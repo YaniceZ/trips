@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trips</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@700;900&family=Noto+Sans+SC:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0C121C;--card:#141C2A;--line:#25324A;--text:#EAE8E2;--dim:#8E9BAF;--faint:#5E6C82;
+ --shu:#E2452F;--ai:#4C9CC4}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;min-height:100dvh;background:var(--ink);color:var(--text);
+ font-family:'Noto Sans SC',-apple-system,sans-serif;font-weight:300;line-height:1.7;
+ display:flex;align-items:center;justify-content:center;padding:28px}
+.wrap{width:100%;max-width:560px}
+h1{font-family:'Zen Kaku Gothic New','Noto Sans SC',sans-serif;font-weight:900;font-size:29px;
+ margin:0 0 5px;letter-spacing:-.01em}
+.sub{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;color:var(--faint);
+ text-transform:uppercase;margin-bottom:30px}
+a.card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);
+ border-radius:13px;padding:19px 20px;margin-bottom:11px;transition:.2s;position:relative;overflow:hidden}
+a.card:before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c)}
+a.card:hover{border-color:var(--c);transform:translateY(-2px)}
+a.card h2{font-family:'Zen Kaku Gothic New','Noto Sans SC',sans-serif;font-weight:700;font-size:18px;
+ margin:0 0 4px;letter-spacing:.01em}
+a.card .m{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.11em;color:var(--c)}
+a.card p{margin:9px 0 0;font-size:13px;color:var(--dim);line-height:1.7}
+a.card .go{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.09em;color:var(--faint);
+ margin-top:12px;display:block}
+footer{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:var(--faint);
+ margin-top:26px;line-height:1.9}
+@media(max-width:520px){h1{font-size:24px}a.card{padding:16px 17px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Trips</h1>
+  <div class="sub">行程 · 地图 · 预算 · 预订</div>
+
+  <a class="card" href="./kansai-2026/" style="--c:#E2452F">
+    <h2>関西 · 四国 · 熊野古道</h2>
+    <div class="m">2026.09.17 → 10.06 · 18 NIGHTS</div>
+    <p>大阪落地、四国自驾、京都长住、熊野古道中边路徒步。四个方案可切换。</p>
+    <span class="go">打开 →</span>
+  </a>
+
+  <a class="card" href="./japow-2027/" style="--c:#4C9CC4">
+    <h2>JAPOW · 留寿都 / 白马</h2>
+    <div class="m">2027.01 或 2026.12 · EPIC PASS</div>
+    <p>Epic 在日本的 5+5 天怎么排。含实时雪情、去年同期实测降雪。</p>
+    <span class="go">打开 →</span>
+  </a>
+
+  <footer>
+    两个站各自有独立的行程码，数据不互通。<br>
+    手机上可「添加到主屏幕」，离线也能看。
+  </footer>
+</div>
+</body>
+</html>
