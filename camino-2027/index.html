@@ -73,8 +73,11 @@ header{flex:0 0 auto;background:var(--card);border-bottom:1px solid var(--line);
   border:1px solid var(--line);border-radius:9px;background:var(--card-2);transition:.18s;text-align:left}
 .opt:hover{border-color:var(--faint);background:var(--sunk)}
 .opt[aria-pressed=true]{border-color:var(--oc);background:var(--card);box-shadow:0 0 0 1px var(--oc),0 2px 8px rgba(15,21,28,.07)}
-.opt .gr{width:30px;height:30px;flex:none;border-radius:50%;background:var(--oc);
-  display:grid;place-items:center;color:#FBF8F2;font-family:var(--disp2);font-weight:700;font-size:15px}
+.opt .gr{width:32px;height:32px;flex:none;border-radius:2px;background:transparent;
+  border:1px solid var(--oc);display:grid;place-items:center;color:var(--oc);
+  font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.06em;
+  transition:background .18s,color .18s}
+.opt[aria-pressed=true] .gr{background:var(--oc);color:#FBF8F2}
 .opt .lab{display:block;font-size:13px;font-weight:500;white-space:nowrap;line-height:1.3}
 .opt .met{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--mist);
   white-space:nowrap;margin-top:1px}
@@ -476,7 +479,7 @@ function lastYear(dstr){ /* "2027.01.08 → 01.24" → 去年同期 */
  const m=dstr.match(/(\d{4})\.(\d{2})\.(\d{2}).*?(\d{2})\.(\d{2})/);if(!m)return null;
  const y=+m[1]-1;return{a:`${y}-${m[2]}-${m[3]}`,b:`${y}-${m[4]}-${m[5]}`}}
 async function loadWX(force){
- const cache=await S.get('ski:wx');
+ const cache=await S.get('camino:wx');
  if(!force&&cache&&Date.now()-cache.at<3*3600e3){WX=cache;return}
  const la=WXP.map(x=>x.lat).join(','),lo=WXP.map(x=>x.lng).join(',');
  try{
@@ -492,7 +495,7 @@ async function loadWX(force){
     `&start_date=${ly.a}&end_date=${ly.b}&daily=precipitation_sum,temperature_2m_max&timezone=Europe%2FMadrid`);
    if(r2.ok){const j2=await r2.json();WX.hist={win:ly,d:Array.isArray(j2)?j2:[j2]}}
   }catch(e){if(cache&&cache.hist)WX.hist=cache.hist}}
- WX.at=Date.now();await S.set('ski:wx',WX)}
+ WX.at=Date.now();await S.set('camino:wx',WX)}
 function wxBlock(s){
  if(WX.hist){
   const box=el('div','wx');
@@ -582,14 +585,14 @@ function toICS(){
 const AVC=['#D63C33','#1A6FBF','#1F8F5F','#C98A15','#8B4FB5','#0F9B9B','#D6588C','#5A6B8C'];
 let st={opt:'A',tab:'plan',room:'camino27',openDay:null,
   me:{id:null,name:'',color:AVC[0]},pins:[],members:[],budget:{},done:{},bk:{},notes:{},
-  rate:115,perPerson:false,ccy:'CAD'};
+  rate:0.63,perPerson:false,ccy:'CAD'};
 const $=s=>document.querySelector(s);
 const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
 const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 const uid=()=>Math.random().toString(36).slice(2,10);
 let tT;const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('show'),2500)};
-const K={pins:()=>`ski:${st.room}:pins`,mem:()=>`ski:${st.room}:members`,
-  bk:()=>`ski:${st.room}:bookings`,notes:()=>`ski:${st.room}:notes`,cfg:()=>'ski:localcfg'};
+const K={pins:()=>`camino:${st.room}:pins`,mem:()=>`camino:${st.room}:members`,
+  bk:()=>`camino:${st.room}:bookings`,notes:()=>`camino:${st.room}:notes`,cfg:()=>'camino:localcfg'};
 
 /* ═══════ 6. 地图 ═══════ */
 const BASES=[
@@ -814,16 +817,16 @@ function vSpots(s){
 function vBud(s){
   const b=st.budget[st.opt]||(st.budget[st.opt]={...V[st.opt].budget});
   const tot=BROWS.reduce((a,r)=>a+(b[r.k]||0),0),dv=st.perPerson?2:1;
-  const f=n=>st.ccy==='CAD'?'$'+Math.round(n/dv).toLocaleString():'¥'+Math.round(n*st.rate/dv).toLocaleString();
+  const f=n=>st.ccy==='CAD'?'$'+Math.round(n/dv).toLocaleString():'€'+Math.round(n*st.rate/dv).toLocaleString();
   const nd=V[st.opt].days.length;
   const t=el('div','btot');
   t.innerHTML=`<div><div class="cap">${st.perPerson?'每人':'两人合计'} · ${nd} 天</div><div class="big">${f(tot)}</div></div>
-    <div class="side">${st.ccy==='CAD'?'¥'+Math.round(tot*st.rate/dv).toLocaleString():'$'+Math.round(tot/dv).toLocaleString()}<br><span style="color:var(--faint)">${f(tot/nd)} / 天</span></div>`;
+    <div class="side">${st.ccy==='CAD'?'€'+Math.round(tot*st.rate/dv).toLocaleString():'$'+Math.round(tot/dv).toLocaleString()}<br><span style="color:var(--faint)">${f(tot/nd)} / 天</span></div>`;
   s.appendChild(t);
   const ct=el('div','row');ct.style.marginBottom='16px';
   const mk=(x,on,fn)=>{const q=el('button','btn'+(on?' pri':''),x);q.onclick=fn;return q};
   ct.appendChild(mk(st.perPerson?'每人':'两人合计',st.perPerson,()=>{st.perPerson=!st.perPerson;renderBody();save()}));
-  ct.appendChild(mk(st.ccy,st.ccy==='JPY',()=>{st.ccy=st.ccy==='CAD'?'JPY':'CAD';renderBody();save()}));
+  ct.appendChild(mk(st.ccy,st.ccy==='EUR',()=>{st.ccy=st.ccy==='CAD'?'EUR':'CAD';renderBody();save()}));
   ct.appendChild(mk('重置',false,()=>{st.budget[st.opt]={...V[st.opt].budget};renderBody();save()}));
   s.appendChild(ct);
   BROWS.forEach(r=>{const w=el('div','bl');
@@ -843,9 +846,9 @@ function vBud(s){
     <div class="side">预算 ${f(tot)}<br><span style="color:${paid>tot?'var(--rd)':'var(--gr)'}">${paid>tot?'超':'剩'} $${Math.abs(Math.round((tot-paid)/dv)).toLocaleString()}</span></div>`;
    s.appendChild(w)}
   s.appendChild(el('h2','sec','汇率'));
-  const fd=el('div','fd');fd.innerHTML='<label class="lb">1 CAD = ? JPY</label>';
-  const i=el('input');i.type='number';i.value=st.rate;i.step='0.5';
-  i.onchange=e=>{st.rate=+e.target.value||115;renderBody();save()};fd.appendChild(i);s.appendChild(fd);
+  const fd=el('div','fd');fd.innerHTML='<label class="lb">1 CAD = ? EUR</label>';
+  const i=el('input');i.type='number';i.value=st.rate;i.step='0.01';
+  i.onchange=e=>{st.rate=+e.target.value||0.63;renderBody();save()};fd.appendChild(i);s.appendChild(fd);
   s.appendChild(el('p','tx',TXT.budgetNote));
 }
 
@@ -892,7 +895,7 @@ function vPrep(s){
   w.textContent=TXT.aboutFoot;
   s.appendChild(w)}
 
-const AREA_HINT={cam:'Camino de Santiago',gal:'Galicia España',nor:'España',cit:'España',por:'Portugal'};
+const AREA_HINT={cam:'España',gal:'Galicia, España',nor:'Asturias, España',cit:'España',por:'Portugal'};
 const PLACE_TAB='spots';
 /* 让升级模块的 p.jp 指向西语名 */
 Object.keys(P).forEach(k=>{if(!P[k].jp)P[k].jp=P[k].es||P[k].zh});
@@ -915,7 +918,7 @@ const LK2={
   pin:  p=>`https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`,
   dir:  p=>`https://www.google.com/maps/dir/?api=1&destination=${gquery(p)}&travelmode=transit`,
   site: p=>`https://www.google.com/search?q=${encodeURIComponent((p.jp||p.zh)+' 公式サイト 営業時間')}`,
-  /* 餐厅：西班牙没有食べログ这种统一库，用谷歌地图搜最实际 */
+  /* 餐厅：西班牙没有Gronze这种统一库，用谷歌地图搜最实际 */
   tabelog: q=>`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`,
   /* Renfe 火车 / Gronze 路书（朝圣路最常用的两个西语站） */
   gronze: q=>`https://www.gronze.com/buscar?keys=${encodeURIComponent(q)}`,
@@ -1193,7 +1196,7 @@ let sT;const save=()=>{clearTimeout(sT);sT=setTimeout(()=>S.set(K.cfg(),
  {room:st.room,opt:st.opt,me:st.me,budget:st.budget,done:st.done,rate:st.rate,perPerson:st.perPerson,ccy:st.ccy}),320)};
 async function load(){const c=await S.get(K.cfg());if(!c)return;
  st.room=c.room||st.room;st.opt=V[c.opt]?c.opt:'A';st.me=c.me||st.me;
- st.budget=c.budget||{};st.done=c.done||{};st.rate=c.rate||115;
+ st.budget=c.budget||{};st.done=c.done||{};st.rate=c.rate||0.63;
  st.perPerson=!!c.perPerson;st.ccy=c.ccy||'CAD'}
 
 /* ═══════ 12. 手机抽屉 ═══════ */

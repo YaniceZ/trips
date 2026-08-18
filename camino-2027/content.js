@@ -156,7 +156,7 @@ const TIMING={
 
 /* ══════ 四个方案 ══════ */
 const V={
-A:{k:'A',gr:'甲',name:'最后 100 公里 + 西班牙北部',met:'16 DAYS · 5 WALK',hex:'#D9A21B',tag:'推荐',
+A:{k:'A',gr:'I',name:'最后 100 公里 + 西班牙北部',met:'16 DAYS · 5 WALK',hex:'#D9A21B',tag:'推荐',
   dates:'2027.05.08 → 05.23', walkDays:5, walkKm:115,
   pitch:'Sarria 走到 Santiago，六天，115 公里，够拿 Compostela 证书。'
     +'剩下的时间给圣塞瓦斯蒂安、毕尔巴鄂和马德里。\n\n'
@@ -205,7 +205,7 @@ A:{k:'A',gr:'甲',name:'最后 100 公里 + 西班牙北部',met:'16 DAYS · 5 W
    {d:'05.23',w:'日',t:'马德里 → 温哥华',r:'cit',stay:'—',km:null,note:'',stops:[{t:'—',p:'mad',n:'MAD',s:'退税柜台排队久，提前三小时'}]}
   ]},
 
-B:{k:'B',gr:'乙',name:'葡萄牙之路 · Porto 出发',met:'18 DAYS · 11 WALK',hex:'#C0532F',tag:'最平缓',
+B:{k:'B',gr:'II',name:'葡萄牙之路 · Porto 出发',met:'18 DAYS · 11 WALK',hex:'#C0532F',tag:'最平缓',
   dates:'2027.05.06 → 05.23', walkDays:11, walkKm:263,
   pitch:'从 Porto 走完整的 240 公里，12 天。地形是几条主线里最平缓的，'
     +'气候也比内陆温和。海岸线变体贴着大西洋走，木栈道很长一段。\n\n'
@@ -235,7 +235,7 @@ B:{k:'B',gr:'乙',name:'葡萄牙之路 · Porto 出发',met:'18 DAYS · 11 WALK
    {d:'05.23',w:'日',t:'马德里 → 温哥华',r:'cit',stay:'—',km:null,note:'',stops:[{t:'—',p:'mad',n:'MAD',s:''}]}
   ]},
 
-C:{k:'C',gr:'丙',name:'原始之路 · Oviedo 出发',met:'20 DAYS · 13 WALK',hex:'#1F6FA8',tag:'最难最静',
+C:{k:'C',gr:'III',name:'原始之路 · Oviedo 出发',met:'20 DAYS · 13 WALK',hex:'#1F6FA8',tag:'最难最静',
   dates:'2027.05.04 → 05.23', walkDays:13, walkKm:315,
   pitch:'321 公里，14 天，最古老的一条，9 世纪阿方索二世走的原路。'
     +'翻越坎塔布连山脉，服务点少，同行者也少。\n\n'
@@ -268,7 +268,7 @@ C:{k:'C',gr:'丙',name:'原始之路 · Oviedo 出发',met:'20 DAYS · 13 WALK',
    {d:'05.23',w:'日',t:'马德里 → 温哥华',r:'cit',stay:'—',km:null,note:'',stops:[{t:'—',p:'mad',n:'MAD',s:''}]}
   ]},
 
-D:{k:'D',gr:'丁',name:'法国之路全程 · SJPdP 出发',met:'38 DAYS · 33 WALK · 节点示意',hex:'#8C4A6B',tag:'全程',
+D:{k:'D',gr:'IV',name:'法国之路全程 · SJPdP 出发',met:'38 DAYS · 33 WALK · 节点示意',hex:'#8C4A6B',tag:'全程',
   dates:'2027.05.01 → 06.07', walkDays:33, walkKm:780,
   pitch:'780 公里，33 个步行日，从法国边境走到 Santiago。'
     +'这是绝大多数人说「走朝圣之路」时指的那条。\n\n'
