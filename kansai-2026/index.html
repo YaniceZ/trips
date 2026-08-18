@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0C121C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>関西・四国・熊野 — 2026.09.17 → 10.06</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:#0C121C; --surface:#121A28; --surface-2:#182234; --surface-3:#1F2B40;
+  --line:#26334C; --line-soft:#1C2537;
+  --text:#EAE8E2; --dim:#94A1B7; --faint:#61708A;
+  --shu:#E2452F;   /* 朱 — 関西 */
+  --ai:#4C9CC4;    /* 藍 — 四国 */
+  --iou:#D89B2E;   /* 硫黄 — 九州 */
+  --sugi:#57946F;  /* 杉 — 熊野 */
+  --kin:#C9A227;
+  --disp:'Shippori Mincho','Noto Serif SC',serif;
+  --body:'Noto Sans SC',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --sheet-h:55vh;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%;overflow:hidden;background:var(--ink);color:var(--text);font-family:var(--body);font-weight:300;font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+:focus-visible{outline:2px solid var(--shu);outline-offset:2px;border-radius:3px}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px;border:2px solid var(--surface)}
+::-webkit-scrollbar-thumb:hover{background:var(--surface-3)}
+
+/* ─────────── shell ─────────── */
+#app{display:flex;flex-direction:column;height:100%;height:100dvh;overflow:clip}
+header{
+  flex:0 0 auto;background:var(--ink);border-bottom:1px solid var(--line-soft);
+  padding:12px 18px 0;position:relative;z-index:1200;
+  padding-top:calc(12px + env(safe-area-inset-top));
+}
+.hrow{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.brand{flex:1 1 auto;min-width:200px}
+.brand h1{
+  font-family:var(--disp);font-weight:800;font-size:21px;margin:0;letter-spacing:.06em;line-height:1.2;
+}
+.brand h1 em{font-style:normal;color:var(--shu)}
+.brand .sub{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--faint);
+  text-transform:uppercase;margin-top:4px;display:flex;gap:10px;flex-wrap:wrap;align-items:center
+}
+.brand .sub b{color:var(--dim);font-weight:500}
+
+/* room + members */
+.hright{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:2px}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);
+  border-radius:999px;padding:5px 11px;font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;color:var(--dim);
+  transition:border-color .18s,color .18s
+}
+.chip:hover{border-color:var(--surface-3);color:var(--text)}
+.chip b{color:var(--text);font-weight:500}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--sugi);flex:none}
+.dot.off{background:var(--faint)}
+.dot.busy{background:var(--kin);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.25}}
+.avatars{display:flex}
+.av{
+  width:23px;height:23px;border-radius:50%;display:grid;place-items:center;
+  font-family:var(--mono);font-size:10px;font-weight:700;color:#0C121C;
+  border:2px solid var(--ink);margin-left:-7px;flex:none
+}
+.av:first-child{margin-left:0}
+
+/* ─────────── seal switcher (signature) ─────────── */
+.seals{display:flex;gap:9px;padding:13px 0 12px;overflow-x:auto;scrollbar-width:none}
+.seals::-webkit-scrollbar{display:none}
+.seal{
+  flex:none;position:relative;display:flex;align-items:center;gap:11px;
+  padding:9px 15px 9px 9px;border:1px solid var(--line);border-radius:11px;
+  background:var(--surface);transition:border-color .2s,background .2s,transform .2s;text-align:left
+}
+.seal:hover{border-color:var(--surface-3);background:var(--surface-2)}
+.seal[aria-pressed=true]{border-color:var(--sc);background:var(--surface-2)}
+.seal[aria-pressed=true]:after{
+  content:'';position:absolute;inset:-1px;border-radius:11px;border:1px solid var(--sc);opacity:.4;pointer-events:none
+}
+.seal .mark{
+  width:34px;height:34px;flex:none;border-radius:8px;display:grid;place-items:center;
+  font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:-.02em;
+  border:1.5px solid var(--sc);color:var(--sc);background:color-mix(in srgb,var(--sc) 10%,transparent);
+  transition:background .2s,color .2s
+}
+.seal[aria-pressed=true] .mark{background:var(--sc);color:#0C121C}
+.seal .lab{display:block;font-size:13px;font-weight:500;letter-spacing:.02em;white-space:nowrap;line-height:1.35}
+.seal .met{
+  display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--faint);
+  text-transform:uppercase;white-space:nowrap;margin-top:1px
+}
+.seal[aria-pressed=true] .met{color:var(--dim)}
+
+/* ─────────── main ─────────── */
+main{flex:1 1 auto;display:flex;min-height:0;position:relative;overflow:clip}
+#map{flex:1 1 auto;min-width:0;background:#0A0F17;z-index:1}
+#panel{
+  flex:0 0 428px;background:var(--surface);border-right:1px solid var(--line-soft);
+  display:flex;flex-direction:column;min-height:0;z-index:2
+}
+.tabs{
+  flex:0 0 auto;display:flex;border-bottom:1px solid var(--line-soft);background:var(--surface);
+  padding:0 6px;gap:2px;overflow-x:auto;scrollbar-width:none
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex:1 1 auto;padding:13px 6px 11px;font-size:12.5px;letter-spacing:.06em;color:var(--faint);
+  border-bottom:2px solid transparent;transition:color .18s,border-color .18s;white-space:nowrap;font-weight:400
+}
+.tab:hover{color:var(--dim)}
+.tab[aria-selected=true]{color:var(--text);border-bottom-color:var(--shu);font-weight:500}
+.tab .n{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-left:4px}
+.scroll{flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;padding:18px 18px 60px}
+.scroll::-webkit-scrollbar-thumb{border-color:var(--surface)}
+
+/* ─────────── typography bits ─────────── */
+h2.sec{
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);
+  margin:0 0 12px;font-weight:500;display:flex;align-items:center;gap:10px
+}
+h2.sec:after{content:'';flex:1;height:1px;background:var(--line-soft)}
+h2.sec+ h2.sec{margin-top:26px}
+.lede{font-size:13.5px;color:var(--dim);line-height:1.75;margin:0 0 18px}
+.lede strong{color:var(--text);font-weight:500}
+
+/* ─────────── typhoon band ─────────── */
+.risk{margin:0 0 22px}
+.riskbar{display:flex;height:26px;border-radius:6px;overflow:hidden;border:1px solid var(--line-soft)}
+.riskseg{flex:1;display:grid;place-items:center;font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;color:#0C121C;font-weight:700}
+.risklab{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--faint);margin-top:6px;text-transform:uppercase}
+
+/* ─────────── itinerary spine (signature) ─────────── */
+.spine{position:relative;padding-left:34px}
+.spine:before{content:'';position:absolute;left:12px;top:14px;bottom:20px;width:1px;background:var(--line)}
+.day{position:relative;margin-bottom:6px}
+.daybtn{
+  width:100%;text-align:left;padding:12px 13px;border-radius:10px;border:1px solid transparent;
+  transition:background .18s,border-color .18s;display:block
+}
+.daybtn:hover{background:var(--surface-2)}
+.day.open .daybtn{background:var(--surface-2);border-color:var(--line)}
+.node{
+  position:absolute;left:-28px;top:16px;width:19px;height:19px;border-radius:50%;
+  border:1.5px solid var(--nc);background:var(--surface);display:grid;place-items:center;
+  font-family:var(--mono);font-size:8.5px;font-weight:700;color:var(--nc);z-index:2;transition:background .2s,color .2s
+}
+.day.open .node{background:var(--nc);color:#0C121C}
+.dhead{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.ddate{font-family:var(--mono);font-size:10px;letter-spacing:.11em;color:var(--faint);text-transform:uppercase}
+.dtitle{font-family:var(--disp);font-size:16px;font-weight:600;letter-spacing:.03em;flex:1 1 100%;margin-top:2px}
+.dnote{font-size:12.5px;color:var(--dim);margin-top:5px;line-height:1.6}
+.dmeta{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.pill{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;padding:3px 8px;border-radius:5px;
+  background:var(--surface-3);color:var(--dim);text-transform:uppercase
+}
+.pill.stay{background:color-mix(in srgb,var(--nc) 16%,transparent);color:var(--nc)}
+.dbody{display:none;padding:2px 13px 16px}
+.day.open .dbody{display:block}
+.stop{
+  display:flex;gap:11px;padding:8px 0;border-top:1px solid var(--line-soft);width:100%;text-align:left;
+  transition:opacity .15s
+}
+.stop:hover{opacity:.72}
+.stop .t{font-family:var(--mono);font-size:10px;color:var(--faint);flex:0 0 46px;padding-top:3px;letter-spacing:.05em}
+.stop .n{font-size:13px;font-weight:400;line-height:1.5}
+.stop .n small{display:block;color:var(--faint);font-size:11.5px;margin-top:2px;line-height:1.5}
+.stop .n .jp{font-family:var(--disp);color:var(--dim);font-size:11.5px;letter-spacing:.04em}
+
+/* ─────────── place cards ─────────── */
+.pcard{
+  border:1px solid var(--line-soft);border-radius:10px;padding:12px 13px;margin-bottom:8px;
+  background:var(--surface-2);transition:border-color .18s;position:relative
+}
+.pcard:hover{border-color:var(--line)}
+.pcard .top{display:flex;align-items:flex-start;gap:10px}
+.pcard .swatch{width:9px;height:9px;border-radius:50%;flex:none;margin-top:6px;background:var(--pc)}
+.pcard h3{margin:0;font-size:14px;font-weight:500;line-height:1.45;flex:1}
+.pcard h3 .jp{font-family:var(--disp);color:var(--faint);font-size:11.5px;margin-left:6px;letter-spacing:.04em}
+.pcard p{margin:6px 0 0;font-size:12.5px;color:var(--dim);line-height:1.65}
+.pcard .foot{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.byline{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9.5px;color:var(--faint);letter-spacing:.06em}
+.mini{width:15px;height:15px;border-radius:50%;display:grid;place-items:center;font-size:7.5px;font-weight:700;color:#0C121C;font-family:var(--mono)}
+.act{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;padding:4px 8px;border-radius:5px;
+  border:1px solid var(--line);color:var(--faint);transition:.15s;text-transform:uppercase
+}
+.act:hover{border-color:var(--surface-3);color:var(--text)}
+.act.on{border-color:var(--shu);color:var(--shu);background:color-mix(in srgb,var(--shu) 10%,transparent)}
+.act.del:hover{border-color:var(--shu);color:var(--shu)}
+
+/* ─────────── forms ─────────── */
+.field{margin-bottom:13px}
+label.lb{
+  display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;color:var(--faint);
+  text-transform:uppercase;margin-bottom:5px
+}
+input[type=text],input[type=number],select,textarea{
+  width:100%;background:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 11px;
+  font-size:13.5px;font-weight:300;transition:border-color .18s
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--surface-3)}
+textarea{resize:vertical;min-height:64px;line-height:1.6}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--faint) 50%),linear-gradient(135deg,var(--faint) 50%,transparent 50%);background-position:calc(100% - 15px) 17px,calc(100% - 10px) 17px;background-size:5px 5px;background-repeat:no-repeat}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 15px;border-radius:8px;
+  border:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  color:var(--dim);transition:.18s;text-transform:uppercase
+}
+.btn:hover{border-color:var(--surface-3);color:var(--text);background:var(--surface-2)}
+.btn.pri{background:var(--shu);border-color:var(--shu);color:#0C121C;font-weight:700}
+.btn.pri:hover{background:#EF5A43;border-color:#EF5A43;color:#0C121C}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row>*{flex:1 1 0;min-width:0}
+
+/* ─────────── budget ─────────── */
+.btot{
+  border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;background:var(--surface-2);
+  display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap
+}
+.btot .big{font-family:var(--mono);font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1;color:var(--kin)}
+.btot .cap{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin-bottom:6px}
+.btot .side{text-align:right}
+.btot .side div{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.bline{padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.bline .lr{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.bline .nm{font-size:13.5px;font-weight:400}
+.bline .nm small{display:block;color:var(--faint);font-size:11px;margin-top:1px}
+.bline .vv{font-family:var(--mono);font-size:13.5px;color:var(--kin);white-space:nowrap;font-weight:500}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:2px;background:var(--line);border-radius:2px;margin:12px 0 2px
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--kin);cursor:grab;border:3px solid var(--surface)
+}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--kin);cursor:grab;border:3px solid var(--surface)}
+
+/* ─────────── checklist ─────────── */
+.todo{display:flex;gap:11px;padding:11px 0;border-bottom:1px solid var(--line-soft);align-items:flex-start;width:100%;text-align:left}
+.box{
+  width:17px;height:17px;border:1.5px solid var(--line);border-radius:5px;flex:none;margin-top:2px;
+  display:grid;place-items:center;transition:.18s
+}
+.todo.done .box{background:var(--sugi);border-color:var(--sugi)}
+.todo.done .box:after{content:'';width:4px;height:8px;border:solid #0C121C;border-width:0 2px 2px 0;transform:rotate(43deg) translate(-1px,-1px)}
+.todo.done .tx{color:var(--faint);text-decoration:line-through}
+.tx{font-size:13.5px;line-height:1.55;flex:1}
+.tx small{display:block;color:var(--faint);font-size:11px;margin-top:2px}
+.due{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;color:var(--shu);flex:none;margin-top:3px}
+.due.ok{color:var(--faint)}
+
+/* ─────────── map overlay ─────────── */
+.mapctl{
+  position:absolute;top:12px;right:12px;z-index:900;display:flex;flex-direction:column;gap:6px;align-items:flex-end
+}
+.mbtn{
+  background:rgba(18,26,40,.93);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:8px;
+  padding:7px 11px;font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;color:var(--dim);
+  transition:.15s;text-transform:uppercase;white-space:nowrap
+}
+.mbtn:hover{color:var(--text);border-color:var(--surface-3)}
+.mbtn.on{color:var(--shu);border-color:var(--shu)}
+.hint{
+  position:absolute;left:12px;bottom:12px;z-index:900;background:rgba(18,26,40,.93);backdrop-filter:blur(14px);
+  border:1px solid var(--line);border-radius:8px;padding:7px 11px;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.07em;color:var(--faint);max-width:min(70%,300px);line-height:1.6;pointer-events:none
+}
+.leaflet-container{background:#0A0F17;font-family:var(--body)}
+.leaflet-control-attribution{background:rgba(12,18,28,.82)!important;color:var(--faint)!important;font-size:9px!important;font-family:var(--mono)!important}
+.leaflet-control-attribution a{color:var(--dim)!important}
+.leaflet-control-zoom a{background:rgba(18,26,40,.93)!important;color:var(--dim)!important;border-color:var(--line)!important;backdrop-filter:blur(14px)}
+.leaflet-control-zoom a:hover{color:var(--text)!important;background:var(--surface-2)!important}
+.leaflet-popup-content-wrapper{background:var(--surface-2);color:var(--text);border-radius:10px;border:1px solid var(--line);box-shadow:0 12px 40px rgba(0,0,0,.55)}
+.leaflet-popup-tip{background:var(--surface-2);border:1px solid var(--line)}
+.leaflet-popup-content{margin:12px 14px;font-size:13px;line-height:1.6;font-weight:300}
+.leaflet-popup-content b{font-family:var(--disp);font-size:14.5px;font-weight:600;letter-spacing:.03em;display:block;margin-bottom:3px}
+.leaflet-popup-content .jp{font-family:var(--disp);color:var(--faint);font-size:11.5px}
+.leaflet-popup-content .mt{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--faint);text-transform:uppercase;margin-top:7px;display:block}
+.leaflet-popup-close-button{color:var(--faint)!important}
+.pinico{display:grid;place-items:center;border-radius:50%;border:2px solid #0C121C;box-shadow:0 2px 8px rgba(0,0,0,.5);font-family:var(--mono);font-weight:700;color:#0C121C}
+.pinico.num{font-size:10px}
+.pinico.usr{border-radius:50% 50% 50% 2px;transform:rotate(-45deg);font-size:8.5px}
+.pinico.usr span{transform:rotate(45deg)}
+
+/* ─────────── toast ─────────── */
+#toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,90px);z-index:3000;
+  background:var(--surface-3);border:1px solid var(--line);border-radius:9px;padding:10px 17px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--text);
+  transition:transform .32s cubic-bezier(.2,.9,.3,1.2);pointer-events:none;box-shadow:0 12px 40px rgba(0,0,0,.5);
+  max-width:88vw;text-align:center
+}
+#toast.show{transform:translate(-50%,0)}
+
+/* ─────────── modal ─────────── */
+#modal{position:fixed;inset:0;z-index:2500;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(6,10,16,.78);backdrop-filter:blur(6px)}
+#modal.show{display:flex}
+.mbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;width:100%;max-width:400px;max-height:86vh;overflow-y:auto;box-shadow:0 24px 70px rgba(0,0,0,.6)}
+.mbox h3{font-family:var(--disp);font-size:18px;font-weight:700;margin:0 0 4px;letter-spacing:.04em}
+.mbox .mp{font-size:12.5px;color:var(--dim);margin:0 0 16px;line-height:1.65}
+
+
+/* 深链行 */
+.lkrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+.lk2{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9.5px;
+ letter-spacing:.05em;padding:4px 8px;border-radius:5px;border:1px solid var(--line);
+ color:var(--dim);background:transparent;text-decoration:none;transition:.15s;white-space:nowrap}
+.lk2:hover{border-color:var(--ai);color:var(--ai)}
+.lk2.jp{border-style:dashed;color:var(--faint)}
+.lk2.jp:hover{border-color:var(--sugi);color:var(--sugi)}
+.lk2.nt:hover{border-color:var(--kin);color:var(--kin)}
+/* 实地笔记 */
+.notes{margin-top:9px;display:flex;flex-direction:column;gap:6px}
+.note{position:relative;background:color-mix(in srgb,var(--kin) 9%,transparent);
+ border-left:2px solid var(--kin);border-radius:0 7px 7px 0;padding:8px 26px 8px 10px}
+.note .nb{font-size:12.5px;line-height:1.7;color:var(--text)}
+.note .nm{font-family:var(--mono);font-size:9px;letter-spacing:.05em;color:var(--faint);margin-top:4px}
+.ndel{position:absolute;top:5px;right:7px;color:var(--faint);font-size:14px;line-height:1;padding:2px 4px}
+.ndel:hover{color:var(--shu)}
+/* 天气 */
+.wx{border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:7px;background:var(--surface-2)}
+.wxh{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 11px;
+ border-bottom:1px solid var(--line-soft)}
+.wxn{font-size:12.5px;font-weight:500}
+.wxm{font-family:var(--mono);font-size:9px;color:var(--faint);white-space:nowrap}
+.wxd{display:flex}
+.wxc{flex:1;text-align:center;padding:8px 2px;border-right:1px solid var(--line-soft);min-width:0}
+.wxc:last-child{border-right:0}
+.wxc .dd{font-family:var(--mono);font-size:8.5px;color:var(--faint)}
+.wxc .sn{font-family:var(--mono);font-size:15px;font-weight:700;margin:3px 0;line-height:1.15;color:var(--text)}
+.wxc .sn small{font-size:9px;font-weight:400;color:var(--faint)}
+.wxc .tt{font-family:var(--mono);font-size:8.5px;color:var(--faint)}
+/* 预订 */
+.bkrow{border:1px solid var(--line-soft);border-radius:8px;padding:10px 11px;margin-bottom:6px;
+ background:var(--surface-2);transition:.15s;cursor:pointer}
+.bkrow:hover{border-color:var(--line)}
+.bkrow.done{background:transparent}
+.bkrow .box{width:17px;height:17px;border:1.5px solid var(--line);border-radius:5px;flex:none;
+ margin-top:2px;display:grid;place-items:center}
+.bkrow .box.on{background:var(--sugi);border-color:var(--sugi)}
+.bkrow .box.on:after{content:'';width:4px;height:8px;border:solid #0C121C;border-width:0 2px 2px 0;
+ transform:rotate(43deg) translate(-1px,-1px)}
+.vfy{display:inline-flex;font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:4px;
+ letter-spacing:.05em;margin-left:6px;vertical-align:1px}
+.vfy.todo{background:color-mix(in srgb,var(--kin) 18%,transparent);color:var(--kin)}
+.vfy.ok{background:color-mix(in srgb,var(--sugi) 18%,transparent);color:var(--sugi)}
+
+:root{--LN:var(--line);--LN2:var(--line-soft);--BG2:var(--surface-2);--BG3:var(--surface-3);--DM:var(--dim);--FT:var(--faint);--PICK:var(--kin);--PICKTX:#0C121C;--PICKBG:color-mix(in srgb,var(--kin) 8%,transparent);--WARN:var(--kin)}
+
+/* ── 住宿 / 吃饭 ── */
+.stayb{margin:10px 0 4px;border:1px solid var(--LN);border-radius:9px;overflow:hidden;background:var(--BG2)}
+.stayh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:8px 11px;
+ border-bottom:1px solid var(--LN2);background:var(--BG3)}
+.sn2{font-size:12px;font-weight:500}
+.sa{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--FT)}
+.stayh2{padding:7px 11px 3px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+ color:var(--FT);text-transform:uppercase;border-top:1px solid var(--LN2)}
+.sopt,.sfood{padding:9px 11px;border-top:1px solid var(--LN2)}
+.sopt:first-of-type{border-top:0}
+.sopt.pick{background:var(--PICKBG)}
+.st{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+.tier{font-family:var(--mono);font-size:10px;color:var(--FT);letter-spacing:.05em}
+.sname{font-size:12.5px;font-weight:500;flex:1;min-width:0}
+.fjp{font-family:var(--mono);font-size:10px;color:var(--FT)}
+.pk{font-family:var(--mono);font-size:9px;letter-spacing:.09em;padding:1px 6px;border-radius:3px;
+ background:var(--PICK);color:var(--PICKTX)}
+.swhy{font-size:12px;color:var(--DM);line-height:1.65;margin-top:4px}
+.staynote{padding:8px 11px;border-top:1px solid var(--LN2);font-family:var(--mono);font-size:9.5px;
+ line-height:1.75;color:var(--FT)}
+/* ── 加点搜索结果 ── */
+.gitem{display:flex;align-items:baseline;gap:8px;width:100%;text-align:left;padding:8px 10px;
+ border:1px solid var(--LN2);border-radius:7px;margin-top:6px;background:var(--BG2);transition:.15s}
+.gitem:hover{border-color:var(--LN)}
+.gitem.on{border-color:var(--PICK)}
+.gn{flex:1;font-size:12.5px;line-height:1.5}
+.gk{font-family:var(--mono);font-size:9px;color:var(--FT)}
+.tiny{font-family:var(--mono);font-size:9.5px;line-height:1.8;color:var(--FT);margin-top:6px}
+.tiny.warn{color:var(--WARN)}
+.lk2.dim{opacity:.6}
+/* ── 竖排日文：桌面端的一处细节 ── */
+@media (min-width:901px){
+  .vjp{position:absolute;top:14px;right:12px;writing-mode:vertical-rl;text-orientation:upright;
+   font-family:var(--disp);font-size:10.5px;letter-spacing:.22em;color:var(--FT);opacity:.5;
+   pointer-events:none;max-height:calc(100% - 28px);overflow:hidden}
+  .day.open .vjp{opacity:.75}
+  .daybtn{position:relative;padding-right:34px}
+}
+
+/* ─────────── mobile ─────────── */
+@media (max-width:900px){
+  header{padding:8px 13px 0;padding-top:calc(8px + env(safe-area-inset-top))}
+  .brand h1{font-size:17px}
+  .brand .sub{font-size:9.5px;gap:8px}
+  .hrow{gap:8px}
+  .hright{width:100%;order:3}
+  .seals{padding:9px 0 8px;gap:7px}
+  .seal{padding:6px 11px 6px 6px;gap:8px}
+  .seal .mark{width:28px;height:28px;font-size:13.5px;border-radius:7px}
+  .seal .lab{font-size:12px}
+  main{display:block}
+  #map{position:absolute;inset:0;height:100%}
+  #panel{
+    position:absolute;left:0;right:0;bottom:0;top:0;flex:none;
+    height:100%;border-right:0;border-top:1px solid var(--line);
+    border-radius:16px 16px 0 0;box-shadow:0 -14px 44px rgba(0,0,0,.55);
+    transform:translateY(max(0px, calc(100% - var(--sheet-h))));
+    transition:transform .34s cubic-bezier(.25,.9,.3,1);z-index:1000;touch-action:none
+  }
+  #panel.dragging{transition:none}
+  .grab{display:block!important}
+  .scroll{padding:14px 16px calc(70px + env(safe-area-inset-bottom))}
+  .tab{font-size:12px;padding:11px 5px 9px}
+  .hint{display:none}
+  .mapctl{top:10px;right:10px}
+  .mbtn{padding:6px 9px;font-size:9px}
+  .spine{padding-left:30px}
+  .spine:before{left:10px}
+  .node{left:-26px}
+}
+.grab{display:none;padding:9px 0 5px;cursor:grab;flex:none;touch-action:none}
+.grab:after{content:'';display:block;width:36px;height:4px;border-radius:3px;background:var(--line);margin:0 auto;transition:background .2s}
+#panel.dragging .grab:after{background:var(--surface-3)}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="hrow">
+      <div class="brand">
+        <h1>関西 <em>·</em> 四国 <em>·</em> 熊野古道</h1>
+        <div class="sub"><b id="hdates">2026.09.17 → 10.06</b> · <span id="hnights">18 NIGHTS</span> · <span id="hvar">PLAN A</span></div>
+      </div>
+      <div class="hright">
+        <button class="chip" id="roomBtn" title="同一个行程码 = 同一份行程">
+          <span class="dot" id="syncDot"></span>行程码 <b id="roomLabel">—</b>
+        </button>
+        <button class="chip" id="meBtn"><span class="avatars" id="avatars"></span><b id="meName">设置名字</b></button>
+      </div>
+    </div>
+    <div class="seals" id="seals"></div>
+  </header>
+
+  <main>
+    <section id="panel">
+      <div class="grab" id="grab"></div>
+      <div class="tabs" role="tablist" id="tabs"></div>
+      <div class="scroll" id="scroll"></div>
+    </section>
+    <section id="map">
+      <div class="mapctl">
+        <button class="mbtn" id="baseBtn">底图 · 夜</button>
+        <button class="mbtn" id="allBtn">显示全程</button>
+        <button class="mbtn" id="addBtn">＋ 加点</button>
+      </div>
+      <div class="hint" id="hint">点左侧任一天 → 地图跟随；地图上长按 → 落一个新点</div>
+    </section>
+  </main>
+</div>
+
+<div id="toast"></div>
+<div id="modal"><div class="mbox" id="mbox"></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="content.js"></script>
+<script>
+if(typeof V==='undefined'||typeof P==='undefined'){document.getElementById('app').innerHTML='<div style="padding:40px;font-family:monospace;font-size:13px;line-height:2;color:#8A94A6">content.js 没加载成功。<br>确认它和 index.html 在同一个文件夹里，文件名一字不差。<br>刚改过的话多半是里面有语法错误 —— 按 F12 看 Console 红字。</div>';throw new Error('no content.js');}
+/* ══════════════════════════════════════════════════════════════
+   1. STORAGE ADAPTER
+   Artifact 环境用 window.storage（shared:true 实现多人协作）；
+   自建部署时换掉 remote() 即可接 Supabase / Firebase。
+   ══════════════════════════════════════════════════════════════ */
+const mem = new Map();
+const S = {
+  ok: typeof window.storage !== 'undefined' && window.storage,
+  async get(k, shared=false){
+    if(!this.ok) return mem.has(k+shared) ? mem.get(k+shared) : null;
+    try{ const r = await window.storage.get(k, shared); return r ? JSON.parse(r.value) : null; }
+    catch(e){ return null; }
+  },
+  async set(k, v, shared=false){
+    if(!this.ok){ mem.set(k+shared, v); return true; }
+    try{ await window.storage.set(k, JSON.stringify(v), shared); return true; }
+    catch(e){ return false; }
+  }
+};
+
+/* ══════════════════════════════════════════════════════════════
+   2. PLACE LIBRARY  — id, 中文名, 日文名, lat, lng, 区域, 一句话
+   坐标为示意精度，导航请以实际地图为准
+   ══════════════════════════════════════════════════════════════ */
+
+
+
+/* ══════ 深链 · 日文名 · 实地笔记 ══════ */
+const SITE={_kumano:'https://www.tb-kumano.jp/en/kumano-kodo/'};
+async function copyJP(p){
+ const t=p.jp||p.zh;
+ try{await navigator.clipboard.writeText(t)}
+ catch(e){const x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();
+  try{document.execCommand('copy')}catch(_){}x.remove()}
+ toast('已复制「'+t+'」')}
+/* 实地笔记：你们自己写的，压在我写的上面 */
+function notesOf(id){return (st.notes||{})[id]||[]}
+async function addNote(id,txt){
+ st.notes=st.notes||{};st.notes[id]=notesOf(id).concat([{by:st.me.name,at:new Date().toISOString().slice(0,10),t:txt}]);
+ await S.set(K.notes(),st.notes,true);renderBody()}
+async function delNote(id,i){
+ st.notes[id]=notesOf(id).filter((_,k)=>k!==i);
+ if(!st.notes[id].length)delete st.notes[id];
+ await S.set(K.notes(),st.notes,true);renderBody()}
+function noteModal(p){
+ if(!st.me.name)return meModal(()=>noteModal(p));
+ openModal(`<h3>${esc(p.zh)}</h3><p class="mp">${esc(TXT.noteHint)}</p>
+  <div class="field"><textarea id="nt" maxlength="300" placeholder="例：9/28 早上 7:15 到，只有五六个人。抹茶店 10 点才开。"></textarea></div>
+  <div class="row"><button class="btn" data-close>取消</button><button class="btn pri" id="nok">记下</button></div>`,
+ b=>{b.querySelector('#nt').focus();
+  b.querySelector('#nok').onclick=async()=>{const t=b.querySelector('#nt').value.trim();
+   if(!t)return toast('写点什么');closeModal();await addNote(p.id,t);toast('记下了')}})}
+function noteBlock(p){
+ const ns=notesOf(p.id);if(!ns.length)return null;
+ const w=el('div','notes');
+ ns.forEach((n,i)=>{const r=el('div','note');
+  r.innerHTML=`<div class="nb">${esc(n.t)}</div><div class="nm">${esc(n.by||'匿名')} · ${esc(n.at||'')}</div>`;
+  if(n.by===st.me.name){const d=el('button','ndel','×');d.onclick=e=>{e.stopPropagation();delNote(p.id,i)};r.appendChild(d)}
+  w.appendChild(r)});
+ return w}
+
+/* ══════ 实时天气 · Open-Meteo（无 key / CORS 开放 / 含 JMA 模型） ══════ */
+const WXP=[{k:'kyoto',n:'京都',lat:35.0037,lng:135.7681},{k:'hongu',n:'熊野本宫',lat:33.8404,lng:135.7737}];
+let WX={fc:null,hist:null,at:0,err:null};
+function tripWindow(v){
+ const a=v.days[0].d.split('.'),b=v.days[v.days.length-1].d.split('.');
+ return{y:2026,a:`2026-${a[0]}-${a[1]}`,b:`2026-${b[0]}-${b[1]}`,
+        la:`2025-${a[0]}-${a[1]}`,lb:`2025-${b[0]}-${b[1]}`}}
+async function loadWX(force){
+ const c=await S.get('jp:wx');
+ if(!force&&c&&Date.now()-c.at<3*3600e3&&c.opt===st.variant){WX=c;return}
+ const la=WXP.map(x=>x.lat).join(','),lo=WXP.map(x=>x.lng).join(',');
+ try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${la}&longitude=${lo}`+
+   `&daily=precipitation_sum,temperature_2m_max,temperature_2m_min,weather_code`+
+   `&timezone=Asia%2FTokyo&forecast_days=7&models=jma_seamless`);
+  if(!r.ok)throw 0;const j=await r.json();WX.fc=Array.isArray(j)?j:[j];WX.err=null}
+ catch(e){WX.err='预报没拉到';if(c)WX.fc=c.fc}
+ const w=tripWindow(V[st.variant]);
+ try{const r2=await fetch(`https://archive-api.open-meteo.com/v1/archive?latitude=${la}&longitude=${lo}`+
+   `&start_date=${w.la}&end_date=${w.lb}&daily=precipitation_sum,temperature_2m_max&timezone=Asia%2FTokyo`);
+  if(r2.ok){const j2=await r2.json();WX.hist={w,d:Array.isArray(j2)?j2:[j2]}}}
+ catch(e){if(c&&c.hist)WX.hist=c.hist}
+ WX.at=Date.now();WX.opt=st.variant;await S.set('jp:wx',WX)}
+function wxBlock(s){
+ if(WX.hist){
+  const box=el('div','wx');
+  box.appendChild(el('div','wxh',`<span class="wxn">去年同期实测</span><span class="wxm">${WX.hist.w.la} → ${WX.hist.w.lb}</span>`));
+  const row=el('div','wxd');
+  WXP.forEach((pt,i)=>{
+   const d=WX.hist.d[i]?.daily;if(!d)return;
+   const rain=(d.precipitation_sum||[]).filter(x=>x>=1).length;
+   const heavy=(d.precipitation_sum||[]).filter(x=>x>=20).length;
+   const hot=(d.temperature_2m_max||[]).filter(x=>x>=30).length;
+   const c=el('div','wxc');
+   c.innerHTML=`<div class="dd">${pt.n}</div><div class="sn">${rain}<small> / ${(d.precipitation_sum||[]).length} 天有雨</small></div>`+
+    `<div class="tt">暴雨 ${heavy} 天 · 30°C 以上 ${hot} 天</div>`;
+   row.appendChild(c)});
+  box.appendChild(row);s.appendChild(box)}
+ if(WX.fc){
+  WXP.forEach((pt,i)=>{
+   const d=WX.fc[i]?.daily;if(!d)return;
+   const box=el('div','wx');
+   box.appendChild(el('div','wxh',`<span class="wxn">${pt.n} · 未来 7 天</span><span class="wxm">JMA</span>`));
+   const row=el('div','wxd');
+   d.time.forEach((t,j)=>{const r=d.precipitation_sum[j]||0;const c=el('div','wxc');
+    c.innerHTML=`<div class="dd">${t.slice(5).replace('-','/')}</div>`+
+     `<div class="sn" style="color:${r>=10?'var(--shu)':r>0?'var(--ai)':'var(--faint)'};font-size:14px">${r>0?r.toFixed(0):'·'}</div>`+
+     `<div class="tt">${Math.round(d.temperature_2m_min[j])}/${Math.round(d.temperature_2m_max[j])}°</div>`;
+    row.appendChild(c)});
+   box.appendChild(row);s.appendChild(box)})}
+ const n=el('p','lede');n.style.cssText='font-size:11.5px;color:var(--faint);margin:2px 0 20px';
+ n.innerHTML=(WX.err?`<span style="color:var(--kin)">${WX.err}（离线或被拦截，显示上次缓存）</span> · `:'')+TXT.wxNote;
+ s.appendChild(n)}
+
+/* ══════ 预订台账 ══════ */
+function bookings(){
+ const v=V[st.variant],out=[];
+ out.push({id:'air',n:'国际机票 · YVR ⇄ KIX',t:'交通'});
+ const ids=new Set();v.days.forEach(d=>d.stops.forEach(x=>x.p&&ids.add(x.p)));
+ const drive=/自驾|取车/.test(JSON.stringify(v.days));
+ if(drive)out.push({id:'car',n:'租车（右舵 / ETC / 中文导航）',t:'交通'});
+ if(ids.has('takijiri')||ids.has('hongu')){
+  out.push({id:'kumano-stay',n:'熊野山中民宿 3 晚（含两餐）',t:'住宿'});
+  out.push({id:'kuroshio',n:'特急くろしお 指定席 往返',t:'交通'})}
+ if(ids.has('naoshima'))out.push({id:'chichu',n:'地中美术馆 指定时段预约',t:'门票'});
+ [...new Set(v.days.map(d=>(d.stay||'').replace(/\s?[①②③④⑤⑥⑦⑧⑨⑩⑪]/g,'').trim())
+   .filter(x=>x&&x!=='—'&&x!=='机上'))].forEach(x=>out.push({id:'stay-'+x,n:'住宿 · '+x,t:'住宿'}));
+ out.push({id:'ins',n:'旅行保险（含台风延误 / 行程变更）',t:'其他'});
+ out.push({id:'esim',n:'eSIM + 离线地图',t:'其他'});
+ return out}
+const bkKey=i=>st.variant+':'+i;
+const bkGet=i=>(st.bk||{})[bkKey(i)]||null;
+async function bkSet(i,r){st.bk=st.bk||{};
+ if(r)st.bk[bkKey(i)]=r;else delete st.bk[bkKey(i)];
+ await S.set(K.bk(),st.bk,true);renderTabs();renderBody()}
+function bkModal(b){
+ if(!st.me.name)return meModal(()=>bkModal(b));
+ const r=bkGet(b.id)||{};
+ openModal(`<h3>${esc(b.n)}</h3><p class="mp">订好了填确认号，没订就关掉。两个人共享。</p>
+  <div class="field"><label class="lb">确认号 / 订单号</label><input type="text" id="bref" maxlength="60" value="${esc(r.ref||'')}"></div>
+  <div class="field"><label class="lb">实付 CAD（两人合计）</label><input type="number" id="bamt" step="1" value="${r.amt||''}"></div>
+  <div class="row"><button class="btn" id="bclr">标为未订</button><button class="btn pri" id="bok">标为已订</button></div>
+  <div class="row" style="margin-top:7px"><button class="btn" data-close>取消</button></div>`,
+ x=>{x.querySelector('#bref').focus();
+  x.querySelector('#bok').onclick=async()=>{await bkSet(b.id,{state:'ok',
+   ref:x.querySelector('#bref').value.trim(),amt:+x.querySelector('#bamt').value||0,
+   by:st.me.name,at:new Date().toISOString().slice(0,10)});closeModal();toast('已记下')};
+  x.querySelector('#bclr').onclick=async()=>{await bkSet(b.id,null);closeModal();toast('已清除')}})}
+
+/* ══════ .ics 导出 ══════ */
+function toICS(){
+ const v=V[st.variant],pad=n=>String(n).padStart(2,'0');
+ const nx=d=>{const t=new Date(`${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6,8)}T00:00:00Z`);
+  t.setUTCDate(t.getUTCDate()+1);return `${t.getUTCFullYear()}${pad(t.getUTCMonth()+1)}${pad(t.getUTCDate())}`};
+ const E=t=>String(t).replace(/[\\;,]/g,m=>'\\'+m).replace(/\n/g,'\\n');
+ let o='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//kansai//ZH\r\nCALSCALE:GREGORIAN\r\n';
+ v.days.forEach((d,i)=>{
+  const ds='2026'+d.d.replace('.','');
+  const body=[d.note||'',...d.stops.map(x=>`${x.t} ${x.n}${x.s?' — '+x.s:''}`)].filter(Boolean).join('\n');
+  o+=`BEGIN:VEVENT\r\nUID:kansai-${st.variant}-${i}@local\r\nDTSTAMP:${ds}T000000Z\r\n`+
+   `DTSTART;VALUE=DATE:${ds}\r\nDTEND;VALUE=DATE:${nx(ds)}\r\nSUMMARY:${E(d.t)}\r\n`+
+   (d.stay&&d.stay!=='—'?`LOCATION:${E(d.stay)}\r\n`:'')+`DESCRIPTION:${E(body)}\r\nEND:VEVENT\r\n`});
+ o+='END:VCALENDAR\r\n';
+ const bl=new Blob([o],{type:'text/calendar;charset=utf-8'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download=`kansai-${st.variant}.ics`;
+ document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
+ toast('已导出 '+v.days.length+' 天到日历')}
+
+/* ══════════════════════════════════════════════════════════════
+   4. STATE
+   ══════════════════════════════════════════════════════════════ */
+const AVCOL = ['#E2452F','#4C9CC4','#57946F','#D89B2E','#B888D9','#4FC3A1','#E8899B','#8FA5D6'];
+let st = {
+  variant:'A', tab:'plan', room:'jp2610', openDay:null, bk:{}, notes:{},
+  me:{id:null,name:'',color:AVCOL[0]},
+  pins:[], members:[], budget:{}, done:{}, rate:115, perPerson:false, ccy:'CAD'
+};
+
+const $ = s => document.querySelector(s);
+const el = (t,c,h) => { const e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e; };
+const esc = s => String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const uid = () => Math.random().toString(36).slice(2,10);
+let toastT;
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600); }
+const K = { pins:()=>`trip:${st.room}:pins`, mem:()=>`trip:${st.room}:members`,
+  bk:()=>`trip:${st.room}:bookings`, notes:()=>`trip:${st.room}:notes`, cfg:()=>'trip:localcfg' };
+
+/* ══════════════════════════════════════════════════════════════
+   5. MAP
+   ══════════════════════════════════════════════════════════════ */
+const BASES = [
+  {n:'夜', u:'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', a:'&copy; OpenStreetMap &copy; CARTO', max:20},
+  {n:'昼', u:'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', a:'&copy; OpenStreetMap &copy; CARTO', max:20},
+  {n:'地形', u:'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', a:'&copy; OpenStreetMap · SRTM | &copy; OpenTopoMap (CC-BY-SA)', max:17}
+];
+let map, baseIdx=0, baseLayer, layerPlaces, layerPins, layerRoute, mReg={}, adding=false;
+
+function initMap(){
+  map = L.map('map',{zoomControl:true, attributionControl:true, tap:true}).setView([34.30,135.10],7);
+  map.zoomControl.setPosition('bottomright');
+  setBase(0);
+  layerRoute  = L.layerGroup().addTo(map);
+  layerPlaces = L.layerGroup().addTo(map);
+  layerPins   = L.layerGroup().addTo(map);
+
+  // 长按 / 右键落点
+  let lt;
+  map.on('contextmenu', e => dropPin(e.latlng));
+  map.on('mousedown touchstart', e => { if(!adding) return; });
+  map.on('click', e => { if(adding){ dropPin(e.latlng); setAdding(false); } });
+  map.on('mousedown', e => { lt = setTimeout(()=>dropPin(e.latlng), 620); });
+  map.on('mouseup mousemove dragstart zoomstart', ()=>clearTimeout(lt));
+}
+function setBase(i){
+  baseIdx=i; if(baseLayer) map.removeLayer(baseLayer);
+  const b=BASES[i];
+  baseLayer=L.tileLayer(b.u,{attribution:b.a,maxZoom:b.max,subdomains:'abc'}).addTo(map);
+  $('#baseBtn').textContent='底图 · '+b.n;
+}
+function icoNum(hex,txt,size=25){
+  return L.divIcon({className:'',html:`<div class="pinico num" style="background:${hex};width:${size}px;height:${size}px">${esc(txt)}</div>`,iconSize:[size,size],iconAnchor:[size/2,size/2]});
+}
+function icoUsr(hex,txt){
+  return L.divIcon({className:'',html:`<div class="pinico usr" style="background:${hex};width:22px;height:22px"><span>${esc(txt)}</span></div>`,iconSize:[22,22],iconAnchor:[11,20]});
+}
+
+function drawPlaces(){
+  layerPlaces.clearLayers(); mReg={};
+  const seen=new Set(); const v=V[st.variant];
+  v.days.forEach((day,di)=> day.stops.forEach(s=>{
+    if(!s.p || seen.has(s.p)) return; seen.add(s.p);
+    const p=P[s.p]; if(!p) return;
+    const hex=R[p.r].hex;
+    const m=L.marker([p.lat,p.lng],{icon:icoNum(hex,String(di+1),24)}).addTo(layerPlaces);
+    m.bindPopup(`<b>${esc(p.zh)}</b><span class="jp">${esc(p.jp)}</span><div style="margin-top:6px">${esc(p.note)}</div><span class="mt">D${di+1} · ${esc(day.d)} · ${R[p.r].n}</span>`);
+    mReg[p.id]=m;
+  }));
+}
+function drawPins(){
+  layerPins.clearLayers();
+  st.pins.forEach(pin=>{
+    const m=L.marker([pin.lat,pin.lng],{icon:icoUsr(pin.color||'#B888D9',(pin.by||'?').slice(0,1))}).addTo(layerPins);
+    m.bindPopup(`<b>${esc(pin.name)}</b><div style="margin-top:5px">${esc(pin.note||'')}</div><span class="mt">${esc(pin.by||'匿名')} 添加 · ♥ ${(pin.likes||[]).length}</span>`);
+    m.on('popupopen',()=>{ st.tab='places'; renderTabs(); renderBody(); });
+  });
+}
+function focusDay(i){
+  const day=V[st.variant].days[i];
+  const pts=day.stops.filter(s=>s.p&&P[s.p]).map(s=>[P[s.p].lat,P[s.p].lng]);
+  layerRoute.clearLayers();
+  if(!pts.length){ return; }
+  const hex=R[day.r].hex;
+  if(pts.length>1){
+    L.polyline(pts,{color:hex,weight:2.5,opacity:.85,dashArray:'1 7',lineCap:'round'}).addTo(layerRoute);
+    L.polyline(pts,{color:hex,weight:12,opacity:.07}).addTo(layerRoute);
+  }
+  map.flyToBounds(L.latLngBounds(pts).pad(.42),{duration:.85,maxZoom:12});
+  $('#allBtn').classList.remove('on');
+}
+function showAll(){
+  layerRoute.clearLayers();
+  const pts=[];
+  V[st.variant].days.forEach(d=>d.stops.forEach(s=>{ if(s.p&&P[s.p]) pts.push([P[s.p].lat,P[s.p].lng]); }));
+  st.pins.forEach(p=>pts.push([p.lat,p.lng]));
+  if(pts.length) map.flyToBounds(L.latLngBounds(pts).pad(.12),{duration:.85});
+  $('#allBtn').classList.add('on');
+}
+function setAdding(v){
+  adding=v; $('#addBtn').classList.toggle('on',v);
+  $('#addBtn').textContent = v ? '点地图落点…' : '＋ 加点';
+  map.getContainer().style.cursor = v ? 'crosshair' : '';
+  if(v) toast('在地图上点一下，落一个新点');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6. RENDER — header
+   ══════════════════════════════════════════════════════════════ */
+function renderSeals(){
+  const w=$('#seals'); w.innerHTML='';
+  Object.values(V).forEach(v=>{
+    const b=el('button','seal');
+    b.style.setProperty('--sc',v.color);
+    b.setAttribute('aria-pressed', st.variant===v.key);
+    b.innerHTML=`<span class="mark">${v.mark}</span><span><span class="lab">${esc(v.name)}</span><span class="met">${esc(v.met)}</span></span>`;
+    b.onclick=()=>{ st.variant=v.key; st.openDay=null; renderSeals(); renderTabs(); renderBody(); drawPlaces(); showAll(); saveCfg(); loadWX(true).then(()=>{ if(st.tab==='plan') renderBody(); }); };
+    w.appendChild(b);
+  });
+  $('#hvar').textContent='PLAN '+st.variant;
+}
+function renderMembers(){
+  const w=$('#avatars'); w.innerHTML='';
+  const all=[...st.members]; if(st.me.id && !all.find(m=>m.id===st.me.id)) all.unshift(st.me);
+  all.slice(0,4).forEach(m=>{
+    const a=el('span','av',esc((m.name||'?').slice(0,1)));
+    a.style.background=m.color; a.title=m.name; w.appendChild(a);
+  });
+  $('#meName').textContent = st.me.name || '设置名字';
+  $('#roomLabel').textContent = st.room;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   7. RENDER — tabs + body
+   ══════════════════════════════════════════════════════════════ */
+const TABS=[{k:'plan',n:'方案'},{k:'itin',n:'行程'},{k:'places',n:'地点'},{k:'budget',n:'预算'},{k:'prep',n:'备忘'}];
+function renderTabs(){
+  const w=$('#tabs'); w.innerHTML='';
+  TABS.forEach(t=>{
+    const b=el('button','tab');
+    let n='';
+    if(t.k==='places') n=`<span class="n">${st.pins.length}</span>`;
+    if(t.k==='itin')   n=`<span class="n">${V[st.variant].days.length}</span>`;
+    if(t.k==='prep'){ const left=TODOS.filter(x=>x.vars.includes(st.variant)&&!st.done[x.id]).length; n=`<span class="n">${left}</span>`; }
+    b.innerHTML=esc(t.n)+n;
+    b.setAttribute('role','tab'); b.setAttribute('aria-selected', st.tab===t.k);
+    b.onclick=()=>{ st.tab=t.k; renderTabs(); renderBody(); $('#scroll').scrollTop=0; if(window.innerWidth<=900) snapTo(1); };
+    w.appendChild(b);
+  });
+}
+function renderBody(){
+  const s=$('#scroll'); s.innerHTML='';
+  ({plan:vPlan, itin:vItin, places:vPlaces, budget:vBudget, prep:vPrep})[st.tab](s);
+}
+
+/* ---- 方案 ---- */
+function vPlan(s){
+  const v=V[st.variant];
+  s.appendChild(el('h2','sec',LABELS.weather));
+  wxBlock(s);
+  s.appendChild(el('h2','sec',LABELS.typhoon));
+  const rk=el('div','risk');
+  const bar=el('div','riskbar');
+  RISK.forEach(r=>{ const g=el('div','riskseg',r.lv); g.style.background=r.c; g.style.flex=r.d; bar.appendChild(g); });
+  rk.appendChild(bar);
+  const lb=el('div','risklab');
+  RISK.forEach((r,i)=>{ const x=el('span',null,r.lab); x.style.flex=r.d; x.style.textAlign=i===0?'left':i===RISK.length-1?'right':'center'; lb.appendChild(x); });
+  rk.appendChild(lb);
+  rk.appendChild(el('p','lede',TXT.typhoon));
+  s.appendChild(rk);
+
+  s.appendChild(el('h2','sec','方案 '+v.key+' · '+v.tag));
+  const h=el('div'); h.style.cssText='font-family:var(--disp);font-size:20px;font-weight:700;letter-spacing:.04em;margin-bottom:10px;line-height:1.4';
+  h.textContent=v.name; s.appendChild(h);
+  v.pitch.split('\n\n').forEach(x=>s.appendChild(el('p','lede',x)));
+  const c=el('div'); c.style.cssText=`border-left:2px solid ${v.hex};padding:2px 0 2px 13px;margin:0 0 22px`;
+  c.appendChild(el('div',null,`<span style="font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">${esc(LABELS.cost)}</span>`));
+  v.cons.split('\n\n').forEach((x,i)=>{const cp=el('p','lede',x);
+    cp.style.margin=i?'8px 0 0':'4px 0 0';c.appendChild(cp)}); s.appendChild(c);
+
+  s.appendChild(el('h2','sec',LABELS.segments));
+  const segs={};
+  v.days.forEach(d=>{ const k=d.stay.replace(/\s?[①②③④⑤⑥⑦⑧⑨⑩⑪]/,'').trim(); if(k==='—'||k==='机上')return; segs[k]=(segs[k]||0)+1; });
+  Object.entries(segs).forEach(([k,n])=>{
+    const day=v.days.find(d=>d.stay.startsWith(k)); const hex=day?R[day.r].hex:'#61708A';
+    const r=el('div','bline');
+    r.innerHTML=`<div class="lr"><span class="nm"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${hex};margin-right:8px"></span>${esc(k)}</span><span class="vv" style="color:var(--dim)">${n} 晚</span></div>`;
+    s.appendChild(r);
+  });
+
+  s.appendChild(el('h2','sec',LABELS.comparePlan));
+  Object.values(V).filter(x=>x.key!==st.variant).forEach(x=>{
+    const b=el('button','pcard'); b.style.setProperty('--pc',x.color); b.style.width='100%'; b.style.textAlign='left';
+    b.innerHTML=`<div class="top"><span class="swatch"></span><h3>${esc(x.name)}<span class="jp">${esc(x.tag)}</span></h3></div><p>${x.pitch.replace(/<[^>]+>/g,'').slice(0,84)}…</p>`;
+    b.onclick=()=>{ st.variant=x.key; st.openDay=null; renderSeals(); renderTabs(); renderBody(); drawPlaces(); showAll(); saveCfg(); $('#scroll').scrollTop=0; };
+    s.appendChild(b);
+  });
+}
+
+/* ---- 行程 ---- */
+function vItin(s){
+  const v=V[st.variant];
+  s.appendChild(el('p','lede','点任意一天 → 地图跟随并画出当天动线。<strong>底图可切「地形」</strong>，熊野那几天能看清爬升。'));
+  const sp=el('div','spine');
+  v.days.forEach((d,i)=>{
+    const hex=R[d.r].hex;
+    const w=el('div','day'+(st.openDay===i?' open':'')); w.style.setProperty('--nc',hex);
+    const b=el('button','daybtn');
+    b.innerHTML=`<span class="node">${i+1}</span>
+      <span class="dhead"><span class="ddate">${esc(d.d)} ${esc(d.w)}</span></span>
+      <div class="dtitle">${esc(d.t)}</div>
+      ${d.note?`<div class="dnote">${esc(d.note)}</div>`:''}
+      <div class="dmeta">${d.stay&&d.stay!=='—'?`<span class="pill stay">宿 · ${esc(d.stay)}</span>`:''}<span class="pill">${R[d.r].n}</span>${d.stops.length?`<span class="pill">${d.stops.length} 站</span>`:''}</div>`;
+    b.onclick=()=>{ st.openDay = st.openDay===i?null:i; renderBody(); if(st.openDay===i) focusDay(i); };
+    w.appendChild(b);
+    const body=el('div','dbody');
+    d.stops.forEach(stp=>{
+      const btn=el('button','stop');
+      const p=stp.p?P[stp.p]:null;
+      btn.innerHTML=`<span class="t">${esc(stp.t)}</span><span class="n">${esc(stp.n)}${p?` <span class="jp">${esc(p.jp)}</span>`:''}${stp.s?`<small>${esc(stp.s)}</small>`:''}</span>`;
+      btn.onclick=e=>{ e.stopPropagation(); if(p){ map.flyTo([p.lat,p.lng],13,{duration:.7}); mReg[p.id]?.openPopup(); if(window.innerWidth<=900) snapTo(0); } };
+      body.appendChild(btn);
+      if(p){const lr=linkRow(p,true);lr.style.margin='0 0 6px 56px';body.appendChild(lr);}
+    });
+    const sb=stayBlock(d,2026); if(sb) body.appendChild(sb);
+    const vj=(d.stops||[]).map(x=>x.p&&P[x.p]&&P[x.p].jp).filter(Boolean)[0];
+    if(vj){const v=el('div','vjp',esc(vj)); b.appendChild(v);}
+    w.appendChild(body); sp.appendChild(w);
+  });
+  s.appendChild(sp);
+}
+
+/* ---- 地点 ---- */
+function vPlaces(s){
+  const bar=el('div','row'); bar.style.marginBottom='16px';
+  const a=el('button','btn pri','＋ 添加地点'); a.onclick=()=>addModal(); bar.appendChild(a);
+  const r=el('button','btn','↻ 同步'); r.onclick=()=>pull(true); bar.appendChild(r);
+  s.appendChild(bar);
+
+  s.appendChild(el('h2','sec',`${LABELS.ourPins} <span style="color:var(--dim)">${st.pins.length}</span>`));
+  if(!st.pins.length){
+    s.appendChild(el('p','lede',TXT.pinsEmpty));
+  }
+  [...st.pins].sort((x,y)=>(y.likes||[]).length-(x.likes||[]).length || y.at-x.at).forEach(pin=>{
+    const c=el('div','pcard'); c.style.setProperty('--pc',pin.color||'#B888D9');
+    const liked=(pin.likes||[]).includes(st.me.id);
+    c.innerHTML=`<div class="top"><span class="swatch"></span><h3>${esc(pin.name)}</h3></div>
+      ${pin.note?`<p>${esc(pin.note)}</p>`:''}
+      <div class="foot">
+        <span class="byline"><span class="mini" style="background:${pin.color||'#B888D9'}">${esc((pin.by||'?').slice(0,1))}</span>${esc(pin.by||'匿名')}</span>
+        <span style="flex:1"></span>
+        <button class="act like ${liked?'on':''}">♥ ${(pin.likes||[]).length}</button>
+        <button class="act go">定位</button>
+        ${pin.byId===st.me.id?'<button class="act del">删除</button>':''}
+      </div>`;
+    c.querySelector('.like').onclick=()=>toggleLike(pin.id);
+    c.querySelector('.go').onclick=()=>{ map.flyTo([pin.lat,pin.lng],14,{duration:.7}); if(window.innerWidth<=900) snapTo(0); };
+    c.querySelector('.del')?.addEventListener('click',()=>delPin(pin.id));
+    c.appendChild(linkRow({id:pin.id,zh:pin.name,jp:pin.name,lat:pin.lat,lng:pin.lng},true));
+    s.appendChild(c);
+  });
+
+  s.appendChild(el('h2','sec',LABELS.places));
+  const seen=new Set(); const list=[];
+  V[st.variant].days.forEach(d=>d.stops.forEach(x=>{ if(x.p&&P[x.p]&&!seen.has(x.p)){seen.add(x.p);list.push(P[x.p]);} }));
+  list.forEach(p=>{
+    const c=el('button','pcard'); c.style.setProperty('--pc',R[p.r].c); c.style.width='100%'; c.style.textAlign='left';
+    c.innerHTML=`<div class="top"><span class="swatch"></span><h3>${esc(p.zh)}<span class="jp">${esc(p.jp)}</span></h3></div>`;
+    const nb=noteBlock(p); if(nb) c.appendChild(nb);
+    const mine=el('p',null,esc(p.note));
+    mine.style.cssText='margin:6px 0 0;font-size:12.5px;color:var(--dim);line-height:1.65';
+    if(nb){const tagx=el('span',null,'参考');
+      tagx.style.cssText='font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--faint);border:1px solid var(--line-soft);border-radius:3px;padding:1px 5px;margin-right:6px;vertical-align:1px';
+      mine.prepend(tagx)}
+    c.appendChild(mine);
+    c.appendChild(linkRow(p,false));
+    c.onclick=e=>{ if(e.target.closest('a,.lk2,.ndel')) return;
+      map.flyTo([p.lat,p.lng],13,{duration:.7}); mReg[p.id]?.openPopup(); if(window.innerWidth<=900) snapTo(0); };
+    s.appendChild(c);
+  });
+}
+
+/* ---- 预算 ---- */
+function vBudget(s){
+  const b=st.budget[st.variant] || (st.budget[st.variant]={...V[st.variant].budget});
+  const total=BUDGET_ROWS.reduce((a,r)=>a+(b[r.k]||0),0);
+  const div = st.perPerson?2:1;
+  const fmt = n => st.ccy==='CAD' ? '$'+Math.round(n/div).toLocaleString() : '¥'+Math.round(n*st.rate/div).toLocaleString();
+
+  const t=el('div','btot');
+  t.innerHTML=`<div><div class="cap">${st.perPerson?'每人':'两人合计'} · 18 晚</div><div class="big">${fmt(total)}</div></div>
+    <div class="side"><div>≈ ${st.ccy==='CAD'?'¥'+Math.round(total*st.rate/div).toLocaleString():'$'+Math.round(total/div).toLocaleString()}</div><div style="color:var(--faint);font-size:10.5px;margin-top:3px">${fmt(total/18)} / 晚</div></div>`;
+  s.appendChild(t);
+
+  const ctl=el('div','row'); ctl.style.marginBottom='18px';
+  const mk=(txt,on,fn)=>{ const x=el('button','btn'+(on?' pri':''),txt); x.onclick=fn; return x; };
+  ctl.appendChild(mk(st.perPerson?'每人':'两人合计',st.perPerson,()=>{st.perPerson=!st.perPerson;renderBody();saveCfg();}));
+  ctl.appendChild(mk(st.ccy,st.ccy==='JPY',()=>{st.ccy=st.ccy==='CAD'?'JPY':'CAD';renderBody();saveCfg();}));
+  ctl.appendChild(mk('重置',false,()=>{st.budget[st.variant]={...V[st.variant].budget};renderBody();saveCfg();}));
+  s.appendChild(ctl);
+
+  BUDGET_ROWS.forEach(r=>{
+    const w=el('div','bline');
+    w.innerHTML=`<div class="lr"><span class="nm">${esc(r.n)}<small>${esc(r.s)}</small></span><span class="vv">${fmt(b[r.k]||0)}</span></div>`;
+    const sl=el('input'); sl.type='range'; sl.min=0; sl.max=r.max; sl.step=25; sl.value=b[r.k]||0;
+    sl.oninput=e=>{ b[r.k]=+e.target.value; renderBody(); };
+    sl.onchange=()=>saveCfg();
+    w.appendChild(sl); s.appendChild(w);
+  });
+
+  const bks=bookings(), paid=bks.reduce((a,b)=>a+(bkGet(b.id)?.amt||0),0);
+  const nbk=bks.filter(b=>bkGet(b.id)?.state==='ok').length;
+  s.appendChild(el('h2','sec',LABELS.reconcile));
+  if(!nbk) s.appendChild(el('p','lede','还没登记任何已订项目。去「备忘」页把订好的东西打勾填金额，这里会自动汇总。'));
+  else{const w=el('div','btot');
+   w.innerHTML=`<div><div class="cap">已登记 ${nbk} / ${bks.length} 项</div><div class="big">$${Math.round(paid/div).toLocaleString()}</div></div>
+    <div class="side"><div>预算 ${fmt(total)}</div><div style="color:${paid>total?'var(--shu)':'var(--sugi)'};margin-top:3px">${paid>total?'超':'剩'} $${Math.abs(Math.round((total-paid)/div)).toLocaleString()}</div></div>`;
+   s.appendChild(w)}
+  s.appendChild(el('h2','sec',LABELS.fx));
+  const f=el('div','field');
+  f.innerHTML=`<label class="lb">1 CAD = ? JPY</label>`;
+  const i=el('input'); i.type='number'; i.value=st.rate; i.step='0.5';
+  i.onchange=e=>{ st.rate=+e.target.value||115; renderBody(); saveCfg(); };
+  f.appendChild(i); s.appendChild(f);
+  s.appendChild(el('p','lede',TXT.budgetNote));
+}
+
+/* ---- 备忘 ---- */
+function vPrep(s){
+  const bks=bookings(), dn=bks.filter(b=>bkGet(b.id)?.state==='ok').length;
+  s.appendChild(el('h2','sec',`${LABELS.bookings} ${dn} / ${bks.length}`));
+  s.appendChild(el('p','lede',TXT.bookingIntro));
+  bks.forEach(b=>{
+    const r=bkGet(b.id), ok=r?.state==='ok';
+    const w=el('div','bkrow'+(ok?' done':''));
+    w.innerHTML=`<div style="display:flex;align-items:flex-start;gap:9px">
+      <span class="box${ok?' on':''}"></span>
+      <span style="flex:1"><span style="font-size:13.5px">${esc(b.n)}</span>
+      <span class="vfy ${ok?'ok':'todo'}">${ok?'已订':'未订'}</span>
+      ${ok&&r.ref?`<small style="display:block;font-family:var(--mono);font-size:10.5px;color:var(--dim);margin-top:3px">确认号 ${esc(r.ref)}</small>`:''}
+      ${ok&&r.amt?`<small style="display:block;font-family:var(--mono);font-size:10.5px;color:var(--faint)">实付 $${Number(r.amt).toLocaleString()} CAD</small>`:''}
+      ${ok&&r.by?`<small style="display:block;font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-top:2px">${esc(r.by)} · ${esc(r.at||'')}</small>`:''}
+      </span><span class="pill">${esc(b.t)}</span></div>`;
+    w.onclick=()=>bkModal(b); s.appendChild(w)});
+  const ic=el('button','btn','↓ 导出到日历 .ics'); ic.onclick=toICS; ic.style.marginTop='12px'; s.appendChild(ic);
+  s.appendChild(el('h2','sec',LABELS.prepList));
+  s.appendChild(el('p','lede',TXT.prepIntro));
+  TODOS.filter(t=>t.vars.includes(st.variant)).forEach(t=>{
+    const done=!!st.done[t.id];
+    const b=el('button','todo'+(done?' done':''));
+    b.innerHTML=`<span class="box"></span><span class="tx">${esc(t.n)}<small>${esc(t.s)}</small></span><span class="due ${done?'ok':''}">${esc(t.due)}</span>`;
+    b.onclick=()=>{ st.done[t.id]=!done; renderTabs(); renderBody(); saveCfg(); };
+    s.appendChild(b);
+  });
+
+  s.appendChild(el('h2','sec',LABELS.drive));
+  DRIVE.forEach(([n,d])=>{
+    const w=el('div','bline'); w.innerHTML=`<div class="nm">${esc(n)}<small style="margin-top:4px;line-height:1.6">${esc(d)}</small></div>`; s.appendChild(w);
+  });
+
+  s.appendChild(el('h2','sec',LABELS.kumano));
+  KUMANO.forEach(([n,d])=>{
+    const w=el('div','bline'); w.innerHTML=`<div class="nm">${esc(n)}<small style="margin-top:4px;line-height:1.6">${esc(d)}</small></div>`; s.appendChild(w);
+  });
+
+  s.appendChild(el('h2','sec',LABELS.aboutPage));
+  s.appendChild(el('p','lede',TXT.aboutPage));
+  const row=el('div','row');
+  const ex=el('button','btn','导出 JSON'); ex.onclick=exportJSON; row.appendChild(ex);
+  const im=el('button','btn','导入 JSON'); im.onclick=importJSON; row.appendChild(im);
+  s.appendChild(row);
+  const w=el('p','lede'); w.style.cssText='margin-top:16px;font-size:12px;color:var(--faint)';
+  w.innerHTML=TXT.aboutFoot;
+  s.appendChild(w);
+}
+
+const AREA_HINT={kansai:'関西',shikoku:'四国',kyushu:'九州',kumano:'和歌山 熊野'};
+const PLACE_TAB='places';
+/* ══════════════════════════════════════════════════════════════
+   升级模块 v3 — 注入到两个日本站的 index.html
+   1. 地图跳转改用「地名」而不是经纬度
+   2. 小红书在手机上先试 App scheme，失败回退网页
+   3. 加地点支持「名字搜索」和「粘贴谷歌地图链接」
+   4. 每晚住宿 / 吃饭推荐 + 比价与预订深链
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 地名查询串：优先用日文名 + 地区，避免同名 ── */
+function gquery(p){
+  return encodeURIComponent(p.gq || ((p.jp||p.zh)+' '+(AREA_HINT[p.r]||'')).trim());
+}
+const LK2={
+  /* 用地名搜索：落在真实的地点卡片上（含营业时间、评价、照片） */
+  map:  p=>`https://www.google.com/maps/search/?api=1&query=${gquery(p)}`,
+  /* 坐标兜底：地名搜不到时用这个 */
+  pin:  p=>`https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`,
+  dir:  p=>`https://www.google.com/maps/dir/?api=1&destination=${gquery(p)}&travelmode=transit`,
+  site: p=>`https://www.google.com/search?q=${encodeURIComponent((p.jp||p.zh)+' 公式サイト 営業時間')}`,
+  /* 食べログ：日本餐厅的实际权威来源 */
+  tabelog: q=>`https://tabelog.com/rst/rstsearch/?SrchWord=${encodeURIComponent(q)}`,
+  /* Yahoo 乗換案内：日本人自己用的换乘工具，比谷歌准 */
+  transit: (a,b)=>`https://transit.yahoo.co.jp/search/result?from=${encodeURIComponent(a)}&to=${encodeURIComponent(b)}`,
+  /* 住宿比价 */
+  booking: (q,ci,co)=>`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(q)}`
+            +(ci?`&checkin=${ci}`:'')+(co?`&checkout=${co}`:''),
+  ghotel:  q=>`https://www.google.com/travel/search?q=${encodeURIComponent(q)}`,
+  agoda:   q=>`https://www.agoda.com/search?text=${encodeURIComponent(q)}`,
+  xhsWeb:  q=>`https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(q)}`
+};
+
+/* ── 小红书：手机上先试 App，1.2 秒没跳走就打开网页 ── */
+const IS_MOBILE=/Android|iPhone|iPad|iPod|HarmonyOS/i.test(navigator.userAgent);
+function openXHS(kw){
+  const web=LK2.xhsWeb(kw);
+  if(!IS_MOBILE){ window.open(web,'_blank','noopener'); return; }
+  let gone=false;
+  const mark=()=>{gone=true};
+  document.addEventListener('visibilitychange',mark,{once:true});
+  window.addEventListener('pagehide',mark,{once:true});
+  const t=setTimeout(()=>{
+    document.removeEventListener('visibilitychange',mark);
+    if(!gone) window.location.href=web;
+  },1200);
+  try{ window.location.href='xhsdiscover://search/result?keyword='+encodeURIComponent(kw); }
+  catch(e){ clearTimeout(t); window.location.href=web; }
+}
+
+/* ── 地理编码：Nominatim（OpenStreetMap）
+   使用条款 https://operations.osmfoundation.org/policies/nominatim/
+   志愿者服务器，无可用性保证。本实现：每秒最多 1 次、结果缓存、不做批量。
+   数据 © OpenStreetMap contributors（ODbL）。 ── */
+let geoAt=0, geoBusy=false;
+async function geoSearch(q){
+  const key='geo:'+q.toLowerCase().trim();
+  const hit=await S.get(key); if(hit) return hit;
+  if(geoBusy) return null;
+  geoBusy=true;
+  try{
+    const wait=Math.max(0,1100-(Date.now()-geoAt));
+    if(wait) await new Promise(r=>setTimeout(r,wait));
+    geoAt=Date.now();
+    const r=await fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5'
+      +'&accept-language=zh-CN,ja,en&q='+encodeURIComponent(q));
+    if(!r.ok) throw new Error('geo '+r.status);
+    const j=await r.json();
+    const out=j.map(x=>({name:x.display_name,lat:+x.lat,lng:+x.lon,kind:x.type||''}));
+    await S.set(key,out);
+    return out;
+  }catch(e){ return null; }
+  finally{ geoBusy=false; }
+}
+/* ── 粘贴谷歌地图链接 / 坐标，直接抽出经纬度 ── */
+function parseCoords(t){
+  t=String(t||'');
+  let m=t.match(/@(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/);            if(m) return{lat:+m[1],lng:+m[2]};
+  m=t.match(/!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/);               if(m) return{lat:+m[1],lng:+m[2]};
+  m=t.match(/[?&](?:q|ll|daddr|destination)=(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/); if(m) return{lat:+m[1],lng:+m[2]};
+  m=t.match(/^\s*(-?\d{1,2}(?:\.\d+)?)\s*[,，]\s*(-?\d{1,3}(?:\.\d+)?)\s*$/);          if(m) return{lat:+m[1],lng:+m[2]};
+  return null;
+}
+
+/* ── 一个地点的深链行 ── */
+function linkRow(p,compact){
+  const w=el('div','lkrow');
+  const A=(t,href,cls)=>{const a=document.createElement('a');a.className='lk2'+(cls?' '+cls:'');
+    a.href=href;a.target='_blank';a.rel='noopener noreferrer';a.textContent=t;return a};
+  const B=(t,fn,cls)=>{const b=el('button','lk2'+(cls?' '+cls:''),null);b.textContent=t;
+    b.onclick=e=>{e.stopPropagation();fn()};return b};
+  w.appendChild(A('地图',LK2.map(p)));
+  w.appendChild(A('导航',LK2.dir(p)));
+  const j=B('日本語 ⧉',()=>copyJP(p),'jp'); j.title=p.jp||p.zh; w.appendChild(j);
+  if(!compact){
+    w.appendChild(A('官网 / 营业时间',LK2.site(p)));
+    w.appendChild(B('小红书',()=>openXHS(p.zh)));
+    w.appendChild(A('坐标',LK2.pin(p),'dim'));
+    const n=B('＋ 笔记',()=>noteModal(p),'nt'); w.appendChild(n);
+  }
+  return w;
+}
+
+/* ── 住宿 / 吃饭：每晚给 2–3 个方向 + 预订深链 ── */
+function stayKey(s){ return String(s||'').replace(/\s?[①②③④⑤⑥⑦⑧⑨⑩⑪]/g,'').trim(); }
+function isoDate(dstr,year){ const a=String(dstr).split('.'); return `${year}-${a[0]}-${a[1]}`; }
+function stayBlock(day,year){
+  const k=stayKey(day.stay);
+  if(!k||k==='—'||k==='机上'||typeof STAY==='undefined'||!STAY[k]) return null;
+  const S2=STAY[k];
+  const ci=isoDate(day.d,year);
+  const co=(()=>{const d=new Date(ci+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+1);
+    return d.toISOString().slice(0,10)})();
+  const box=el('div','stayb');
+  box.appendChild(el('div','stayh',
+    `<span class="sn2">住 · ${esc(k)}</span><span class="sa">${esc(S2.area||'')}</span>`));
+  (S2.opts||[]).forEach(o=>{
+    const r=el('div','sopt'+(o.pick?' pick':''));
+    r.innerHTML=`<div class="st"><span class="tier">${esc(o.tier||'')}</span>`
+      +`<span class="sname">${esc(o.n)}</span>`
+      +(o.pick?'<span class="pk">建议</span>':'')+`</div>`
+      +(o.why?`<div class="swhy">${esc(o.why)}</div>`:'');
+    const lr=el('div','lkrow');
+    [['Booking',LK2.booking(o.q||((S2.area||k)+' '+(o.n||'')),ci,co)],
+     ['Google 酒店',LK2.ghotel(/hotel|ryokan|accommodation|apartment|lodge/i.test(o.q||'')?(o.q||''):((o.q||S2.area||k)+' hotel'))],
+     ['Agoda',LK2.agoda(o.q||S2.area||k)]].forEach(([t,h])=>{
+      const a=document.createElement('a');a.className='lk2';a.href=h;a.target='_blank';
+      a.rel='noopener noreferrer';a.textContent=t;lr.appendChild(a)});
+    r.appendChild(lr);
+    box.appendChild(r)});
+  if((S2.food||[]).length){
+    box.appendChild(el('div','stayh2','吃'));
+    S2.food.forEach(f=>{
+      const r=el('div','sfood');
+      r.innerHTML=`<div class="st"><span class="sname">${esc(f.n)}</span>`
+        +(f.jp?`<span class="fjp">${esc(f.jp)}</span>`:'')+`</div>`
+        +(f.why?`<div class="swhy">${esc(f.why)}</div>`:'');
+      const lr=el('div','lkrow');
+      const a1=document.createElement('a');a1.className='lk2';a1.href=LK2.tabelog(f.jp||f.n);
+      a1.target='_blank';a1.rel='noopener noreferrer';a1.textContent='食べログ';lr.appendChild(a1);
+      const a2=document.createElement('a');a2.className='lk2';
+      a2.href=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((f.jp||f.n)+' '+(S2.area||k))}`;
+      a2.target='_blank';a2.rel='noopener noreferrer';a2.textContent='地图';lr.appendChild(a2);
+      const b=el('button','lk2',null);b.textContent='小红书';
+      b.onclick=e=>{e.stopPropagation();openXHS(f.n)};lr.appendChild(b);
+      r.appendChild(lr);box.appendChild(r)});
+  }
+  const note=el('div','staynote');
+  note.textContent='上面是方向和筛选条件，不是具体房源清单——按钮已按当晚日期预填好搜索。价格和空房以平台当日为准。';
+  box.appendChild(note);
+  return box;
+}
+
+/* ── 加地点弹窗 v2：名字搜索 + 粘贴链接 ── */
+function addModal(pre){
+  if(!st.me.name) return meModal(()=>addModal(pre));
+  openModal(`<h3>添加地点</h3>
+   <p class="mp">三种方式：搜名字、粘贴谷歌地图链接、或在地图上长按取点。</p>
+   <div class="field"><label class="lb">① 搜名字</label>
+     <div style="display:flex;gap:6px"><input type="text" id="gq" placeholder="例：一芳亭 大阪 / 栂池高原"
+       style="flex:1"><button class="btn" id="gbtn" style="flex:0 0 auto">搜索</button></div>
+     <div id="gres"></div>
+     <div class="tiny">地理编码来自 OpenStreetMap Nominatim，志愿者服务器，每秒限一次，偶尔搜不到。
+       搜不到就用②或③。数据 © OpenStreetMap contributors</div>
+   </div>
+   <div class="field"><label class="lb">② 粘贴谷歌地图链接 / 坐标</label>
+     <input type="text" id="gpaste" placeholder="粘贴分享链接，或 34.6659,135.5011"></div>
+   <div class="field"><label class="lb">名字</label><input type="text" id="an" maxlength="40"
+     value="${pre&&pre.name?esc(pre.name):''}" placeholder="显示在地图上的名字"></div>
+   <div class="field"><label class="lb">为什么想去</label><textarea id="ad" maxlength="200"
+     placeholder="小红书看到的 / 朋友推荐 / 想拍的机位"></textarea></div>
+   <div class="row"><div class="field"><label class="lb">纬度</label>
+     <input type="number" id="alat" step="0.00001" value="${pre?pre.lat.toFixed(5):''}"></div>
+     <div class="field"><label class="lb">经度</label>
+     <input type="number" id="alng" step="0.00001" value="${pre?pre.lng.toFixed(5):''}"></div></div>
+   <div class="row" style="margin-top:5px"><button class="btn" data-close>取消</button>
+     <button class="btn pri" id="as">加进地图</button></div>`,
+  b=>{
+    const $q=b.querySelector('#gq'), $res=b.querySelector('#gres'),
+          $lat=b.querySelector('#alat'), $lng=b.querySelector('#alng'), $an=b.querySelector('#an');
+    const setPt=(lat,lng,nm)=>{$lat.value=(+lat).toFixed(5);$lng.value=(+lng).toFixed(5);
+      if(nm&&!$an.value.trim())$an.value=nm};
+    async function run(){
+      const q=$q.value.trim(); if(q.length<2) return toast('至少两个字');
+      $res.innerHTML='<div class="tiny">搜索中…</div>';
+      const rs=await geoSearch(q);
+      $res.innerHTML='';
+      if(!rs){ $res.innerHTML='<div class="tiny warn">没搜到，或服务暂时不可用。用②粘贴链接更稳。</div>'; return }
+      if(!rs.length){ $res.innerHTML='<div class="tiny warn">没有结果。换个写法，或加上城市名。</div>'; return }
+      rs.forEach(x=>{
+        const r=el('button','gitem');
+        const short=x.name.split(',').slice(0,3).join(',');
+        r.innerHTML=`<span class="gn">${esc(short)}</span><span class="gk">${esc(x.kind)}</span>`;
+        r.onclick=ev=>{ev.preventDefault();setPt(x.lat,x.lng,short.split(',')[0].trim());
+          $res.querySelectorAll('.gitem').forEach(z=>z.classList.remove('on'));
+          r.classList.add('on'); toast('已取点')};
+        $res.appendChild(r)});
+    }
+    b.querySelector('#gbtn').onclick=run;
+    $q.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();run()}});
+    b.querySelector('#gpaste').addEventListener('input',e=>{
+      const c=parseCoords(e.target.value);
+      if(c){ setPt(c.lat,c.lng); toast('已从链接取到坐标') }});
+    $an.focus();
+    b.querySelector('#as').onclick=async()=>{
+      const n=$an.value.trim();
+      const la=parseFloat($lat.value), ln=parseFloat($lng.value);
+      if(!n) return toast('起个名字');
+      if(isNaN(la)||isNaN(ln)) return toast('还没有坐标 — 用上面三种方式之一取一个');
+      st.pins.push({id:uid(),name:n,note:b.querySelector('#ad').value.trim(),lat:la,lng:ln,
+        by:st.me.name,byId:st.me.id,color:st.me.color,likes:[],at:Date.now()});
+      closeModal(); st.tab=PLACE_TAB; renderTabs(); renderBody(); drawPins();
+      if(typeof mapOK==='undefined'||mapOK) try{map.flyTo([la,ln],13,{duration:.7})}catch(e){}
+      await pushPins(); toast('加好了，同行的人也能看到');
+    };
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   8. COLLAB
+   ══════════════════════════════════════════════════════════════ */
+async function pull(loud){
+  $('#syncDot').className='dot busy';
+  const [pins,mems,bk,nt]=await Promise.all([S.get(K.pins(),true),S.get(K.mem(),true),
+    S.get(K.bk(),true),S.get(K.notes(),true)]);
+  if(Array.isArray(pins)) st.pins=pins;
+  if(Array.isArray(mems)) st.members=mems;
+  if(bk&&typeof bk==='object') st.bk=bk;
+  if(nt&&typeof nt==='object') st.notes=nt;
+  $('#syncDot').className = S.ok ? 'dot' : 'dot off';
+  renderMembers(); renderTabs(); if(st.tab==='places') renderBody(); drawPins();
+  if(loud) toast(S.ok?`已同步 · ${st.pins.length} 个点`:'当前环境无共享存储，改动只保留在本次会话');
+}
+async function pushPins(){ $('#syncDot').className='dot busy'; await S.set(K.pins(),st.pins,true); $('#syncDot').className=S.ok?'dot':'dot off'; }
+async function joinRoom(){
+  if(!st.me.id) return;
+  const m=await S.get(K.mem(),true) || [];
+  const i=m.findIndex(x=>x.id===st.me.id);
+  const rec={id:st.me.id,name:st.me.name,color:st.me.color,at:Date.now()};
+  if(i>=0) m[i]=rec; else m.push(rec);
+  st.members=m; await S.set(K.mem(),m,true); renderMembers();
+}
+function dropPin(ll){
+  if(!st.me.name){ meModal(()=>dropPin(ll)); return; }
+  addModal({lat:ll.lat,lng:ll.lng});
+}
+async function toggleLike(id){
+  if(!st.me.id) return meModal();
+  const p=st.pins.find(x=>x.id===id); if(!p) return;
+  p.likes=p.likes||[];
+  const i=p.likes.indexOf(st.me.id);
+  if(i>=0) p.likes.splice(i,1); else p.likes.push(st.me.id);
+  renderBody(); drawPins(); await pushPins();
+}
+async function delPin(id){
+  st.pins=st.pins.filter(p=>p.id!==id);
+  renderTabs(); renderBody(); drawPins(); await pushPins(); toast('已删除');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   9. MODALS
+   ══════════════════════════════════════════════════════════════ */
+function openModal(html,setup){
+  const b=$('#mbox'); b.innerHTML=html; $('#modal').classList.add('show'); setup&&setup(b);
+  b.querySelectorAll('[data-close]').forEach(x=>x.onclick=closeModal);
+}
+function closeModal(){ $('#modal').classList.remove('show'); }
+$('#modal').onclick=e=>{ if(e.target.id==='modal') closeModal(); };
+
+function meModal(after){
+  openModal(`<h3>你是谁</h3><p class="mp">名字会出现在你添加的每个点旁边，同行的人才知道是谁想去的。</p>
+    <div class="field"><label class="lb">名字</label><input type="text" id="mn" maxlength="12" value="${esc(st.me.name)}" placeholder="比如 小K"></div>
+    <div class="field"><label class="lb">颜色</label><div id="cw" style="display:flex;gap:8px;flex-wrap:wrap"></div></div>
+    <div class="row" style="margin-top:16px"><button class="btn" data-close>取消</button><button class="btn pri" id="ms">保存</button></div>`,
+  b=>{
+    const cw=b.querySelector('#cw');
+    AVCOL.forEach(c=>{
+      const d=el('button'); d.style.cssText=`width:26px;height:26px;border-radius:50%;background:${c};border:2px solid ${st.me.color===c?'#EAE8E2':'transparent'}`;
+      d.onclick=()=>{ st.me.color=c; meModal(after); };
+      cw.appendChild(d);
+    });
+    b.querySelector('#mn').focus();
+    b.querySelector('#ms').onclick=async()=>{
+      const n=b.querySelector('#mn').value.trim();
+      if(!n) return toast('填个名字');
+      st.me.name=n; st.me.id=st.me.id||uid();
+      closeModal(); saveCfg(); await joinRoom(); renderMembers(); toast('已加入 '+st.room);
+      after&&after();
+    };
+  });
+}
+function roomModal(){
+  openModal(`<h3>行程码</h3><p class="mp">同一个码 = 同一份地图，你和同行的人加的点会互相同步。<strong style="color:var(--text)">换一个没人用过的码，就得到一份全新的空白行程</strong>——别人也可以这样拿去建自己的。</p>
+    <div class="field"><label class="lb">当前行程码</label><input type="text" id="rc" maxlength="24" value="${esc(st.room)}" placeholder="jp2610"></div>
+    <p class="mp" style="font-size:11.5px;color:var(--faint)">只能用字母数字和短横线。共享数据对所有知道这个码的人可见。</p>
+    <div class="row"><button class="btn" data-close>取消</button><button class="btn pri" id="rs">切换</button></div>`,
+  b=>{
+    b.querySelector('#rs').onclick=async()=>{
+      const v=b.querySelector('#rc').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
+      if(v.length<3) return toast('至少 3 个字符');
+      st.room=v; closeModal(); saveCfg(); st.pins=[]; st.members=[];
+      await pull(); await joinRoom(); toast('已切换到 '+v);
+    };
+  });
+}
+function exportJSON(){
+  const d={room:st.room,variant:st.variant,pins:st.pins,budget:st.budget,done:st.done,rate:st.rate};
+  const t=JSON.stringify(d,null,2);
+  openModal(`<h3>导出</h3><p class="mp">复制走，可以粘回任何一个行程码里。</p>
+    <textarea id="ex" style="height:230px;font-family:var(--mono);font-size:11px">${esc(t)}</textarea>
+    <div class="row" style="margin-top:12px"><button class="btn" data-close>关闭</button><button class="btn pri" id="cp">复制</button></div>`,
+  b=>{ b.querySelector('#cp').onclick=async()=>{
+    const ta=b.querySelector('#ex');
+    try{ await navigator.clipboard.writeText(ta.value); }
+    catch(e){ ta.select(); try{ document.execCommand('copy'); }catch(_){ return toast('复制失败 — 手动全选'); } }
+    toast('已复制');
+  }; });
+}
+function importJSON(){
+  openModal(`<h3>导入</h3><p class="mp">粘贴一份导出的 JSON。会覆盖当前行程码下的点位和预算。</p>
+    <textarea id="im" style="height:200px;font-family:var(--mono);font-size:11px" placeholder='{"pins":[...]}'></textarea>
+    <div class="row" style="margin-top:12px"><button class="btn" data-close>取消</button><button class="btn pri" id="io">导入</button></div>`,
+  b=>{ b.querySelector('#io').onclick=async()=>{
+    try{
+      const d=JSON.parse(b.querySelector('#im').value);
+      if(Array.isArray(d.pins)) st.pins=d.pins;
+      if(d.budget) st.budget=d.budget;
+      if(d.done) st.done=d.done;
+      if(d.variant&&V[d.variant]) st.variant=d.variant;
+      if(d.rate) st.rate=d.rate;
+      closeModal(); renderSeals(); renderTabs(); renderBody(); drawPlaces(); drawPins();
+      await pushPins(); saveCfg(); toast('导入完成');
+    }catch(e){ toast('JSON 格式不对'); }
+  };});
+}
+
+/* ══════════════════════════════════════════════════════════════
+   10. LOCAL CONFIG
+   ══════════════════════════════════════════════════════════════ */
+let saveT;
+function saveCfg(){
+  clearTimeout(saveT);
+  saveT=setTimeout(()=>S.set(K.cfg(),{room:st.room,variant:st.variant,me:st.me,budget:st.budget,done:st.done,rate:st.rate,perPerson:st.perPerson,ccy:st.ccy}),350);
+}
+async function loadCfg(){
+  const c=await S.get(K.cfg());
+  if(c){
+    st.room=c.room||st.room; st.variant=V[c.variant]?c.variant:'A';
+    st.me=c.me||st.me; st.budget=c.budget||{}; st.done=c.done||{};
+    st.rate=c.rate||115; st.perPerson=!!c.perPerson; st.ccy=c.ccy||'CAD';
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   11. MOBILE BOTTOM SHEET
+   ══════════════════════════════════════════════════════════════ */
+const SNAP=[0.14,0.55,0.90];
+let snapI=1, sheetPx=0;
+const VH=()=>window.innerHeight;
+function snapTo(i){
+  if(window.innerWidth>900) return;
+  snapI=Math.max(0,Math.min(SNAP.length-1,i));
+  sheetPx=SNAP[snapI]*VH();
+  document.documentElement.style.setProperty('--sheet-h',sheetPx+'px');
+}
+(function sheet(){
+  const p=$('#panel'), g=$('#grab'), sc=$('#scroll');
+  let y0=0,h0=0,drag=false,moved=false;
+  const start=e=>{
+    if(window.innerWidth>900) return;
+    drag=true; moved=false; p.classList.add('dragging');
+    y0=(e.touches?e.touches[0].clientY:e.clientY);
+    h0=sheetPx||SNAP[snapI]*VH();
+  };
+  const move=e=>{
+    if(!drag) return;
+    const y=(e.touches?e.touches[0].clientY:e.clientY);
+    if(Math.abs(y-y0)>3){ moved=true; if(e.cancelable) e.preventDefault(); }
+    sheetPx=Math.max(70,Math.min(VH()*0.92,h0-(y-y0)));
+    document.documentElement.style.setProperty('--sheet-h',sheetPx+'px');
+  };
+  const end=()=>{
+    if(!drag) return; drag=false; p.classList.remove('dragging');
+    if(!moved){ snapTo(snapI===2?1:2); return; }
+    const frac=sheetPx/VH();
+    let best=0,bd=Infinity;
+    SNAP.forEach((s,i)=>{ const d=Math.abs(s-frac); if(d<bd){bd=d;best=i;} });
+    snapTo(best);
+  };
+  g.addEventListener('touchstart',start,{passive:true});
+  g.addEventListener('touchmove',move,{passive:false});
+  g.addEventListener('touchend',end);
+  g.addEventListener('mousedown',start);
+  window.addEventListener('mousemove',move);
+  window.addEventListener('mouseup',end);
+  // 内容已滚到顶还继续下拉 → 降一档
+  let sy=0;
+  sc.addEventListener('touchstart',e=>{ sy=e.touches[0].clientY; },{passive:true});
+  sc.addEventListener('touchmove',e=>{
+    if(window.innerWidth>900) return;
+    if(sc.scrollTop<=0 && e.touches[0].clientY-sy>64 && snapI>0){ snapTo(snapI-1); sy=e.touches[0].clientY; }
+  },{passive:true});
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   12. BOOT
+   ══════════════════════════════════════════════════════════════ */
+$('#baseBtn').onclick=()=>setBase((baseIdx+1)%BASES.length);
+$('#allBtn').onclick=showAll;
+$('#addBtn').onclick=()=>setAdding(!adding);
+$('#roomBtn').onclick=roomModal;
+$('#meBtn').onclick=()=>meModal();
+window.addEventListener('resize',()=>{ if(window.innerWidth>900) document.documentElement.style.removeProperty('--sheet-h'); else snapTo(snapI); setTimeout(()=>map&&map.invalidateSize(),120); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') { closeModal(); if(adding) setAdding(false); } });
+
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});}
+(async function boot(){
+  await loadCfg();
+  initMap();
+  renderSeals(); renderTabs(); renderBody(); renderMembers();
+  drawPlaces(); showAll();
+  await pull();
+  loadWX().then(()=>{ if(st.tab==='plan') renderBody(); });
+  if(st.me.id) joinRoom();
+  snapTo(1);
+  setInterval(()=>{ if(document.visibilityState==='visible') pull(); }, 9000);
+  document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') pull(); });
+  if(!S.ok) $('#syncDot').className='dot off';
+  setTimeout(()=>map.invalidateSize(),200);
+})();
+</script>
+</body>
+</html>
