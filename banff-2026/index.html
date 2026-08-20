@@ -280,6 +280,10 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 /* ── mobile ── */
 
 /* 深链行 */
+.sigrow{display:flex;align-items:flex-start;gap:7px;margin-top:8px;font-size:12px;
+ line-height:1.7;color:var(--slate);background:var(--card-2);border-left:2px solid var(--blu);
+ border-radius:0 6px 6px 0;padding:7px 10px}
+.sigi{width:10px;height:10px;flex:none;margin-top:5px;border-radius:50%;background:var(--blu);opacity:.55}
 .lkrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
 .lk2{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9.5px;
  letter-spacing:.04em;padding:4px 8px;border-radius:5px;border:1px solid var(--line);
@@ -354,13 +358,6 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 .tiny.warn{color:var(--WARN)}
 .lk2.dim{opacity:.6}
 /* ── 竖排日文：桌面端的一处细节 ── */
-@media (min-width:901px){
-  .vjp{position:absolute;top:14px;right:12px;writing-mode:vertical-rl;text-orientation:upright;
-   font-family:var(--disp);font-size:10.5px;letter-spacing:.22em;color:var(--FT);opacity:.5;
-   pointer-events:none;max-height:calc(100% - 28px);overflow:hidden}
-  .day.open .vjp{opacity:.75}
-  .daybtn{position:relative;padding-right:34px}
-}
 
 
 /* ── 海拔统计 + 剖面 ── */
@@ -419,6 +416,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
         <div class="sub"><b id="hdates">—</b> · <span id="hski">—</span> · <span id="hopt">—</span></div>
       </div>
       <div class="hright">
+        <button class="chip" id="dateBtn">📅 改日期</button>
         <button class="chip" id="roomBtn"><span class="dot" id="syncDot"></span>行程码 <b id="roomLabel">—</b></button>
         <button class="chip" id="meBtn"><span class="avatars" id="avatars"></span><b id="meName">设置名字</b></button>
       </div>
@@ -497,6 +495,12 @@ let WX={fc:null,hist:null,at:0,err:null};
 function lastYear(dstr){ /* "2027.01.08 → 01.24" → 去年同期 */
  const m=dstr.match(/(\d{4})\.(\d{2})\.(\d{2}).*?(\d{2})\.(\d{2})/);if(!m)return null;
  const y=+m[1]-1;return{a:`${y}-${m[2]}-${m[3]}`,b:`${y}-${m[4]}-${m[5]}`}}
+function tripWindow(v){
+  const a=dayInfo(v,0), b=dayInfo(v,v.days.length-1);
+  if(!a.iso) return null;
+  const ly=x=>String(+x.slice(0,4)-1)+x.slice(4);
+  return {a:a.iso,b:b.iso,la:ly(a.iso),lb:ly(b.iso)};
+}
 async function loadWX(force){
  const cache=await S.get('banff:wx');
  if(!force&&cache&&Date.now()-cache.at<3*3600e3){WX=cache;return}
@@ -508,17 +512,17 @@ async function loadWX(force){
   if(!r.ok)throw 0;
   const j=await r.json();WX.fc=Array.isArray(j)?j:[j];WX.err=null;
  }catch(e){WX.err='预报没拉到';if(cache)WX.fc=cache.fc}
- const ly=lastYear(V[st.opt].dates);
+ const ly=tripWindow(V[st.opt]);
  if(ly){try{
    const r2=await fetch(`https://archive-api.open-meteo.com/v1/archive?latitude=${la}&longitude=${lo}`+
-    `&start_date=${ly.a}&end_date=${ly.b}&daily=precipitation_sum,temperature_2m_max&timezone=America%2FEdmonton`);
+    `&start_date=${ly.la}&end_date=${ly.lb}&daily=precipitation_sum,temperature_2m_max&timezone=America%2FEdmonton`);
    if(r2.ok){const j2=await r2.json();WX.hist={win:ly,d:Array.isArray(j2)?j2:[j2]}}
   }catch(e){if(cache&&cache.hist)WX.hist=cache.hist}}
  WX.at=Date.now();await S.set('banff:wx',WX)}
 function wxBlock(s){
  if(WX.hist){
   const box=el('div','wx');
-  box.appendChild(el('div','wxh',`<span class="wxn">去年同期实测</span><span class="wxm">${WX.hist.win.a} → ${WX.hist.win.b}</span>`));
+  box.appendChild(el('div','wxh',`<span class="wxn">去年同期实测</span><span class="wxm">${WX.hist.win.la} → ${WX.hist.win.lb}</span>`));
   const rowd=el('div','wxd');
   WXP.forEach((pt,i)=>{
    const dd=WX.hist.d[i]?.daily||{};
@@ -555,16 +559,19 @@ function wxBlock(s){
 /* ── 预订清单：从行程自动推导 ── */
 function bookings(){
  const v=V[st.opt],out=[];
- out.push({id:'air',n:'国际机票 · YVR ⇄ 东京',t:'交通'});
- if((v.budget.dom||0)>0)out.push({id:'dom',n:'日本国内航段',t:'交通'});
- out.push({id:'epic',n:'Epic 雪票网上预约（两场分别登记）',t:'雪票'});
- const hasR=v.days.some(d=>d.ski==='rusutsu'),hasH=v.days.some(d=>d.ski==='hakuba');
- if(hasR)out.push({id:'bus-cts',n:'新千岁 ⇄ 留寿都 度假村巴士',t:'交通'});
- if(hasH)out.push({id:'bus-hkb',n:'羽田/长野 → 白马 大巴',t:'交通'});
- [...new Set(v.days.map(d=>d.stay).filter(x=>x&&x!=='—'&&x!=='机上'))]
+ const ids=new Set(); v.days.forEach(d=>d.stops.forEach(x=>x.p&&ids.add(x.p)));
+ if(ids.has('yyc')) out.push({id:'air',n:'机票 · YVR ⇄ YYC',t:'交通'},{id:'car',n:'租车（注意异地还车费）',t:'交通'});
+ if(ids.has('moraine')||ids.has('parkride'))
+   out.push({id:'shuttle',n:'Moraine Lake 班车预约（最要紧）',t:'预约'});
+ out.push({id:'park',n:'国家公园门票 / Canada Strong Pass 确认',t:'门票'});
+ if(ids.has('icefield')) out.push({id:'icefield',n:'哥伦比亚冰原 冰上车',t:'门票'});
+ if(ids.has('maligne')) out.push({id:'maligne',n:'Maligne Lake 游船',t:'门票'});
+ if(ids.has('kicking')||ids.has('sunshine')) out.push({id:'ski',n:'雪票（SkiBig3 / Kicking Horse）',t:'雪票'},{id:'gear',n:'雪具租赁',t:'装备'});
+ const strip=x=>String(x||'').replace(/\s?[①②③④⑤⑥⑦⑧⑨⑩⑪]/g,'').trim();
+ [...new Set(v.days.map(d=>strip(d.stay)).filter(x=>x&&x!=='—'&&x!=='机上'))]
    .forEach(x=>out.push({id:'stay-'+x,n:'住宿 · '+x,t:'住宿'}));
- out.push({id:'ins',n:'旅行保险（确认含滑雪条款）',t:'其他'});
- out.push({id:'gear',n:'雪具租赁 / 板包托运登记',t:'其他'});
+ if(ids.has('farmfire')||ids.has('joey')) out.push({id:'dine',n:'餐厅订位（Farm and Fire / JOEY）',t:'餐饮'});
+ out.push({id:'ins',n:'旅行保险 / 道路救援',t:'其他'});
  return out}
 const bkKey=id=>st.opt+':'+id;
 function bkGet(id){return (st.bk||{})[bkKey(id)]||null}
@@ -583,10 +590,9 @@ function toICS(){
   t.setUTCDate(t.getUTCDate()+1);return `${t.getUTCFullYear()}${pad(t.getUTCMonth()+1)}${pad(t.getUTCDate())}`};
  let out='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//banff//ZH\r\nCALSCALE:GREGORIAN\r\n';
  v.days.forEach((d,i)=>{
-  const yy=(String(V[st.opt].dates).match(/(\d{4})/)||['2026'])[0];
-  const mm=String(d.d).replace('.','');
-  if(!/^\d{4}$/.test(mm)) return;
-  const ds=yy+mm;
+  const info=dayInfo(v,i);
+  if(!info.iso) return;
+  const ds=info.iso.replace(/-/g,'');
   const esc2=t=>String(t).replace(/[\\;,]/g,m=>'\\'+m).replace(/\n/g,'\\n');
   const body=[d.note||'',...d.stops.map(x=>`${x.t} ${x.n}${x.s?' — '+x.s:''}`)].filter(Boolean).join('\n');
   out+='BEGIN:VEVENT\r\n'+`UID:banff-${st.opt}-${i}@local\r\n`+`DTSTAMP:${ds}T000000Z\r\n`+
@@ -675,6 +681,48 @@ function setAdd(v){adding=v;$('#addBtn').classList.toggle('on',v);
   $('#addBtn').textContent=v?'点地图落点…':'＋ 加点';if(mapOK)map.getContainer().style.cursor=v?'crosshair':'';
   if(v)toast('在地图上点一下')}
 
+/* ═══════ 6.5 日期引擎 ═══════ */
+const WD=['日','一','二','三','四','五','六'];
+function planStart(v){ return (st.starts&&st.starts[v.k]) || v.start || '2026-08-27'; }
+function dayInfo(v,i){
+  const d=new Date(planStart(v)+'T00:00:00Z');
+  if(isNaN(d)) return {iso:null,md:v.days[i].d||'—',wd:v.days[i].w||'',date:null};
+  d.setUTCDate(d.getUTCDate()+i);
+  const mm=String(d.getUTCMonth()+1).padStart(2,'0'), dd=String(d.getUTCDate()).padStart(2,'0');
+  return {iso:`${d.getUTCFullYear()}-${mm}-${dd}`, md:`${mm}.${dd}`, wd:WD[d.getUTCDay()], date:d};
+}
+function planRange(v){
+  const a=dayInfo(v,0), b=dayInfo(v,v.days.length-1);
+  return a.iso? `${a.iso.replace(/-/g,'.')} → ${b.md}` : (v.dates||'');
+}
+function dateModal(){
+  const v=V[st.opt];
+  openM(`<h3>改出发日期</h3><p class="mp">天数不变，整段行程按新日期平移。星期几会自动重算，天气的「去年同期」也会跟着换。</p>
+   <div class="fd"><label class="lb">出发日</label>
+     <input type="date" id="sd" value="${esc(planStart(v))}"></div>
+   <div class="fd"><label class="lb">当前方案</label>
+     <div class="tiny">${esc(v.name)} · 共 ${v.days.length} 天</div></div>
+   <div class="row"><button class="btn" id="sreset">恢复默认</button>
+     <button class="btn pri" id="sok">应用</button></div>
+   <div class="row" style="margin-top:7px"><button class="btn" data-close>取消</button></div>`,
+  b=>{
+   b.querySelector('#sok').onclick=()=>{
+     const val=b.querySelector('#sd').value;
+     if(!val) return toast('选个日期');
+     st.starts=st.starts||{}; st.starts[v.k]=val;
+     closeM(); save(); renderOpts(); renderTabs(); renderBody();
+     loadWX(true).then(()=>{if(st.tab==='prep')renderBody()});
+     toast('已改为 '+val+' 出发');
+   };
+   b.querySelector('#sreset').onclick=()=>{
+     if(st.starts) delete st.starts[v.k];
+     closeM(); save(); renderOpts(); renderTabs(); renderBody();
+     loadWX(true).then(()=>{if(st.tab==='prep')renderBody()});
+     toast('已恢复默认日期');
+   };
+  });
+}
+
 /* ═══════ 7. 开车强度 ═══════ */
 function quota(){
   const v=V[st.opt];
@@ -697,7 +745,7 @@ function renderOpts(){
     b.onclick=()=>{st.opt=v.k;st.openDay=null;renderOpts();renderTabs();renderBody();drawPl();showAll();save();loadWX(true).then(()=>{if(st.tab==='plan')renderBody()})};
     w.appendChild(b)});
   const v=V[st.opt];
-  $('#hdates').textContent=v.dates;
+  $('#hdates').textContent=planRange(v);
   $('#hski').textContent=v.days.length+' 天 / 开车 '+quota().total+' h';
   $('#hopt').textContent='方案 '+v.gr;
 }
@@ -707,7 +755,7 @@ function renderMem(){
   all.slice(0,4).forEach(m=>{const a=el('span','av',esc((m.name||'?').slice(0,1)));a.style.background=m.color;a.title=m.name;w.appendChild(a)});
   $('#meName').textContent=st.me.name||'设置名字';$('#roomLabel').textContent=st.room;
 }
-const TABS=[{k:'plan',n:'方案'},{k:'itin',n:'行程'},{k:'spots',n:'地点'},{k:'bud',n:'预算'},{k:'prep',n:'备忘'}];
+const TABS=[{k:'plan',n:'方案'},{k:'prep',n:'准备'},{k:'itin',n:'行程'},{k:'spots',n:'地点'},{k:'bud',n:'预算'}];
 function renderTabs(){
   const w=$('#tabs');w.innerHTML='';
   TABS.forEach(t=>{const b=el('button','tab');let n='';
@@ -718,7 +766,7 @@ function renderTabs(){
     b.onclick=()=>{st.tab=t.k;renderTabs();renderBody();$('#scroll').scrollTop=0;if(innerWidth<=900)snap(1)};
     w.appendChild(b)})}
 function renderBody(){const s=$('#scroll');s.innerHTML='';
-  ({plan:vPlan,itin:vItin,spots:vSpots,bud:vBud,prep:vPrep})[st.tab](s)}
+  ({plan:vPlan,prep:vPrep,itin:vItin,spots:vSpots,bud:vBud})[st.tab](s)}
 
 /* ── 方案 ── */
 function qBlock(s){
@@ -735,13 +783,13 @@ function qBlock(s){
     const hh=d.drive==null?0:Math.max(2,Math.round(d.drive/top*46));
     const b=el('div','pbar'+(isJump(v,i)?' jump':''));
     b.style.height=hh+'px';
-    b.title=`${d.d} · ${d.drive==null?'—':d.drive+' 小时'}`;
+    b.title=`${dayInfo(v,i).md} 周${dayInfo(v,i).wd} · ${d.drive==null?'—':d.drive+' 小时'}`;
     b.onclick=()=>{st.tab='itin';st.openDay=i;renderTabs();renderBody();
       setTimeout(()=>{const n=document.querySelectorAll('.day')[i];n&&n.scrollIntoView({block:'center'})},60)};
     prof.appendChild(b)});
   box.appendChild(prof);
   const ax=el('div','pax');
-  ax.innerHTML=`<span>${esc(v.days[0].d)}</span><span>${esc(v.days[v.days.length-1].d)}</span>`;
+  ax.innerHTML=`<span>${esc(dayInfo(v,0).md)}</span><span>${esc(dayInfo(v,v.days.length-1).md)}</span>`;
   box.appendChild(ax);
   const nt=el('div','qnote'+(q.ok?'':' warn'));
   nt.textContent=q.ok
@@ -751,11 +799,6 @@ function qBlock(s){
 }
 function vPlan(s){
   const v=V[st.opt];
-  s.appendChild(el('h2','sec',LABELS.weather));
-  wxBlock(s);
-  s.appendChild(el('h2','sec',LABELS.drive));
-  qBlock(s);
-  s.appendChild(el('p','tx',TXT.drive));
   s.appendChild(el('h2','sec',LABELS.season));
   const tm=el('div','tm'),g=el('div','tmg');
   g.appendChild(el('div','tmc',''));
@@ -776,6 +819,10 @@ function vPlan(s){
   v.pitch.split('\n\n').forEach(par=>s.appendChild(el('p','tx',par)));
   const c=el('div','callout');
   c.innerHTML=`<span class="k">${esc(LABELS.cost)}</span><p>${v.cons}</p>`;s.appendChild(c);
+  s.appendChild(el('h2','sec',LABELS.compare));
+  COMPARE.forEach(([n2,d2])=>{const w=el('div','bl');
+    w.innerHTML=`<div class="nm">${esc(n2)}<small style="margin-top:3px;display:block">${esc(d2)}</small></div>`;
+    s.appendChild(w)});
   s.appendChild(el('h2','sec',LABELS.switchPlan));
   Object.values(V).filter(x=>x.k!==st.opt).forEach(x=>{
     const b=el('button','pc');b.style.setProperty('--pc',x.hex);b.style.width='100%';b.style.textAlign='left';
@@ -793,9 +840,10 @@ function vItin(s){
     const w=el('div','day'+(st.openDay===i?' open':''));w.style.setProperty('--nc',hex);
     const b=el('button','daybtn');
     b.innerHTML=`<span class="node${isJump(V[st.opt],i)?' jump':''}">${d.drive==null?'—':d.drive}<small>H</small></span>`+`
-      <span class="ddate">${esc(d.d)} 周${esc(d.w)}</span>
+      <span class="ddate">${esc(dayInfo(V[st.opt],i).md)} 周${esc(dayInfo(V[st.opt],i).wd)}</span>
       <div class="dtitle">${esc(d.t)}</div>
       ${d.note?`<div class="dnote">${esc(d.note)}</div>`:''}
+      ${d.sig?`<div class="sigrow"><span class="sigi"></span>${esc(d.sig)}</div>`:''}
       <div class="dmeta">${d.drive!=null&&d.drive>0?`<span class="pill sk">开车 ${d.drive} h</span>`:''}
         ${d.stay&&d.stay!=='—'?`<span class="pill st">宿 ${esc(d.stay)}</span>`:''}
         <span class="pill">${REG[d.r].n}</span></div>`;
@@ -807,9 +855,7 @@ function vItin(s){
       btn.onclick=e=>{e.stopPropagation();if(p&&mapOK){map.flyTo([p.lat,p.lng],12,{duration:.7});mReg[p.id]?.openPopup();if(innerWidth<=900)snap(0)}};
       bd.appendChild(btn);
       if(p){const lr=linkRow(p,true);lr.style.margin='0 0 6px 54px';bd.appendChild(lr)}});
-    const sb=stayBlock(d,+(String(V[st.opt].dates).slice(0,4))||2026); if(sb) bd.appendChild(sb);
-    const vj=(d.stops||[]).map(x=>x.p&&P[x.p]&&P[x.p].jp).filter(Boolean)[0];
-    if(vj){const v=el('div','vjp',esc(vj));b.appendChild(v)}
+    const sb=stayBlock2(V[st.opt],i); if(sb) bd.appendChild(sb);
     w.appendChild(bd);sp.appendChild(w)});
   s.appendChild(sp)}
 
@@ -892,6 +938,17 @@ function vBud(s){
 
 /* ── 备忘 ── */
 function vPrep(s){
+  s.appendChild(el('h2','sec',LABELS.weather));
+  wxBlock(s);
+  s.appendChild(el('h2','sec',LABELS.drive));
+  qBlock(s);
+  s.appendChild(el('p','tx',TXT.drive));
+  {const t=el('p','tx');t.style.cssText='font-size:12px;color:var(--mist)';t.innerHTML='行程日期可以改：右上角「📅 改日期」，天数不变、整段平移，星期几和下面的天气窗口会自动跟着变。';s.appendChild(t)}
+  s.appendChild(el('h2','sec',LABELS.rules));
+  RULES.forEach(([n,d])=>{const w=el('div','bl');
+    w.innerHTML=`<div class="nm">${esc(n)}<small style="margin-top:3px;display:block">${esc(d)}</small></div>`;
+    s.appendChild(w)});
+
   /* ── 预订清单 ── */
   const bks=bookings();
   const dn=bks.filter(b=>bkGet(b.id)?.state==='ok').length;
@@ -920,10 +977,6 @@ function vPrep(s){
     const dn=!!st.done[t.id];const b=el('button','td'+(dn?' done':''));
     b.innerHTML=`<span class="box"></span><span class="tx2">${esc(t.n)}<small>${esc(t.s)}</small></span><span class="due ${dn?'ok':''}">${esc(t.due)}</span>`;
     b.onclick=()=>{st.done[t.id]=!dn;renderTabs();renderBody();save()};s.appendChild(b)});
-  s.appendChild(el('h2','sec',LABELS.rules));
-  RULES.forEach(([n,d])=>{const w=el('div','bl');w.innerHTML=`<div class="nm">${esc(n)}<small style="margin-top:3px">${esc(d)}</small></div>`;s.appendChild(w)});
-  s.appendChild(el('h2','sec',LABELS.compare));
-  COMPARE.forEach(([n,d])=>{const w=el('div','bl');w.innerHTML=`<div class="nm">${esc(n)}<small style="margin-top:3px">${esc(d)}</small></div>`;s.appendChild(w)});
   s.appendChild(el('h2','sec',LABELS.aboutPage));
   s.appendChild(el('p','tx',TXT.aboutPage));
   const rw=el('div','row');
@@ -1029,10 +1082,13 @@ function linkRow(p,compact){
   w.appendChild(A('导航',LK2.dir(p)));
   const j=B('英文名 ⧉',()=>copyJP(p),'jp'); j.title=p.jp||p.zh; w.appendChild(j);
   if(!compact){
-    w.appendChild(A('官网 / 营业时间',LK2.site(p)));
-    w.appendChild(B('小红书',()=>openXHS(p.zh)));
+    const kind=p.kind||'poi';
+    if(kind!=='way'){
+      w.appendChild(A('官网 / 营业时间',LK2.site(p)));
+      w.appendChild(B('攻略搜索',()=>openXHS((p.en||p.zh)+' Banff')));
+    }
     w.appendChild(A('坐标',LK2.pin(p),'dim'));
-    const n=B('＋ 笔记',()=>noteModal(p),'nt'); w.appendChild(n);
+    w.appendChild(B('＋ 笔记',()=>noteModal(p),'nt'));
   }
   return w;
 }
@@ -1042,11 +1098,15 @@ function stayKey(s){ return String(s||'').replace(/\s?[①②③④⑤⑥⑦⑧�
 function isoDate(dstr,year){ const a=String(dstr).split('.');
   if(a.length<2||!/^\d{2}$/.test(a[0])||!/^\d{2}$/.test(a[1])) return null;
   return `${year}-${a[0]}-${a[1]}`; }
-function stayBlock(day,year){
+function stayBlock2(v,i){
+  const info=dayInfo(v,i);
+  return stayBlock(v.days[i], info.iso);
+}
+function stayBlock(day,isoOverride){
   const k=stayKey(day.stay);
   if(!k||k==='—'||k==='机上'||typeof STAY==='undefined'||!STAY[k]) return null;
   const S2=STAY[k];
-  const ci=isoDate(day.d,year);
+  const ci=isoOverride||null;
   const co=ci?(()=>{const d=new Date(ci+'T00:00:00Z');
     if(isNaN(d)) return null;
     d.setUTCDate(d.getUTCDate()+1);return d.toISOString().slice(0,10)})():null;
@@ -1264,7 +1324,7 @@ function snap(i){if(innerWidth>900)return;si=Math.max(0,Math.min(2,i));spx=SNAP[
 /* ═══════ 13. 启动 ═══════ */
 $('#baseBtn').onclick=()=>{if(mapOK)setBase((bi+1)%BASES.length)};
 $('#allBtn').onclick=showAll;$('#addBtn').onclick=()=>setAdd(!adding);
-$('#roomBtn').onclick=roomM;$('#meBtn').onclick=()=>meM();
+$('#roomBtn').onclick=roomM;$('#dateBtn').onclick=dateModal;$('#meBtn').onclick=()=>meM();
 addEventListener('resize',()=>{if(innerWidth>900)document.documentElement.style.removeProperty('--sheet-h');else snap(si);
   setTimeout(()=>mapOK&&map.invalidateSize(),120)});
 addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();if(adding)setAdd(false)}});
