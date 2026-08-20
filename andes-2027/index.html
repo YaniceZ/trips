@@ -352,13 +352,6 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 .tiny.warn{color:var(--WARN)}
 .lk2.dim{opacity:.6}
 /* ── 竖排日文：桌面端的一处细节 ── */
-@media (min-width:901px){
-  .vjp{position:absolute;top:14px;right:12px;writing-mode:vertical-rl;text-orientation:upright;
-   font-family:var(--disp);font-size:10.5px;letter-spacing:.22em;color:var(--FT);opacity:.5;
-   pointer-events:none;max-height:calc(100% - 28px);overflow:hidden}
-  .day.open .vjp{opacity:.75}
-  .daybtn{position:relative;padding-right:34px}
-}
 
 
 /* ── 海拔统计 + 剖面 ── */
@@ -553,16 +546,20 @@ function wxBlock(s){
 /* ── 预订清单：从行程自动推导 ── */
 function bookings(){
  const v=V[st.opt],out=[];
- out.push({id:'air',n:'国际机票 · YVR ⇄ 东京',t:'交通'});
- if((v.budget.dom||0)>0)out.push({id:'dom',n:'日本国内航段',t:'交通'});
- out.push({id:'epic',n:'Epic 雪票网上预约（两场分别登记）',t:'雪票'});
- const hasR=v.days.some(d=>d.ski==='rusutsu'),hasH=v.days.some(d=>d.ski==='hakuba');
- if(hasR)out.push({id:'bus-cts',n:'新千岁 ⇄ 留寿都 度假村巴士',t:'交通'});
- if(hasH)out.push({id:'bus-hkb',n:'羽田/长野 → 白马 大巴',t:'交通'});
- [...new Set(v.days.map(d=>d.stay).filter(x=>x&&x!=='—'&&x!=='机上'))]
+ const ids=new Set(); v.days.forEach(d=>d.stops.forEach(x=>x.p&&ids.add(x.p)));
+ out.push({id:'air',n:'国际机票 · YVR ⇄ 南美',t:'交通'});
+ out.push({id:'dom',n:'境内航段（南美国内线贵且班次少）',t:'交通'});
+ if(ids.has('machu')) out.push({id:'mp',n:'马丘比丘门票（分线路限额）',t:'门票'},{id:'train',n:'去马丘比丘的火车',t:'交通'});
+ if(ids.has('rainbow')||ids.has('humantay')) out.push({id:'tour1',n:'彩虹山 / 乌曼台湖 一日团',t:'团'});
+ if(ids.has('uyuni')) out.push({id:'tour2',n:'乌尤尼盐湖团（一日 或 三日）',t:'团'});
+ if(ids.has('sol')) out.push({id:'boat',n:'太阳岛船票',t:'交通'});
+ if(ids.has('torres')) out.push({id:'tdp',n:'托雷斯德帕因 营地 / 山屋（没预订不让进园）',t:'预约'},{id:'gear',n:'徒步装备租赁',t:'装备'});
+ if(ids.has('perito')) out.push({id:'ice',n:'佩里托莫雷诺 冰上徒步',t:'门票'});
+ const strip=x=>String(x||'').replace(/\s?[①②③④⑤⑥⑦⑧⑨⑩⑪]/g,'').trim();
+ [...new Set(v.days.map(d=>strip(d.stay)).filter(x=>x&&x!=='—'&&x!=='机上'))]
    .forEach(x=>out.push({id:'stay-'+x,n:'住宿 · '+x,t:'住宿'}));
- out.push({id:'ins',n:'旅行保险（确认含滑雪条款）',t:'其他'});
- out.push({id:'gear',n:'雪具租赁 / 板包托运登记',t:'其他'});
+ out.push({id:'ins',n:'旅行保险（确认含高海拔与徒步）',t:'其他'});
+ if(ids.has('lapaz')||ids.has('cusco')) out.push({id:'med',n:'高原药 / 疫苗确认',t:'其他'});
  return out}
 const bkKey=id=>st.opt+':'+id;
 function bkGet(id){return (st.bk||{})[bkKey(id)]||null}
@@ -812,8 +809,6 @@ function vItin(s){
       bd.appendChild(btn);
       if(p){const lr=linkRow(p,true);lr.style.margin='0 0 6px 54px';bd.appendChild(lr)}});
     const sb=stayBlock(d,+(V[st.opt].dates.slice(0,4))||2027); if(sb) bd.appendChild(sb);
-    const vj=(d.stops||[]).map(x=>x.p&&P[x.p]&&P[x.p].jp).filter(Boolean)[0];
-    if(vj){const v=el('div','vjp',esc(vj));b.appendChild(v)}
     w.appendChild(bd);sp.appendChild(w)});
   s.appendChild(sp)}
 
