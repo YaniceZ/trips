@@ -3,27 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-<title>Banff · Calgary — 落基山</title>
+<title>Automne — 加拿大赏枫</title>
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#EDF1F1">
+<meta name="theme-color" content="#0E1513">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   /* 底色：冷灰白，不是暖米色 */
-  --paper:#E8EDEC; --card:#FFFFFF; --card-2:#F3F7F6; --sunk:#DDE5E4;
-  --ink:#16211D; --slate:#4A5A55; --mist:#7D8D88; --faint:#A3B0AC;
-  --line:#CBD6D3; --line-2:#E0E8E6;
+  --paper:#0E1513; --card:#161F1C; --card-2:#1D2724; --sunk:#25302C;
+  --ink:#F2EDE2; --slate:#B5AE9E; --mist:#8A8677; --faint:#5F5F55;
+  --line:#2C3733; --line-2:#212B28;
   /* 日本雪道分级色，当成设计系统用 */
-  --gr:#2F6B4F;  /* 云杉绿 */
-  --rd:#C0392B;  /* Parks Canada 红椅 */
-  --bk:#16211D;
-  --blu:#2E8C9E; /* 冰川绿松 */
-  --amb:#D8A93C; /* 落叶松金 */
-  --disp:'Bitter','Noto Sans SC',serif;
+  --gr:#6FA07A;  /* 常绿针叶 */
+  --rd:#C8412B;  /* 糖枫红 */
+  --bk:#F2EDE2;
+  --blu:#5E8C93; /* 秋日湖水 */
+  --amb:#E0A526; /* 白桦金 */
+  --disp:'Fraunces','Noto Serif SC',serif;
   --body:'Noto Sans SC',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --mono:'IBM Plex Mono',ui-monospace,monospace;
   --sheet-h:55vh;
@@ -46,7 +46,7 @@ header{flex:0 0 auto;background:var(--card);border-bottom:1px solid var(--line);
   padding:11px 18px 0;padding-top:calc(11px + env(safe-area-inset-top));position:relative;z-index:1200}
 .hrow{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .brand{flex:1 1 auto;min-width:190px}
-.brand h1{font-family:var(--disp);font-weight:800;font-size:22px;margin:0;letter-spacing:-.01em;line-height:1.1}
+.brand h1{font-family:var(--disp);font-weight:900;font-size:23px;margin:0;letter-spacing:-.015em;line-height:1.05;font-variation-settings:'SOFT' 40,'WONK' 1}
 .brand h1 i{font-style:normal;color:var(--rd)}
 .brand .sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--mist);
   margin-top:3px;display:flex;gap:9px;flex-wrap:wrap;align-items:center}
@@ -72,17 +72,19 @@ header{flex:0 0 auto;background:var(--card);border-bottom:1px solid var(--line);
   border:1px solid var(--line);border-radius:9px;background:var(--card-2);transition:.18s;text-align:left}
 .opt:hover{border-color:var(--faint);background:var(--sunk)}
 .opt[aria-pressed=true]{border-color:var(--oc);background:var(--card);box-shadow:0 0 0 1px var(--oc),0 2px 8px rgba(15,21,28,.07)}
-.opt .gr{width:30px;height:30px;flex:none;border-radius:3px;background:transparent;
+.opt .gr{width:30px;height:30px;flex:none;border-radius:50% 50% 50% 4px;background:transparent;
   border:1.5px solid var(--oc);display:grid;place-items:center;color:var(--oc);
-  font-family:var(--disp);font-weight:800;font-size:14px;transition:background .18s,color .18s}
-.opt[aria-pressed=true] .gr{background:var(--oc);color:#fff}
+  font-family:var(--disp);font-weight:900;font-size:14px;transform:rotate(-8deg);
+  transition:background .2s,color .2s}
+.opt .gr>span{display:block;transform:rotate(8deg)}
+.opt[aria-pressed=true] .gr{background:var(--oc);color:#0E1513}
 .opt .lab{display:block;font-size:13px;font-weight:500;white-space:nowrap;line-height:1.3}
 .opt .met{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--mist);
   white-space:nowrap;margin-top:1px}
 
 /* ── main ── */
 main{flex:1 1 auto;display:flex;min-height:0;position:relative;overflow:clip}
-#map{flex:1 1 auto;min-width:0;background:#D9E2E0;z-index:1}
+#map{flex:1 1 auto;min-width:0;background:#0A100E;z-index:1}
 #panel{flex:0 0 432px;background:var(--card);border-right:1px solid var(--line);
   display:flex;flex-direction:column;min-height:0;z-index:2}
 .tabs{flex:0 0 auto;display:flex;border-bottom:1px solid var(--line);background:var(--card);
@@ -190,7 +192,7 @@ p.tx b{color:var(--ink);font-weight:600}
 .act{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;padding:4px 8px;border-radius:5px;
   border:1px solid var(--line);color:var(--mist);transition:.15s}
 .act:hover{border-color:var(--faint);color:var(--slate)}
-.act.on{border-color:var(--rd);color:var(--rd);background:#FBEEEC}
+.act.on{border-color:var(--rd);color:var(--rd);background:rgba(200,65,43,.14)}
 
 /* ── forms ── */
 .fd{margin-bottom:12px}
@@ -204,7 +206,7 @@ textarea{resize:vertical;min-height:62px;line-height:1.65}
   border:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;
   color:var(--slate);transition:.16s;background:var(--card)}
 .btn:hover{border-color:var(--faint);background:var(--card-2)}
-.btn.pri{background:var(--rd);border-color:var(--rd);color:#fff;font-weight:600}
+.btn.pri{background:var(--rd);border-color:var(--rd);color:#F2EDE2;font-weight:600}
 .btn.pri:hover{background:#C0332B;border-color:#C0332B}
 .row{display:flex;gap:7px;flex-wrap:wrap}
 .row>*{flex:1 1 0;min-width:0}
@@ -234,7 +236,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 .box{width:17px;height:17px;border:1.5px solid var(--line);border-radius:5px;flex:none;margin-top:3px;
   display:grid;place-items:center;transition:.16s;background:var(--card)}
 .td.done .box{background:var(--gr);border-color:var(--gr)}
-.td.done .box:after{content:'';width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;
+.td.done .box:after{content:'';width:4px;height:8px;border:solid #0E1513;border-width:0 2px 2px 0;
   transform:rotate(43deg) translate(-1px,-1px)}
 .td.done .tx2{color:var(--faint);text-decoration:line-through}
 .tx2{font-size:13.5px;line-height:1.6;flex:1}
@@ -244,13 +246,13 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 
 /* ── map overlay ── */
 .mc{position:absolute;top:12px;right:12px;z-index:900;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
-.mb{background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:7px;
+.mb{background:rgba(22,31,28,.94);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:7px;
   padding:7px 11px;font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;color:var(--slate);
   transition:.15s;white-space:nowrap;box-shadow:0 1px 5px rgba(15,21,28,.07)}
 .mb:hover{color:var(--ink);border-color:var(--faint)}
 .mb.on{color:var(--rd);border-color:var(--rd)}
-.leaflet-container{background:#D9E2E0;font-family:var(--body)}
-.leaflet-control-attribution{background:rgba(255,255,255,.85)!important;font-size:9px!important;font-family:var(--mono)!important;color:var(--mist)!important}
+.leaflet-container{background:#0A100E;font-family:var(--body)}
+.leaflet-control-attribution{background:rgba(14,21,19,.85)!important;font-size:9px!important;font-family:var(--mono)!important;color:var(--mist)!important}
 .leaflet-popup-content-wrapper{background:var(--card);border-radius:9px;border:1px solid var(--line);
   box-shadow:0 10px 32px rgba(15,21,28,.16)}
 .leaflet-popup-tip{background:var(--card);border:1px solid var(--line)}
@@ -260,17 +262,17 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 .leaflet-popup-content .jp{font-family:var(--mono);color:var(--faint);font-size:10.5px}
 .leaflet-popup-content .mt{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--faint);
   margin-top:6px;display:block}
-.pinico{display:grid;place-items:center;border-radius:3px;border:2px solid #fff;color:#fff;
+.pinico{display:grid;place-items:center;border-radius:50% 50% 50% 3px;border:2px solid #0E1513;color:#0E1513;
   box-shadow:0 2px 7px rgba(15,21,28,.28);font-family:var(--mono);font-weight:600;font-size:9.5px}
 .pinico.usr{border-radius:6px 6px 6px 2px}
 
-#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,90px);z-index:3000;background:var(--ink);
-  border-radius:8px;padding:10px 16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:#fff;
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,90px);z-index:3000;background:var(--sunk);border:1px solid var(--line);
+  border-radius:8px;padding:10px 16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--ink);
   transition:transform .3s cubic-bezier(.2,.9,.3,1.2);pointer-events:none;
   box-shadow:0 10px 32px rgba(15,21,28,.28);max-width:88vw;text-align:center}
 #toast.show{transform:translate(-50%,0)}
 #modal{position:fixed;inset:0;z-index:2500;display:none;align-items:center;justify-content:center;
-  padding:20px;background:rgba(22,33,29,.45);backdrop-filter:blur(4px)}
+  padding:20px;background:rgba(6,10,9,.7);backdrop-filter:blur(5px)}
 #modal.show{display:flex}
 .mbox{background:var(--card);border-radius:13px;padding:21px;width:100%;max-width:396px;max-height:86vh;
   overflow-y:auto;box-shadow:0 22px 64px rgba(15,21,28,.28)}
@@ -281,19 +283,19 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 
 /* 深链行 */
 .sigrow{display:flex;align-items:flex-start;gap:7px;margin-top:8px;font-size:12px;
- line-height:1.7;color:var(--slate);background:var(--card-2);border-left:2px solid var(--blu);
+ line-height:1.7;color:var(--slate);background:var(--sunk);border-left:2px solid var(--blu);
  border-radius:0 6px 6px 0;padding:7px 10px}
 .sigi{width:10px;height:10px;flex:none;margin-top:5px;border-radius:50%;background:var(--blu);opacity:.55}
 .lkrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
 .lk2{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9.5px;
  letter-spacing:.04em;padding:4px 8px;border-radius:5px;border:1px solid var(--line);
  color:var(--slate);background:var(--card);text-decoration:none;transition:.15s;white-space:nowrap}
-.lk2:hover{border-color:var(--blu);color:var(--blu);background:#EDF6F7}
+.lk2:hover{border-color:var(--blu);color:var(--blu);background:rgba(94,140,147,.12)}
 .lk2.jp{border-style:dashed;color:var(--mist)}
-.lk2.jp:hover{border-color:var(--gr);color:var(--gr);background:#EFF6F2}
-.lk2.nt:hover{border-color:var(--amb);color:var(--amb);background:#FBF4E0}
+.lk2.jp:hover{border-color:var(--gr);color:var(--gr);background:rgba(111,160,122,.12)}
+.lk2.nt:hover{border-color:var(--amb);color:var(--amb);background:rgba(224,165,38,.12)}
 .notes{margin:9px 0 0;display:flex;flex-direction:column;gap:6px}
-.note{position:relative;background:#FBF4E0;border-left:2px solid var(--amb);
+.note{position:relative;background:rgba(224,165,38,.10);border-left:2px solid var(--amb);
  border-radius:0 7px 7px 0;padding:8px 26px 8px 10px}
 .note .nb{font-size:12.5px;line-height:1.7;color:var(--ink)}
 .note .nm{font-family:var(--mono);font-size:9px;letter-spacing:.05em;color:var(--mist);margin-top:4px}
@@ -318,14 +320,14 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 .bkrow.done{background:var(--card-2)}
 .bkrow .box{margin-top:2px}
 .bkrow .box.on{background:var(--gr);border-color:var(--gr)}
-.bkrow .box.on:after{content:'';width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;
+.bkrow .box.on:after{content:'';width:4px;height:8px;border:solid #0E1513;border-width:0 2px 2px 0;
  transform:rotate(43deg) translate(-1px,-1px)}
 .vfy{display:inline-flex;align-items:center;font-family:var(--mono);font-size:9px;
  padding:2px 6px;border-radius:4px;letter-spacing:.05em;vertical-align:1px}
-.vfy.todo{background:#FAF0D8;color:#8A6510}
-.vfy.ok{background:#E5F1EA;color:#215139}
+.vfy.todo{background:rgba(224,165,38,.18);color:var(--amb)}
+.vfy.ok{background:rgba(111,160,122,.18);color:var(--gr)}
 
-:root{--LN:var(--line);--LN2:var(--line-2);--BG2:var(--card);--BG3:var(--card-2);--DM:var(--slate);--FT:var(--mist);--PICK:var(--gr);--PICKTX:#fff;--PICKBG:#EFF6F2;--WARN:var(--rd)}
+:root{--LN:var(--line);--LN2:var(--line-2);--BG2:var(--card-2);--BG3:var(--sunk);--DM:var(--slate);--FT:var(--mist);--PICK:var(--amb);--PICKTX:#0E1513;--PICKBG:rgba(224,165,38,.09);--WARN:var(--rd)}
 
 /* ── 住宿 / 吃饭 ── */
 .stayb{margin:10px 0 4px;border:1px solid var(--LN);border-radius:9px;overflow:hidden;background:var(--BG2)}
@@ -380,6 +382,27 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 .qnote.warn{color:var(--rd)}
 
 #verBadge{opacity:.55;letter-spacing:.06em}
+
+/* ── 变色窗口图 ── */
+.pkchart{position:relative;height:30px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+.pkgrid{position:absolute;inset:0;left:116px;right:66px}
+.pkg{position:absolute;top:0;bottom:0;border-left:1px solid var(--line-2)}
+.pkg span{position:absolute;bottom:3px;left:5px;font-family:var(--mono);font-size:8.5px;
+ letter-spacing:.1em;color:var(--faint);white-space:nowrap}
+.pkband{position:absolute;top:14px;bottom:-176px;background:rgba(242,237,226,.06);
+ border-left:1px solid var(--amb);border-right:1px solid var(--amb);z-index:3;pointer-events:none}
+.pkband:before{content:'你的日期';position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+ font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:var(--amb);white-space:nowrap}
+.pkrow{display:flex;align-items:center;gap:9px;margin-bottom:7px;position:relative;z-index:1}
+.pkrow.on .pkn{color:var(--ink);font-weight:500}
+.pkn{flex:0 0 107px;font-size:11px;color:var(--mist);line-height:1.35}
+.pktrack{position:relative;flex:1;height:15px;background:var(--sunk);border-radius:3px;overflow:hidden}
+.pkbar{position:absolute;top:0;bottom:0;background:var(--pc);border-radius:3px}
+.pkbar.early{opacity:.22}
+.pkbar.peak{opacity:1}
+.pkov{flex:0 0 58px;text-align:right;font-family:var(--mono);font-size:9px;letter-spacing:.04em}
+.pkov.good{color:var(--gr)} .pkov.mid{color:var(--amb)} .pkov.bad{color:var(--rd)}
+
 @media (max-width:900px){
   header{padding:8px 13px 0;padding-top:calc(8px + env(safe-area-inset-top))}
   .brand h1{font-size:18px}
@@ -401,6 +424,9 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
   .tab{font-size:12px;padding:10px 5px 8px}
   .mc{top:10px;right:10px}
   .tmg{grid-template-columns:48px repeat(7,1fr)}
+  .pkn{flex:0 0 78px;font-size:10px}
+  .pkgrid{left:87px;right:54px}
+  .pkov{flex:0 0 48px;font-size:8.5px}
   .tmh{font-size:10px;padding:5px 6px}
 }
 .grab{display:none;padding:9px 0 4px;flex:none;touch-action:none;cursor:grab}
@@ -413,7 +439,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
   <header>
     <div class="hrow">
       <div class="brand">
-        <h1>Banff <i>/</i> Calgary</h1>
+        <h1>Automne <i>/</i> 加拿大赏枫</h1>
         <div class="sub"><b id="hdates">—</b> · <span id="hski">—</span> · <span id="hopt">—</span> · <span id="verBadge" title="页面版本">v2 · 2026-08-20</span></div>
       </div>
       <div class="hright">
@@ -491,7 +517,7 @@ function noteBlock(p){
  return w}
 
 /* ── 实时雪情：Open-Meteo，无 key，CORS 开放，模型含 JMA ── */
-const WXP=[{k:'banff',n:'Banff',lat:51.1784,lng:-115.5708},{k:'golden',n:'Golden',lat:51.2965,lng:-116.9631}];
+const WXP=[{k:'algonquin',n:'Algonquin',lat:45.5350,lng:-78.6800},{k:'charlevoix',n:'Charlevoix',lat:47.4419,lng:-70.5044}];
 let WX={fc:null,hist:null,at:0,err:null};
 function lastYear(dstr){ /* "2027.01.08 → 01.24" → 去年同期 */
  const m=dstr.match(/(\d{4})\.(\d{2})\.(\d{2}).*?(\d{2})\.(\d{2})/);if(!m)return null;
@@ -503,23 +529,23 @@ function tripWindow(v){
   return {a:a.iso,b:b.iso,la:ly(a.iso),lb:ly(b.iso)};
 }
 async function loadWX(force){
- const cache=await S.get('banff:wx');
+ const cache=await S.get('fall:wx');
  if(!force&&cache&&Date.now()-cache.at<3*3600e3){WX=cache;return}
  const la=WXP.map(x=>x.lat).join(','),lo=WXP.map(x=>x.lng).join(',');
  try{
   const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${la}&longitude=${lo}`+
    `&daily=precipitation_sum,temperature_2m_max,temperature_2m_min,weather_code`+
-   `&timezone=America%2FEdmonton&forecast_days=7`);
+   `&timezone=America%2FToronto&forecast_days=7`);
   if(!r.ok)throw 0;
   const j=await r.json();WX.fc=Array.isArray(j)?j:[j];WX.err=null;
  }catch(e){WX.err='预报没拉到';if(cache)WX.fc=cache.fc}
  const ly=tripWindow(V[st.opt]);
  if(ly){try{
    const r2=await fetch(`https://archive-api.open-meteo.com/v1/archive?latitude=${la}&longitude=${lo}`+
-    `&start_date=${ly.la}&end_date=${ly.lb}&daily=precipitation_sum,temperature_2m_max&timezone=America%2FEdmonton`);
+    `&start_date=${ly.la}&end_date=${ly.lb}&daily=precipitation_sum,temperature_2m_max&timezone=America%2FToronto`);
    if(r2.ok){const j2=await r2.json();WX.hist={win:ly,d:Array.isArray(j2)?j2:[j2]}}
   }catch(e){if(cache&&cache.hist)WX.hist=cache.hist}}
- WX.at=Date.now();await S.set('banff:wx',WX)}
+ WX.at=Date.now();await S.set('fall:wx',WX)}
 function wxBlock(s){
  if(WX.hist){
   const box=el('div','wx');
@@ -589,14 +615,14 @@ function toICS(){
  const pad=n=>String(n).padStart(2,'0');
  const nx=d=>{const t=new Date(d.slice(0,4)+'-'+d.slice(4,6)+'-'+d.slice(6,8)+'T00:00:00Z');
   t.setUTCDate(t.getUTCDate()+1);return `${t.getUTCFullYear()}${pad(t.getUTCMonth()+1)}${pad(t.getUTCDate())}`};
- let out='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//banff//ZH\r\nCALSCALE:GREGORIAN\r\n';
+ let out='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//automne//ZH\r\nCALSCALE:GREGORIAN\r\n';
  v.days.forEach((d,i)=>{
   const info=dayInfo(v,i);
   if(!info.iso) return;
   const ds=info.iso.replace(/-/g,'');
   const esc2=t=>String(t).replace(/[\\;,]/g,m=>'\\'+m).replace(/\n/g,'\\n');
   const body=[d.note||'',...d.stops.map(x=>`${x.t} ${x.n}${x.s?' — '+x.s:''}`)].filter(Boolean).join('\n');
-  out+='BEGIN:VEVENT\r\n'+`UID:banff-${st.opt}-${i}@local\r\n`+`DTSTAMP:${ds}T000000Z\r\n`+
+  out+='BEGIN:VEVENT\r\n'+`UID:automne-${st.opt}-${i}@local\r\n`+`DTSTAMP:${ds}T000000Z\r\n`+
    `DTSTART;VALUE=DATE:${ds}\r\nDTEND;VALUE=DATE:${nx(ds)}\r\n`+
    `SUMMARY:${esc2(''+d.t)}\r\n`+
    (d.stay&&d.stay!=='—'?`LOCATION:${esc2(d.stay)}\r\n`:'')+
@@ -604,13 +630,13 @@ function toICS(){
  out+='END:VCALENDAR\r\n';
  const b=new Blob([out],{type:'text/calendar;charset=utf-8'});
  const a=document.createElement('a');a.href=URL.createObjectURL(b);
- a.download=`banff-${st.opt}.ics`;document.body.appendChild(a);a.click();
+ a.download=`automne-${st.opt}.ics`;document.body.appendChild(a);a.click();
  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
  toast('已导出 '+v.days.length+' 天到日历')}
 
 /* ═══════ 5. 状态 ═══════ */
 const AVC=['#D63C33','#1A6FBF','#1F8F5F','#C98A15','#8B4FB5','#0F9B9B','#D6588C','#5A6B8C'];
-let st={opt:'A',tab:'plan',room:'banff26',openDay:null,
+let st={opt:'A',tab:'plan',room:'fall26',openDay:null,
   me:{id:null,name:'',color:AVC[0]},pins:[],members:[],budget:{},done:{},bk:{},notes:{},
   rate:115,perPerson:false,ccy:'CAD'};
 const $=s=>document.querySelector(s);
@@ -618,8 +644,8 @@ const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=nu
 const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 const uid=()=>Math.random().toString(36).slice(2,10);
 let tT;const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('show'),2500)};
-const K={pins:()=>`banff:${st.room}:pins`,mem:()=>`banff:${st.room}:members`,
-  bk:()=>`banff:${st.room}:bookings`,notes:()=>`banff:${st.room}:notes`,cfg:()=>'banff:localcfg'};
+const K={pins:()=>`fall:${st.room}:pins`,mem:()=>`fall:${st.room}:members`,
+  bk:()=>`fall:${st.room}:bookings`,notes:()=>`fall:${st.room}:notes`,cfg:()=>'fall:localcfg'};
 
 /* ═══════ 6. 地图 ═══════ */
 const BASES=[
@@ -724,6 +750,66 @@ function dateModal(){
   });
 }
 
+/* ═══════ 6.8 变色窗口 ═══════ */
+const AX0='09-01', AX1='10-31';
+function md2n(m){const a=m.split('-');return (+a[0]-9)*31 + (+a[1]);}
+const AXN0=md2n(AX0), AXN1=md2n(AX1), AXSP=AXN1-AXN0;
+const axp=m=>((md2n(m)-AXN0)/AXSP*100);
+function tripMD(v,i){const x=dayInfo(v,i); return x.iso? x.iso.slice(5) : null;}
+/* 当前行程与某条窗口的重叠天数 */
+function overlapDays(v,pk){
+  const a=tripMD(v,0), b=tripMD(v,v.days.length-1);
+  if(!a||!b) return 0;
+  const s1=md2n(a), e1=md2n(b), s2=md2n(pk.a), e2=md2n(pk.b);
+  return Math.max(0, Math.min(e1,e2)-Math.max(s1,s2)+1);
+}
+function peakBlock(s){
+  const v=V[st.opt];
+  const box=el('div','quota');
+  const chart=el('div','pkchart');
+  // 月份网格
+  const grid=el('div','pkgrid');
+  [['09-01','9月'],['09-16','9月中'],['10-01','10月'],['10-16','10月中']].forEach(([m,lab])=>{
+    const g=el('div','pkg'); g.style.left=axp(m)+'%';
+    g.appendChild(el('span',null,lab)); grid.appendChild(g)});
+  chart.appendChild(grid);
+  // 行程区间竖带
+  const a=tripMD(v,0), b=tripMD(v,v.days.length-1);
+  if(a&&b){
+    const band=el('div','pkband');
+    band.style.left=axp(a)+'%'; band.style.width=Math.max(1.2,axp(b)-axp(a))+'%';
+    chart.appendChild(band);
+  }
+  // 四条窗口
+  PEAK.forEach(pk=>{
+    const row=el('div','pkrow');
+    row.appendChild(el('span','pkn',pk.n));
+    const track=el('div','pktrack');
+    const e=el('div','pkbar early'); e.style.left=axp(pk.ea)+'%';
+    e.style.width=(axp(pk.eb)-axp(pk.ea))+'%'; e.style.setProperty('--pc',pk.c);
+    const h=el('div','pkbar peak'); h.style.left=axp(pk.a)+'%';
+    h.style.width=(axp(pk.b)-axp(pk.a))+'%'; h.style.setProperty('--pc',pk.c);
+    track.appendChild(e); track.appendChild(h);
+    const ov=overlapDays(v,pk);
+    const tot=v.days.length;
+    const tag=el('span','pkov'+(ov>=Math.min(4,tot)?' good':ov>0?' mid':' bad'));
+    tag.textContent=ov>0?ov+' 天重叠':'不重叠';
+    row.appendChild(track); row.appendChild(tag);
+    if(pk.k===st.opt) row.classList.add('on');
+    box.appendChild(row);
+  });
+  box.insertBefore(chart,box.firstChild);
+  const cur=PEAK.find(x=>x.k===st.opt);
+  const ov=cur?overlapDays(v,cur):0;
+  const nt=el('div','qnote'+(ov>=4?'':' warn'));
+  nt.textContent = ov>=4
+    ? `当前线路与它的高峰期重叠 ${ov} 天，时机合适。`
+    : ov>0 ? `当前线路只与高峰期重叠 ${ov} 天，偏早或偏晚，颜色可能没到最好。`
+           : `当前线路与它的高峰期完全不重叠。换日期，或换一条线。`;
+  box.appendChild(nt);
+  s.appendChild(box);
+}
+
 /* ═══════ 7. 开车强度 ═══════ */
 function quota(){
   const v=V[st.opt];
@@ -742,7 +828,7 @@ function renderOpts(){
   Object.values(V).forEach(v=>{
     const b=el('button','opt');b.style.setProperty('--oc',v.hex);
     b.setAttribute('aria-pressed',st.opt===v.k);
-    b.innerHTML=`<span class="gr">${v.gr}</span><span><span class="lab">${esc(v.name)}</span><span class="met">${esc(v.met)}</span></span>`;
+    b.innerHTML=`<span class="gr"><span>${v.gr}</span></span><span><span class="lab">${esc(v.name)}</span><span class="met">${esc(v.met)}</span></span>`;
     b.onclick=()=>{st.opt=v.k;st.openDay=null;renderOpts();renderTabs();renderBody();drawPl();showAll();save();loadWX(true).then(()=>{if(st.tab==='plan')renderBody()})};
     w.appendChild(b)});
   const v=V[st.opt];
@@ -810,9 +896,9 @@ function vPlan(s){
   tm.appendChild(g);s.appendChild(tm);
   const lg=el('div','tmleg');
   lg.innerHTML=`<i>颜色越深 = 越多</i>`
-   + `<i>${GCOL.map(c=>`<b style="background:${c}"></b>`).join('')} 可玩度</i>`
+   + `<i>${GCOL.map(c=>`<b style="background:${c}"></b>`).join('')} 颜色强度</i>`
    + `<i>${H2.map(c=>`<b style="background:${c}"></b>`).join('')} 人 / 价</i>`
-   + `<i style="color:var(--rd)">红色列头 = 主要窗口</i>`;
+   + `<i style="color:var(--rd)">红色列头 = 推荐窗口</i>`;
   s.appendChild(lg);
   s.appendChild(el('p','tx',TXT.season));
   s.appendChild(el('h2','sec','方案 '+v.gr+' · '+v.tag));
@@ -939,6 +1025,9 @@ function vBud(s){
 
 /* ── 备忘 ── */
 function vPrep(s){
+  s.appendChild(el('h2','sec',LABELS.peak));
+  peakBlock(s);
+  s.appendChild(el('p','tx',TXT.peak));
   s.appendChild(el('h2','sec',LABELS.weather));
   wxBlock(s);
   s.appendChild(el('h2','sec',LABELS.drive));
@@ -987,7 +1076,7 @@ function vPrep(s){
   w.textContent=TXT.aboutFoot;
   s.appendChild(w)}
 
-const AREA_HINT={bc:'British Columbia Canada',yoho:'Yoho National Park BC',banff:'Banff National Park Alberta',cal:'Calgary Alberta',ice:'Alberta Canada',ski:'Canada'};
+const AREA_HINT={on:'Ontario Canada',qc:'Québec Canada',ns:'Nova Scotia Canada',yt:'Yukon Canada',city:'Canada'};
 const PLACE_TAB='spots';
 Object.keys(P).forEach(k=>{if(!P[k].jp)P[k].jp=P[k].en||P[k].es||P[k].zh});
 /* ══════════════════════════════════════════════════════════════
@@ -1086,7 +1175,7 @@ function linkRow(p,compact){
     const kind=p.kind||'poi';
     if(kind!=='way'){
       w.appendChild(A('官网 / 营业时间',LK2.site(p)));
-      w.appendChild(B('攻略搜索',()=>openXHS((p.en||p.zh)+' Banff')));
+      w.appendChild(B('攻略搜索',()=>openXHS((p.en||p.zh)+' fall')));
     }
     w.appendChild(A('坐标',LK2.pin(p),'dim'));
     w.appendChild(B('＋ 笔记',()=>noteModal(p),'nt'));
@@ -1157,7 +1246,7 @@ function addM(pre){
   openM(`<h3>添加地点</h3>
    <p class="mp">三种方式：搜名字、粘贴谷歌地图链接、或在地图上长按取点。</p>
    <div class="fd"><label class="lb">① 搜名字</label>
-     <div style="display:flex;gap:6px"><input type="text" id="gq" placeholder="例：Emerald Lake / Banff Ave"
+     <div style="display:flex;gap:6px"><input type="text" id="gq" placeholder="例：Lookout Trail / Route 362"
        style="flex:1"><button class="btn" id="gbtn" style="flex:0 0 auto">搜索</button></div>
      <div id="gres"></div>
      <div class="tiny">地理编码来自 OpenStreetMap Nominatim，志愿者服务器，每秒限一次，偶尔搜不到。
