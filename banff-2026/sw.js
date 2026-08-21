@@ -1,7 +1,7 @@
 /* 离线缓存 v2
    关键修正：HTML 和 JS 改成「网络优先」，避免页面框架被永久缓存成旧版。
    地图瓦片和天气仍然缓存，山里没信号照样能用。 */
-const C = 'fall-2026-v2';
+const C = 'banff-2026-v2';
 const SHELL = [
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'
