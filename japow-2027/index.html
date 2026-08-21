@@ -186,8 +186,10 @@ p.tx b{color:var(--ink);font-weight:600}
 .fd{margin-bottom:12px}
 label.lb{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;color:var(--mist);
   text-transform:uppercase;margin-bottom:5px;font-weight:600}
-input[type=text],input[type=number],textarea{width:100%;background:var(--card-2);border:1px solid var(--line);
+input[type=text],input[type=number],input[type=date],textarea{width:100%;background:var(--card-2);border:1px solid var(--line);
   border-radius:7px;padding:9px 11px;font-size:13.5px;transition:.16s}
+input[type=date]{color-scheme:light;color:var(--ink);font-family:var(--mono);letter-spacing:.02em}
+
 input:focus,textarea:focus{outline:none;border-color:var(--blu);background:var(--card)}
 textarea{resize:vertical;min-height:62px;line-height:1.65}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border-radius:7px;
@@ -390,6 +392,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
         <div class="sub"><b id="hdates">—</b> · <span id="hski">—</span> · <span id="hopt">—</span> · <span id="verBadge" title="页面版本">v2 · 2026-08-20</span></div>
       </div>
       <div class="hright">
+        <button class="chip" id="dateBtn">📅 改日期</button>
         <button class="chip" id="roomBtn"><span class="dot" id="syncDot"></span>行程码 <b id="roomLabel">—</b></button>
         <button class="chip" id="meBtn"><span class="avatars" id="avatars"></span><b id="meName">设置名字</b></button>
       </div>
@@ -641,6 +644,57 @@ function setAdd(v){adding=v;$('#addBtn').classList.toggle('on',v);
   $('#addBtn').textContent=v?'点地图落点…':'＋ 加点';if(mapOK)map.getContainer().style.cursor=v?'crosshair':'';
   if(v)toast('在地图上点一下')}
 
+
+/* ═══════ 日期引擎：用户可自定义出发日 ═══════ */
+const WD=['日','一','二','三','四','五','六'];
+function parseBaseDate(v){
+  const m=String(v.dates||'').match(/(\d{4})\.(\d{2})\.(\d{2})/);
+  return m? `${m[1]}-${m[2]}-${m[3]}` : null;
+}
+function planStart(v){ return (st.starts&&st.starts[v.k]) || v.start || parseBaseDate(v); }
+function dayInfo(v,i){
+  const base=planStart(v);
+  const fb=(v.days[i]||{});
+  if(!base) return {iso:null,md:fb.d||'—',wd:(fb.w||'').replace(/^周/,''),wdFull:(fb.w||'').startsWith('周')?fb.w:('周'+(fb.w||'')),date:null};
+  const d=new Date(base+'T00:00:00Z');
+  if(isNaN(d)) return {iso:null,md:fb.d||'—',wd:'',wdFull:'',date:null};
+  d.setUTCDate(d.getUTCDate()+i);
+  const mm=String(d.getUTCMonth()+1).padStart(2,'0'), dd=String(d.getUTCDate()).padStart(2,'0');
+  const wd=WD[d.getUTCDay()];
+  return {iso:`${d.getUTCFullYear()}-${mm}-${dd}`, md:`${mm}.${dd}`, wd, wdFull:'周'+wd, date:d};
+}
+function planRange(v){
+  const a=dayInfo(v,0), b=dayInfo(v,v.days.length-1);
+  return a.iso? `${a.iso.replace(/-/g,'.')} → ${b.md}` : (v.dates||'');
+}
+function dateModal(){
+  const v=V[st.opt];
+  openM(`<h3>改出发日期</h3><p class="mp">天数不变，整段行程按新日期平移。星期几会自动重算，天气的「去年同期」也会跟着换。</p>
+   <div class="fd"><label class="lb">出发日</label>
+     <input type="date" id="sd" value="${esc(planStart(v)||'')}"></div>
+   <div class="fd"><label class="lb">当前方案</label>
+     <div class="tiny">${esc(v.name)} · 共 ${v.days.length} 天</div></div>
+   <div class="row"><button class="btn" id="sreset">恢复默认</button>
+     <button class="btn pri" id="sok">应用</button></div>
+   <div class="row" style="margin-top:7px"><button class="btn" data-close>取消</button></div>`,
+  b=>{
+   b.querySelector('#sok').onclick=()=>{
+     const val=b.querySelector('#sd').value;
+     if(!val) return toast('选个日期');
+     st.starts=st.starts||{}; st.starts[v.k]=val;
+     closeM(); save(); renderOpts(); renderTabs(); renderBody();
+     loadWX(true).then(()=>{ if(st.tab==='prep') renderBody(); });
+     toast('已改为 '+val+' 出发');
+   };
+   b.querySelector('#sreset').onclick=()=>{
+     if(st.starts) delete st.starts[v.k];
+     closeM(); save(); renderOpts(); renderTabs(); renderBody();
+     loadWX(true).then(()=>{ if(st.tab==='prep') renderBody(); });
+     toast('已恢复默认日期');
+   };
+  });
+}
+
 /* ═══════ 7. Epic 配额计算 ═══════ */
 function quota(){
   const days=V[st.opt].days;
@@ -661,7 +715,7 @@ function renderOpts(){
     b.onclick=()=>{st.opt=v.k;st.openDay=null;renderOpts();renderTabs();renderBody();drawPl();showAll();save();loadWX(true).then(()=>{if(st.tab==='plan')renderBody()})};
     w.appendChild(b)});
   const v=V[st.opt];
-  $('#hdates').textContent=v.dates;
+  $('#hdates').textContent=planRange(v);
   $('#hski').textContent=v.days.length+' 天 / '+quota().total+' 滑雪日';
   $('#hopt').textContent='方案 '+v.gr;
 }
@@ -671,7 +725,7 @@ function renderMem(){
   all.slice(0,4).forEach(m=>{const a=el('span','av',esc((m.name||'?').slice(0,1)));a.style.background=m.color;a.title=m.name;w.appendChild(a)});
   $('#meName').textContent=st.me.name||'设置名字';$('#roomLabel').textContent=st.room;
 }
-const TABS=[{k:'plan',n:'方案'},{k:'itin',n:'行程'},{k:'spots',n:'雪场'},{k:'bud',n:'预算'},{k:'prep',n:'备忘'}];
+const TABS=[{k:'plan',n:'方案'},{k:'prep',n:'准备'},{k:'itin',n:'行程'},{k:'spots',n:'雪场'},{k:'bud',n:'预算'}];
 function renderTabs(){
   const w=$('#tabs');w.innerHTML='';
   TABS.forEach(t=>{const b=el('button','tab');let n='';
@@ -704,10 +758,6 @@ function qBlock(s){
 }
 function vPlan(s){
   const v=V[st.opt];
-  s.appendChild(el('h2','sec',LABELS.snowNow));
-  wxBlock(s);
-  s.appendChild(el('h2','sec',LABELS.quota));
-  qBlock(s);
   s.appendChild(el('h2','sec',LABELS.whenToGo));
   const tm=el('div','tm'),g=el('div','tmg');
   g.appendChild(el('div','tmc',''));
@@ -737,6 +787,7 @@ function vPlan(s){
 
 /* ── 行程 ── */
 function vItin(s){
+  const v=V[st.opt];
   qBlock(s);
   s.appendChild(el('p','tx',TXT.itinHint));
   const sp=el('div','spine');
@@ -745,7 +796,7 @@ function vItin(s){
     const w=el('div','day'+(st.openDay===i?' open':''));w.style.setProperty('--nc',hex);
     const b=el('button','daybtn');
     b.innerHTML=`<span class="node${d.ski?' ski':''}">${d.ski?'滑':i+1}</span>
-      <span class="ddate">${esc(d.d)} 周${esc(d.w)}</span>
+      <span class="ddate">${esc(dayInfo(v,i).md)} ${esc(dayInfo(v,i).wdFull)}</span>
       <div class="dtitle">${esc(d.t)}</div>
       ${d.note?`<div class="dnote">${esc(d.note)}</div>`:''}
       <div class="dmeta">${d.ski?`<span class="pill sk">${d.ski==='rusutsu'?'留寿都':'白马'} · Epic</span>`:''}
@@ -759,7 +810,7 @@ function vItin(s){
       btn.onclick=e=>{e.stopPropagation();if(p&&mapOK){map.flyTo([p.lat,p.lng],12,{duration:.7});mReg[p.id]?.openPopup();if(innerWidth<=900)snap(0)}};
       bd.appendChild(btn);
       if(p){const lr=linkRow(p,true);lr.style.margin='0 0 6px 54px';bd.appendChild(lr)}});
-    const sb=stayBlock(d,2027); if(sb) bd.appendChild(sb);
+    const sb=stayBlock2(v,i); if(sb) bd.appendChild(sb);
     const vj=(d.stops||[]).map(x=>x.p&&P[x.p]&&P[x.p].jp).filter(Boolean)[0];
     if(vj){const v=el('div','vjp',esc(vj));b.appendChild(v)}
     w.appendChild(bd);sp.appendChild(w)});
@@ -844,6 +895,13 @@ function vBud(s){
 
 /* ── 备忘 ── */
 function vPrep(s){
+  s.appendChild(el('h2','sec',LABELS.snowNow));
+  wxBlock(s);
+  s.appendChild(el('h2','sec',LABELS.quota));
+  qBlock(s);
+  {const dtip=el('p','tx');dtip.style.cssText='font-size:12px;color:var(--faint)';
+   dtip.innerHTML='行程日期可以改：右上角「📅 改日期」，天数不变、整段平移，星期几和上面的天气窗口会自动跟着变。';
+   s.appendChild(dtip);}
   /* ── 预订清单 ── */
   const bks=bookings();
   const dn=bks.filter(b=>bkGet(b.id)?.state==='ok').length;
@@ -980,8 +1038,11 @@ function linkRow(p,compact){
   w.appendChild(A('导航',LK2.dir(p)));
   const j=B('日本語 ⧉',()=>copyJP(p),'jp'); j.title=p.jp||p.zh; w.appendChild(j);
   if(!compact){
-    w.appendChild(A('官网 / 营业时间',LK2.site(p)));
-    w.appendChild(B('小红书',()=>openXHS(p.zh)));
+    const way=p.kind==='way';
+    if(!way){
+      w.appendChild(A('官网 / 营业时间',LK2.site(p)));
+      w.appendChild(B('小红书',()=>openXHS(p.zh+' 日本')));
+    }
     w.appendChild(A('坐标',LK2.pin(p),'dim'));
     const n=B('＋ 笔记',()=>noteModal(p),'nt'); w.appendChild(n);
   }
@@ -991,13 +1052,17 @@ function linkRow(p,compact){
 /* ── 住宿 / 吃饭：每晚给 2–3 个方向 + 预订深链 ── */
 function stayKey(s){ return String(s||'').replace(/\s?[①②③④⑤⑥⑦⑧⑨⑩⑪]/g,'').trim(); }
 function isoDate(dstr,year){ const a=String(dstr).split('.'); return `${year}-${a[0]}-${a[1]}`; }
-function stayBlock(day,year){
+function stayBlock2(v,i){
+  const info=dayInfo(v,i);
+  return stayBlock(v.days[i], info.iso);
+}
+function stayBlock(day,isoOverride){
   const k=stayKey(day.stay);
   if(!k||k==='—'||k==='机上'||typeof STAY==='undefined'||!STAY[k]) return null;
   const S2=STAY[k];
-  const ci=isoDate(day.d,year);
-  const co=(()=>{const d=new Date(ci+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+1);
-    return d.toISOString().slice(0,10)})();
+  const ci=isoOverride||null;
+  const co=ci?(()=>{const d=new Date(ci+'T00:00:00Z');if(isNaN(d))return null;d.setUTCDate(d.getUTCDate()+1);
+    return d.toISOString().slice(0,10)})():null;
   const box=el('div','stayb');
   box.appendChild(el('div','stayh',
     `<span class="sn2">住 · ${esc(k)}</span><span class="sa">${esc(S2.area||'')}</span>`));
@@ -1212,7 +1277,7 @@ function snap(i){if(innerWidth>900)return;si=Math.max(0,Math.min(2,i));spx=SNAP[
 /* ═══════ 13. 启动 ═══════ */
 $('#baseBtn').onclick=()=>{if(mapOK)setBase((bi+1)%BASES.length)};
 $('#allBtn').onclick=showAll;$('#addBtn').onclick=()=>setAdd(!adding);
-$('#roomBtn').onclick=roomM;$('#meBtn').onclick=()=>meM();
+$('#roomBtn').onclick=roomM;$('#dateBtn').onclick=dateModal;$('#meBtn').onclick=()=>meM();
 addEventListener('resize',()=>{if(innerWidth>900)document.documentElement.style.removeProperty('--sheet-h');else snap(si);
   setTimeout(()=>mapOK&&map.invalidateSize(),120)});
 addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();if(adding)setAdd(false)}});

@@ -54,7 +54,7 @@ const TXT={
   itinHint: '点任意一天，地图跟随。左侧数字 = 当日驾驶小时数，红色 >5 小时。',
 
   pinsEmpty:
-    '暂无收藏点。分享行程码给同行者，新增餐厅/观景点/住宿实时同步。地图长按可落点。',
+    '暂无收藏点。分享行程码给同行者，新增餐厅/观景点/住宿实时同步。地图长按可加收藏点。',
 
   bookingIntro:
     '本栏为预订记录，非建议。勾选完成项，填确认号+实付金额，同行者可见，预算页自动对账。',
@@ -63,7 +63,7 @@ const TXT={
     '按当前方案筛选。<b>Moraine Lake 班车预约</b>需最先处理，其余可临时补办。',
 
   budgetNote:
-    '单位加元，数字为估算，可拖拽调整。'
+    '单位: 加元，数字为估算，可拖拽调整。'
     +'<br><br>油费按往返 1500 km、9 L/100km、1.7 CAD/L 估算，实际依车型浮动。'
     +'国家公园门票：2026.06.19–09.07 由 Canada Strong Pass 覆盖，免费入园。'
     +'Lake Louise 旺季停车 42 CAD/车，Park and Ride 免费。',
@@ -81,13 +81,13 @@ const RULES=[
  ['Moraine Lake 禁私家车','2023 年起全年封闭私家车（含无障碍证）。仅限 Parks Canada 班车/持牌商业车/Roam 公交/骑行（单程 12.5 km，爬升 250 m）。'],
  ['班车分两次放票','2026.04.15 放全季 40% 票额。剩余 60% 于出发前 2 日 08:00 MT 滚动放出。热门时段数分钟售罄。'],
  ['一票通两湖','含 Lake Connector 接驳 + Park and Ride 返程。预约时选定的湖为首个目的地。'],
- ['Lake Louise 可开车，停车贵','旺季 42 CAD/车，3:00–19:00 收费，清晨即满。Park and Ride 班车停车免费。'],
+ ['Lake Louise 可开车，但停车贵','旺季 42 CAD/车，3:00–19:00 收费，清晨即满。Park and Ride 班车停车免费。'],
  ['门票与班车票分离','班车票不含国家公园门票。2026.06.19–09.07 Canada Strong Pass 免费入园，其余时段单独购买。']
 ];
 
 /* ── 五套方案对比 ── */
 const COMPARE=[
- ['甲 · Calgary 连住四晚','住宿仅换两处，行李拆两次。首日直达 Calgary，后三日当日往返，每日 ≤3 景点。'],
+ ['甲 · Calgary 连住四晚','仅换两处住宿。首日直达 Calgary，后三日当日往返，每日 ≤3 景点。'],
  ['乙 · 住进 Banff','省去 Calgary 往返 2 小时。早 7 点可达湖边。旺季住宿成本上升。'],
  ['丙 · 飞抵 4 天','YVR→YYC 1.5 小时，落地租车。省 2 天驾驶，增机票+租车费。'],
  ['丁 · 深度 8 天','含 Jasper + Icefields Parkway 全程 + 哥伦比亚冰原。落基山完整版。'],
@@ -133,7 +133,7 @@ def('cascade','Cascade of Time Garden','Cascade of Time Garden',51.1706,-115.568
 def('surprise','Surprise Corner 观景台','Surprise Corner Viewpoint',51.1697,-115.5578,'banff','拍 Fairmont Banff Springs 城堡的经典机位。路边停车，步行 2 分钟。');
 def('pedbridge','Banff 步行桥','Banff Pedestrian Bridge',51.1729,-115.5695,'banff','跨 Bow River，桥上观 Cascade Mountain。与上述两处均在步行范围，1 小时走完。');
 def('bowfalls','Bow Falls','Bow Falls',51.1667,-115.5622,'banff','落差不大，水量足。观景台距停车场数十米。');
-def('minnewanka','Minnewanka Loop','Lake Minnewanka Loop',51.2417,-115.5000,'banff','约 24 km 环形景观道。清早常见大角羊/麋鹿。开完一圈 40 分钟，不下车也值。');
+def('minnewanka','Minnewanka Loop','Lake Minnewanka Loop',51.2417,-115.5000,'banff','约 24 km 环形景观道。清早常见大角羊/麋鹿。开完一圈 40 分钟，不下车也好看。');
 def('twojack','Two Jack Lake','Two Jack Lake',51.2258,-115.5136,'banff','Minnewanka 环线上。湖面平静时倒映 Mount Rundle。日出机位。');
 def('norquay','Mount Norquay 观景台','Mount Norquay Lookout',51.2000,-115.5967,'banff','盘山公路直达，免费。俯瞰整个 Banff 镇+Bow Valley。日落前 1 小时最佳，人流少于缆车站。');
 def('vermilion','Vermilion Lakes','Vermilion Lakes',51.1786,-115.6042,'banff','距镇中心 5 分钟。日落日出俱佳。路边可停，晚间常有麋鹿。');
@@ -190,7 +190,7 @@ A:{k:'A',gr:'甲',name:'Calgary 连住四晚 · 6 天 5 晚',met:'6 DAYS · 5 NI
   days:[
    {d:'08.27',w:'四',t:'Burnaby → Calgary',r:'bc',stay:'Calgary',drive:10.5,
     sig:'全程基本有信号。Coquihalla 山区局部断续。',
-    note:'约 950 km，10–11 小时。全程最硬一天，出发前满油。',stops:[
+    note:'约 950 km，10–11 小时。全程最长距离一天，出发前满油。',stops:[
      {t:'早',p:'burnaby',n:'出发',s:'6:30 前上路'},
      {t:'—',p:'zopkios',n:'Zopkios Rest Area',s:'Coquihalla 最高点附近，厕所+大停车场'},
      {t:'午',p:'kamloops',n:'Kamloops 加油+午饭',s:'油价低于 Coquihalla 段'},
@@ -329,7 +329,7 @@ D:{k:'D',gr:'丁',name:'深度 8 天 · 含 Jasper',met:'8 DAYS · 示例 2027.0
 
 E:{k:'E',gr:'戊',name:'冬季滑雪 7 天 · Kicking Horse + SkiBig3',met:'7 DAYS · 示例 2028.02',hex:'#1F6FA8',tag:'雪季',
   start:'2028-02-05', dates:'2028.02.05 → 02.11',
-  pitch:'冬季专攻滑雪。Golden 滑 2 天 Kicking Horse，再进 Banff 滑 SkiBig3。\n\n'
+  pitch:'冬季滑雪。Golden 滑 2 天 Kicking Horse，再进 Banff 滑 SkiBig3。\n\n'
     +'Kicking Horse 落差 1260 m，陡峭碗状地形著称。SkiBig3 = Sunshine + Lake Louise + Norquay，'
     +'一票通刷，免费班车串联各雪场+Banff 镇。',
   cons:'冬季 Moraine Lake Road 全封，湖不可达。Icefields Parkway 冬季服务点关闭，'
