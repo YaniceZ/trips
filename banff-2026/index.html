@@ -296,6 +296,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 .shtx{flex:1}
 .shtx b{font-size:13px;font-weight:500;display:block}
 .shtx small{display:block;color:var(--slate);font-size:12px;line-height:1.7;margin-top:3px}
+.navtip{flex-basis:100%;font-family:var(--mono);font-size:9.5px;color:var(--mist);margin-top:4px;line-height:1.7}
 .lk2.navday{border-color:var(--blu);color:var(--blu);font-weight:500}
 .lk2.navday:hover{background:var(--blu);color:#fff}
 .samestay{margin:10px 0 4px;padding:8px 11px;border:1px dashed var(--line);border-radius:8px;
@@ -628,7 +629,7 @@ function toICS(){
 /* ═══════ 5. 状态 ═══════ */
 const AVC=['#D63C33','#1A6FBF','#1F8F5F','#C98A15','#8B4FB5','#0F9B9B','#D6588C','#5A6B8C'];
 let st={opt:'A',tab:'plan',room:'banff26',openDay:null,
-  me:{id:null,name:'',color:AVC[0]},pins:[],members:[],budget:{},done:{},bk:{},notes:{},
+  me:{id:null,name:'',color:AVC[0]},pins:[],members:[],budget:{},done:{},bk:{},notes:{},addr:{},
   rate:115,perPerson:false,ccy:'CAD'};
 const $=s=>document.querySelector(s);
 const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
@@ -636,7 +637,7 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&g
 const uid=()=>Math.random().toString(36).slice(2,10);
 let tT;const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('show'),2500)};
 const K={pins:()=>`banff:${st.room}:pins`,mem:()=>`banff:${st.room}:members`,
-  bk:()=>`banff:${st.room}:bookings`,notes:()=>`banff:${st.room}:notes`,cfg:()=>'banff:localcfg'};
+  bk:()=>`banff:${st.room}:bookings`,addr:()=>`banff:${st.room}:addr`,notes:()=>`banff:${st.room}:notes`,cfg:()=>'banff:localcfg'};
 
 /* ═══════ 6. 地图 ═══════ */
 const BASES=[
@@ -1159,27 +1160,65 @@ function stayKey(s){ return String(s||'').replace(/\s?[①②③④⑤⑥⑦⑧�
 function isoDate(dstr,year){ const a=String(dstr).split('.');
   if(a.length<2||!/^\d{2}$/.test(a[0])||!/^\d{2}$/.test(a[1])) return null;
   return `${year}-${a[0]}-${a[1]}`; }
-/* ── 整日导航：把当天所有停靠点串成一条 Google Maps 路线 ── */
-function navName(p){
-  if(!p) return null;
-  return (p.en||p.zh||'').trim() || null;
+/* ── 整日导航 ──
+   1. 省略 origin → Google 自动用「我的位置」
+   2. 途经点一律用坐标，避免同名/解析失败
+   3. 终点优先用用户自设住宿地址（每个行程码各自保存） */
+function stayAddr(k){
+  if(!k) return null;
+  const custom=(st.addr||{})[k];
+  if(custom&&custom.trim()) return custom.trim();
+  if(typeof STAY!=='undefined'&&STAY[k]&&STAY[k].nav) return STAY[k].nav;
+  return null;
 }
 function dayRouteUrl(v,i){
   const d=v.days[i];
-  const pts=(d.stops||[]).map(x=>x.p?P[x.p]:null).filter(Boolean).map(navName).filter(Boolean);
-  // 终点优先用住宿的精确导航目标（酒店名），否则用最后一个停靠点
+  const pts=(d.stops||[]).map(x=>x.p?P[x.p]:null).filter(Boolean);
+  if(!pts.length) return null;
+  // 途经点用坐标，最稳
+  let way=pts.map(p=>p.lat.toFixed(5)+','+p.lng.toFixed(5));
+  way=way.filter((x,j)=>j===0||x!==way[j-1]);
   const k=stayKey(d.stay);
-  const hotel=(typeof STAY!=='undefined'&&STAY[k]&&STAY[k].nav)?STAY[k].nav:null;
-  let list=pts.slice();
-  if(hotel&&list[list.length-1]!==hotel) list.push(hotel);
-  // 去掉相邻重复
-  list=list.filter((x,j)=>j===0||x!==list[j-1]);
-  if(list.length<2) return null;
-  const origin=encodeURIComponent(list[0]);
-  const dest=encodeURIComponent(list[list.length-1]);
-  const way=list.slice(1,-1).map(encodeURIComponent).join('|');
-  return 'https://www.google.com/maps/dir/?api=1&origin='+origin
-    +'&destination='+dest+(way?'&waypoints='+way:'')+'&travelmode=driving';
+  const hotel=stayAddr(k);
+  let dest;
+  if(hotel){ dest=hotel; }
+  else { dest=way.pop(); }            // 无住宿地址 → 最后一个停靠点当终点
+  if(!dest) return null;
+  // Google Maps URL API 最多 9 个途经点
+  if(way.length>9) way=way.slice(0,9);
+  return 'https://www.google.com/maps/dir/?api=1'
+    +'&destination='+encodeURIComponent(dest)
+    +(way.length?'&waypoints='+way.map(encodeURIComponent).join('%7C'):'')
+    +'&travelmode=driving';
+}
+/* ── 自设住宿地址（同一行程码内共享） ── */
+async function addrModal(k){
+  if(!st.me.name) return meM(()=>addrModal(k));
+  const cur=(st.addr||{})[k]||'';
+  const def=(typeof STAY!=='undefined'&&STAY[k]&&STAY[k].nav)?STAY[k].nav:'';
+  openM(`<h3>${esc(k)} 的住宿地址</h3>
+   <p class="mp">用于「本日整条路线导航」的终点。填酒店名或完整地址，越具体越准。同行程码的人共用。</p>
+   <div class="fd"><label class="lb">住宿地址</label>
+     <input type="text" id="ad2" maxlength="120" value="${esc(cur)}" placeholder="${esc(def||'例：Hilton Garden Inn Calgary Downtown')}"></div>
+   <div class="tiny">留空则用默认值${def?'：'+esc(def):'（当天最后一个停靠点）'}</div>
+   <div class="row" style="margin-top:12px"><button class="btn" id="adclr">清除</button>
+     <button class="btn pri" id="adok">保存</button></div>
+   <div class="row" style="margin-top:7px"><button class="btn" data-close>取消</button></div>`,
+  b=>{
+   b.querySelector('#ad2').focus();
+   b.querySelector('#adok').onclick=async()=>{
+     const val=b.querySelector('#ad2').value.trim();
+     st.addr=st.addr||{};
+     if(val) st.addr[k]=val; else delete st.addr[k];
+     await S.set(K.addr(),st.addr,true);
+     closeM(); renderBody(); toast(val?'已保存住宿地址':'已恢复默认');
+   };
+   b.querySelector('#adclr').onclick=async()=>{
+     st.addr=st.addr||{}; delete st.addr[k];
+     await S.set(K.addr(),st.addr,true);
+     closeM(); renderBody(); toast('已恢复默认');
+   };
+  });
 }
 function dayNavRow(v,i){
   const url=dayRouteUrl(v,i);
@@ -1189,6 +1228,16 @@ function dayNavRow(v,i){
   a.className='lk2 navday'; a.href=url; a.target='_blank'; a.rel='noopener noreferrer';
   a.textContent='本日整条路线导航';
   w.appendChild(a);
+  const k=stayKey(v.days[i].stay);
+  if(k&&k!=='—'&&k!=='机上'){
+    const b2=el('button','lk2',null);
+    b2.textContent=(st.addr||{})[k]?'终点：已自设':'改终点住宿';
+    b2.onclick=e=>{e.stopPropagation();addrModal(k)};
+    w.appendChild(b2);
+  }
+  const tip=el('div','navtip');
+  tip.textContent='起点为你的当前位置。途经点用坐标，不受同名影响。';
+  w.appendChild(tip);
   return w;
 }
 function stayBlock2(v,i){
@@ -1311,10 +1360,10 @@ function addM(pre){
 /* ═══════ 9. 协作 ═══════ */
 async function pull(loud){
   $('#syncDot').className='dot busy';
-  const [p,m,bk,nt]=await Promise.all([S.get(K.pins(),true),S.get(K.mem(),true),
-    S.get(K.bk(),true),S.get(K.notes(),true)]);
+  const [p,m,bk,nt,ad]=await Promise.all([S.get(K.pins(),true),S.get(K.mem(),true),
+    S.get(K.bk(),true),S.get(K.notes(),true),S.get(K.addr(),true)]);
   if(Array.isArray(p))st.pins=p;if(Array.isArray(m))st.members=m;
-  if(bk&&typeof bk==='object')st.bk=bk;if(nt&&typeof nt==='object')st.notes=nt;
+  if(bk&&typeof bk==='object')st.bk=bk;if(nt&&typeof nt==='object')st.notes=nt;if(ad&&typeof ad==='object')st.addr=ad;
   $('#syncDot').className=S.ok?'dot':'dot off';
   renderMem();renderTabs();if(st.tab==='spots')renderBody();drawPin();
   if(loud)toast(S.ok?`已同步 · ${st.pins.length} 个点`:'当前环境没有共享存储，改动只留在本次会话')}

@@ -248,7 +248,7 @@ A:{k:'A',gr:'甲',name:'Calgary 连住四晚 · 6 天 5 晚',met:'6 DAYS · 5 NI
    {d:'08.29',w:'六',t:'湖泊日 · 断网日',r:'yoho',stay:'Calgary',drive:5,
     sig:'全天基本无信号无 wifi。Emerald Lake/Moraine Lake 完全断网。Lake Louise 村信号弱。班车凭证提前截图存本地。',
     note:'今日抢班车。早餐带走，车上食用。全程最满一天。',stops:[
-     {t:'07:00',p:'ethos',n:'Ethos Cafe 带早餐',s:'车上食用'},
+     {t:'07:00',p:'calgary',n:'Calgary 出发 · 带早餐',s:'Ethos Cafe 在 Golden，不在本日路线上。改在 Calgary 买或酒店早餐'},
      {t:'—',p:'emerald',n:'Emerald Lake',s:'环湖步道 30 分钟。或仅至桥头'},
      {t:'—',p:'parkride',n:'Park and Ride 换班车',s:'停车免费，预约时段前 15 分钟到'},
      {t:'—',p:'lakelouise',n:'Lake Louise 湖边',s:'平路，至城堡酒店侧即可'},
