@@ -196,8 +196,10 @@ p.tx b{color:var(--ink);font-weight:600}
 .fd{margin-bottom:12px}
 label.lb{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;color:var(--mist);
   text-transform:uppercase;margin-bottom:5px;font-weight:600}
-input[type=text],input[type=number],textarea{width:100%;background:var(--card-2);border:1px solid var(--line);
+input[type=text],input[type=number],input[type=date],textarea{width:100%;background:var(--card-2);border:1px solid var(--line);
   border-radius:7px;padding:9px 11px;font-size:13.5px;transition:.16s}
+input[type=date]{color-scheme:light;color:var(--ink);font-family:var(--mono);letter-spacing:.02em}
+
 input:focus,textarea:focus{outline:none;border-color:var(--blu);background:var(--card)}
 textarea{resize:vertical;min-height:62px;line-height:1.65}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border-radius:7px;
@@ -284,6 +286,21 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
  line-height:1.7;color:var(--slate);background:var(--card-2);border-left:2px solid var(--blu);
  border-radius:0 6px 6px 0;padding:7px 10px}
 .sigi{width:10px;height:10px;flex:none;margin-top:5px;border-radius:50%;background:var(--blu);opacity:.55}
+.shbox{border:1px solid var(--line);border-radius:9px;padding:11px 12px;margin-bottom:10px;background:var(--card-2)}
+.shtop{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px}
+.shk{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--mist)}
+.shp{font-size:12px;color:var(--slate);line-height:1.75;margin-top:3px}
+.shstep{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-2)}
+.shnum{flex:none;width:19px;height:19px;border-radius:50%;background:var(--rd);color:#fff;
+ display:grid;place-items:center;font-family:var(--mono);font-size:10px;font-weight:600;margin-top:1px}
+.shtx{flex:1}
+.shtx b{font-size:13px;font-weight:500;display:block}
+.shtx small{display:block;color:var(--slate);font-size:12px;line-height:1.7;margin-top:3px}
+.lk2.navday{border-color:var(--blu);color:var(--blu);font-weight:500}
+.lk2.navday:hover{background:var(--blu);color:#fff}
+.samestay{margin:10px 0 4px;padding:8px 11px;border:1px dashed var(--line);border-radius:8px;
+ background:var(--card-2);font-size:12.5px;color:var(--slate)}
+.samestay span{font-family:var(--mono);font-size:10px;color:var(--mist)}
 .lkrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
 .lk2{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9.5px;
  letter-spacing:.04em;padding:4px 8px;border-radius:5px;border:1px solid var(--line);
@@ -856,7 +873,19 @@ function vItin(s){
       btn.onclick=e=>{e.stopPropagation();if(p&&mapOK){map.flyTo([p.lat,p.lng],12,{duration:.7});mReg[p.id]?.openPopup();if(innerWidth<=900)snap(0)}};
       bd.appendChild(btn);
       if(p){const lr=linkRow(p,true);lr.style.margin='0 0 6px 54px';bd.appendChild(lr)}});
-    const sb=stayBlock2(V[st.opt],i); if(sb) bd.appendChild(sb);
+    {const vv=V[st.opt];
+     const nv=dayNavRow(vv,i); if(nv) bd.appendChild(nv);
+     const curK=stayKey(d.stay);
+     const prevK=i>0?stayKey(vv.days[i-1].stay):null;
+     if(curK&&curK!=='—'&&curK!=='机上'&&curK===prevK){
+       let firstIdx=i; while(firstIdx>0&&stayKey(vv.days[firstIdx-1].stay)===curK) firstIdx--;
+       const nth=i-firstIdx+1;
+       const same=el('div','samestay');
+       same.innerHTML=`住 · ${esc(curK)}　<span>连住第 ${nth} 晚，同第 ${firstIdx+1} 天</span>`;
+       bd.appendChild(same);
+     } else {
+       const sb=stayBlock2(vv,i); if(sb) bd.appendChild(sb);
+     }}
     w.appendChild(bd);sp.appendChild(w)});
   s.appendChild(sp)}
 
@@ -949,6 +978,37 @@ function vPrep(s){
   RULES.forEach(([n,d])=>{const w=el('div','bl');
     w.innerHTML=`<div class="nm">${esc(n)}<small style="margin-top:3px;display:block">${esc(d)}</small></div>`;
     s.appendChild(w)});
+
+  /* ── Moraine Lake 抢票分步 ── */
+  if(typeof SHUTTLE!=='undefined'){
+    s.appendChild(el('h2','sec','Moraine Lake 抢票'));
+    const hd=el('div','shbox');
+    hd.innerHTML=`<div class="shtop"><span class="shk">官网</span>`
+      +`<a class="lk2" href="${SHUTTLE.url}" target="_blank" rel="noopener noreferrer">reservation.pc.gc.ca</a></div>`
+      +`<div class="shp">${esc(SHUTTLE.price)}</div>`
+      +`<div class="shp">停车：${esc(SHUTTLE.parking)}`
+      +` <a class="lk2" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SHUTTLE.parking)}" target="_blank" rel="noopener noreferrer">地图</a></div>`;
+    s.appendChild(hd);
+    SHUTTLE.steps.forEach(([n,d],i)=>{const w=el('div','shstep');
+      w.innerHTML=`<span class="shnum">${i+1}</span><span class="shtx"><b>${esc(n)}</b><small>${esc(d)}</small></span>`;
+      s.appendChild(w)});
+    s.appendChild(el('h2','sec','抢不到票的替代方案'));
+    SHUTTLE.fallback.forEach(([n,d])=>{const w=el('div','bl');
+      w.innerHTML=`<div class="nm">${esc(n)}<small style="margin-top:3px;display:block">${esc(d)}</small></div>`;
+      s.appendChild(w)});
+  }
+
+  /* ── 离线地图 ── */
+  if(typeof OFFLINE!=='undefined'){
+    s.appendChild(el('h2','sec','离线地图'));
+    OFFLINE.forEach(([n,d])=>{const w=el('div','bl');
+      w.innerHTML=`<div class="nm">${esc(n)}<small style="margin-top:3px;display:block">${esc(d)}</small></div>`;
+      s.appendChild(w)});
+    const note=el('p','tx');
+    note.style.cssText='font-size:12px;color:var(--mist)';
+    note.textContent='说明：两家地图 App 均不支持从网页一键触发离线下载，只能在 App 内手动框选。出发前在 wifi 下做完。';
+    s.appendChild(note);
+  }
 
   /* ── 预订清单 ── */
   const bks=bookings();
@@ -1099,6 +1159,38 @@ function stayKey(s){ return String(s||'').replace(/\s?[①②③④⑤⑥⑦⑧�
 function isoDate(dstr,year){ const a=String(dstr).split('.');
   if(a.length<2||!/^\d{2}$/.test(a[0])||!/^\d{2}$/.test(a[1])) return null;
   return `${year}-${a[0]}-${a[1]}`; }
+/* ── 整日导航：把当天所有停靠点串成一条 Google Maps 路线 ── */
+function navName(p){
+  if(!p) return null;
+  return (p.en||p.zh||'').trim() || null;
+}
+function dayRouteUrl(v,i){
+  const d=v.days[i];
+  const pts=(d.stops||[]).map(x=>x.p?P[x.p]:null).filter(Boolean).map(navName).filter(Boolean);
+  // 终点优先用住宿的精确导航目标（酒店名），否则用最后一个停靠点
+  const k=stayKey(d.stay);
+  const hotel=(typeof STAY!=='undefined'&&STAY[k]&&STAY[k].nav)?STAY[k].nav:null;
+  let list=pts.slice();
+  if(hotel&&list[list.length-1]!==hotel) list.push(hotel);
+  // 去掉相邻重复
+  list=list.filter((x,j)=>j===0||x!==list[j-1]);
+  if(list.length<2) return null;
+  const origin=encodeURIComponent(list[0]);
+  const dest=encodeURIComponent(list[list.length-1]);
+  const way=list.slice(1,-1).map(encodeURIComponent).join('|');
+  return 'https://www.google.com/maps/dir/?api=1&origin='+origin
+    +'&destination='+dest+(way?'&waypoints='+way:'')+'&travelmode=driving';
+}
+function dayNavRow(v,i){
+  const url=dayRouteUrl(v,i);
+  if(!url) return null;
+  const w=el('div','lkrow'); w.style.margin='10px 0 0';
+  const a=document.createElement('a');
+  a.className='lk2 navday'; a.href=url; a.target='_blank'; a.rel='noopener noreferrer';
+  a.textContent='本日整条路线导航';
+  w.appendChild(a);
+  return w;
+}
 function stayBlock2(v,i){
   const info=dayInfo(v,i);
   return stayBlock(v.days[i], info.iso);

@@ -54,7 +54,7 @@ const TXT={
   itinHint: '点任意一天，地图跟随。左侧数字 = 当日驾驶小时数，红色 >5 小时。',
 
   pinsEmpty:
-    '暂无收藏点。分享行程码给同行者，新增餐厅/观景点/住宿实时同步。地图长按可加收藏点。',
+    '暂无收藏点。分享行程码给同行者，新增餐厅/观景点/住宿实时同步。地图长按可落点。',
 
   bookingIntro:
     '本栏为预订记录，非建议。勾选完成项，填确认号+实付金额，同行者可见，预算页自动对账。',
@@ -63,7 +63,7 @@ const TXT={
     '按当前方案筛选。<b>Moraine Lake 班车预约</b>需最先处理，其余可临时补办。',
 
   budgetNote:
-    '单位: 加元，数字为估算，可拖拽调整。'
+    '单位加元，数字为估算，可拖拽调整。'
     +'<br><br>油费按往返 1500 km、9 L/100km、1.7 CAD/L 估算，实际依车型浮动。'
     +'国家公园门票：2026.06.19–09.07 由 Canada Strong Pass 覆盖，免费入园。'
     +'Lake Louise 旺季停车 42 CAD/车，Park and Ride 免费。',
@@ -76,18 +76,50 @@ const TXT={
     '共享数据对同码用户可见。坐标为示意精度，班车时刻/票价/开放状态以 Parks Canada 当日公告为准。'
 };
 
+/* ── Moraine Lake 抢票分步指南（准备页） ── */
+const SHUTTLE={
+  url:'https://reservation.pc.gc.ca',
+  parking:'1 Whitehorn Rd, Lake Louise, AB T0L 1E0',
+  price:'车票 8 CAD/人（青少年常为 0）+ 预订费约 3.5 CAD + 税。4 人合计通常 <20 CAD。',
+  steps:[
+   ['提前注册账号','reservation.pc.gc.ca 右上角 Sign in。有 GCKey 用 GCKey 最快，否则用 Google 登录。抢票当天再注册来不及。'],
+   ['提前存信用卡','把卡存进浏览器自动填充。付款手速决定成败，别人还在填卡号时你已下单。'],
+   ['设闹钟：出发前 2 日 08:00 MDT','山地时区。温哥华为 07:00。提前 10 分钟登录并停在预订页。'],
+   ['选 Moraine Lake 优先','选哪个湖 = 先到哪个湖。Lake Louise 私家车可达，Moraine 只能坐车 → 优先抢 Moraine。'],
+   ['抢不到就持续刷新','热门时段数分钟售罄。刷新常有退票释出。抢到任意时段先放购物车锁定，再刷理想时段。'],
+   ['时段选择','清晨最热门。抢不到 → 选 12:00 后，成功率更高。看金松需预留 ≥3 小时。'],
+   ['提前截图二维码','邮件收到二维码。现场信号极差，务必本地截图。'],
+   ['现场换纸质票','按预约时段抵达绿色亭子 Booth 签到换票。旺季排队，提前 30 分钟到。'],
+   ['签到后当天无限次','一票通两湖，含 Lake Connector 接驳。末班车常在 19:30 前后，规划返程。']
+  ],
+  fallback:[
+   ['抢不到票的替代方案','Roam Transit 8X Super Pass：成人往返 30 CAD，青少年半价，12 岁以下免费。当天无限次。'],
+   ['购票','roamtransit.com 官网，或现场排队买。Banff High School 站上车。'],
+   ['反向也可以','买不到 Banff→Louise，就买 Louise→Banff，当天无限次，效果相同。'],
+   ['停车','住 Banff 镇可停酒店。未住镇内可停 Banff 火车站，9am–9pm 免费停 9 小时，够玩两湖。'],
+   ['两湖之间','Lake Connector 免费，出示购票二维码即可。']
+  ]
+};
+
+/* ── 离线地图（准备页） ── */
+const OFFLINE=[
+ ['Google 地图 · 离线区域','App 内点头像 → 离线地图 → 选择您自己的地图 → 框选 Banff/Lake Louise/Icefields 一带 → 下载。出发前在 wifi 下完成。'],
+ ['Apple 地图 · 离线地图','iOS 17 起支持。App 内点头像 → 离线地图 → 下载新地图 → 框选区域。'],
+ ['务必截图的内容','Moraine Lake 班车二维码、酒店确认号、当日导航路线。湖区全天无信号，截图比任何 App 可靠。']
+];
+
 /* ── 两条硬规则 ── */
 const RULES=[
  ['Moraine Lake 禁私家车','2023 年起全年封闭私家车（含无障碍证）。仅限 Parks Canada 班车/持牌商业车/Roam 公交/骑行（单程 12.5 km，爬升 250 m）。'],
  ['班车分两次放票','2026.04.15 放全季 40% 票额。剩余 60% 于出发前 2 日 08:00 MT 滚动放出。热门时段数分钟售罄。'],
  ['一票通两湖','含 Lake Connector 接驳 + Park and Ride 返程。预约时选定的湖为首个目的地。'],
- ['Lake Louise 可开车，但停车贵','旺季 42 CAD/车，3:00–19:00 收费，清晨即满。Park and Ride 班车停车免费。'],
+ ['Lake Louise 可开车，停车贵','旺季 42 CAD/车，3:00–19:00 收费，清晨即满。Park and Ride 班车停车免费。'],
  ['门票与班车票分离','班车票不含国家公园门票。2026.06.19–09.07 Canada Strong Pass 免费入园，其余时段单独购买。']
 ];
 
 /* ── 五套方案对比 ── */
 const COMPARE=[
- ['甲 · Calgary 连住四晚','仅换两处住宿。首日直达 Calgary，后三日当日往返，每日 ≤3 景点。'],
+ ['甲 · Calgary 连住四晚','住宿仅换两处，行李拆两次。首日直达 Calgary，后三日当日往返，每日 ≤3 景点。'],
  ['乙 · 住进 Banff','省去 Calgary 往返 2 小时。早 7 点可达湖边。旺季住宿成本上升。'],
  ['丙 · 飞抵 4 天','YVR→YYC 1.5 小时，落地租车。省 2 天驾驶，增机票+租车费。'],
  ['丁 · 深度 8 天','含 Jasper + Icefields Parkway 全程 + 哥伦比亚冰原。落基山完整版。'],
@@ -110,6 +142,13 @@ def('kamloopslake','Kamloops Lake 观景点','Kamloops Lake Rest Area',50.7300,-
 def('revelstoke','Revelstoke','Revelstoke BC',50.9981,-118.1957,'bc','进 Rogers Pass 前最后一个完整城镇。','way');
 def('rogers','Rogers Pass','Rogers Pass',51.3011,-117.5197,'bc','海拔 1330 m。冬季雪崩控制常临时封路。夏季路况良好，全程最佳山景段之一。','way');
 def('golden','Golden','Golden BC',51.2965,-116.9631,'bc','落基山西侧小镇，往返均在此过夜。镇区小，餐厅闭店早。');
+def('sicamous','Sicamous','Sicamous BC',50.8300,-118.9800,'bc','Trans-Canada 转 97A 南下的路口镇。加油+洗手间。','way');
+def('vernon','Vernon','Vernon BC',50.2670,-119.2720,'bc','Okanagan 北端。此后沿湖南下 0.5 小时到 Kelowna。','way');
+def('kelowna','Kelowna','Kelowna BC',49.8880,-119.4960,'bc','Okanagan 湖东岸，BC 内陆最大城市。酒庄+湖滩集中，餐饮选择远多于 Kamloops。');
+def('citypark','Kelowna City Park','Kelowna City Park BC',49.8845,-119.4966,'bc','湖边沙滩+平坦步道，紧邻市中心。晨间散步 30 分钟。');
+def('missionhill','Mission Hill 酒庄','Mission Hill Family Estate Westbank BC',49.8330,-119.6060,'bc','Kelowna 西岸，建筑+视野最佳。参观需预约，仅看风景可直接进。');
+def('quailsgate','Quails Gate 酒庄','Quails Gate Winery West Kelowna BC',49.8480,-119.5760,'bc','与 Mission Hill 相邻，餐厅评价高，湖景座位需订位。');
+def('merritt','Merritt','Merritt BC',50.1120,-120.7860,'bc','97C 与 Coquihalla 交汇。回程唯一完整服务区，加油+吃饭。');
 def('wolfsden','The Wolfs Den','The Wolfs Den Golden',51.2967,-116.9648,'bc','Golden 老牌餐厅。野牛肋排为招牌。旺季晚市需等位，进镇前致电。');
 def('ethos','Ethos Cafe','Ethos Cafe Golden',51.2977,-116.9639,'bc','早餐+外带咖啡。次日出发前采购，湖边食用。');
 def('kicking','Kicking Horse 雪场','Kicking Horse Mountain Resort',51.2981,-117.0489,'ski','Golden 旁，落差 1260 m，加拿大最大雪场之一。陡峭碗状地形+林间道。初学者选择少。');
@@ -133,7 +172,7 @@ def('cascade','Cascade of Time Garden','Cascade of Time Garden',51.1706,-115.568
 def('surprise','Surprise Corner 观景台','Surprise Corner Viewpoint',51.1697,-115.5578,'banff','拍 Fairmont Banff Springs 城堡的经典机位。路边停车，步行 2 分钟。');
 def('pedbridge','Banff 步行桥','Banff Pedestrian Bridge',51.1729,-115.5695,'banff','跨 Bow River，桥上观 Cascade Mountain。与上述两处均在步行范围，1 小时走完。');
 def('bowfalls','Bow Falls','Bow Falls',51.1667,-115.5622,'banff','落差不大，水量足。观景台距停车场数十米。');
-def('minnewanka','Minnewanka Loop','Lake Minnewanka Loop',51.2417,-115.5000,'banff','约 24 km 环形景观道。清早常见大角羊/麋鹿。开完一圈 40 分钟，不下车也好看。');
+def('minnewanka','Minnewanka Loop','Lake Minnewanka Loop',51.2417,-115.5000,'banff','约 24 km 环形景观道。清早常见大角羊/麋鹿。开完一圈 40 分钟，不下车也值。');
 def('twojack','Two Jack Lake','Two Jack Lake',51.2258,-115.5136,'banff','Minnewanka 环线上。湖面平静时倒映 Mount Rundle。日出机位。');
 def('norquay','Mount Norquay 观景台','Mount Norquay Lookout',51.2000,-115.5967,'banff','盘山公路直达，免费。俯瞰整个 Banff 镇+Bow Valley。日落前 1 小时最佳，人流少于缆车站。');
 def('vermilion','Vermilion Lakes','Vermilion Lakes',51.1786,-115.6042,'banff','距镇中心 5 分钟。日落日出俱佳。路边可停，晚间常有麋鹿。');
@@ -190,7 +229,7 @@ A:{k:'A',gr:'甲',name:'Calgary 连住四晚 · 6 天 5 晚',met:'6 DAYS · 5 NI
   days:[
    {d:'08.27',w:'四',t:'Burnaby → Calgary',r:'bc',stay:'Calgary',drive:10.5,
     sig:'全程基本有信号。Coquihalla 山区局部断续。',
-    note:'约 950 km，10–11 小时。全程最长距离一天，出发前满油。',stops:[
+    note:'约 950 km，10–11 小时。全程最硬一天，出发前满油。',stops:[
      {t:'早',p:'burnaby',n:'出发',s:'6:30 前上路'},
      {t:'—',p:'zopkios',n:'Zopkios Rest Area',s:'Coquihalla 最高点附近，厕所+大停车场'},
      {t:'午',p:'kamloops',n:'Kamloops 加油+午饭',s:'油价低于 Coquihalla 段'},
@@ -224,20 +263,24 @@ A:{k:'A',gr:'甲',name:'Calgary 连住四晚 · 6 天 5 晚',met:'6 DAYS · 5 NI
      {t:'—',p:'calgarytower',n:'Calgary Tower',s:'晴天可见落基山轮廓'},
      {t:'—',p:'eauclaire',n:'Eau Claire / Prince Island',s:''},
      {t:'晚',p:'joey',n:'JOEY Eau Claire',s:'江边，饭后散步，需订位'}]},
-   {d:'08.31',w:'一',t:'Icefields Parkway + 转场',r:'ice',stay:'Kamloops',drive:8,
-    sig:'Bow Lake/Peyto Lake 段信号弱，过 Golden 后恢复正常。',
-    note:'今日消耗回程大半路程。Peyto 无需预约，停车场中午满，早到。',stops:[
-     {t:'07:30',p:'calgary',n:'出发',s:''},
+   {d:'08.31',w:'一',t:'Icefields Parkway + 转场 Kelowna',r:'ice',stay:'Kelowna',drive:9,
+    sig:'Bow Lake/Peyto Lake 段信号弱。过 Golden 后恢复正常。',
+    note:'全程最长一天：纯驾驶约 8.5 小时，含观景+用餐全天 10 小时起。7:00 出发。Peyto 看完即上路，Golden 后不再停景点。体力不支 → Revelstoke 或 Salmon Arm 加一晚。',stops:[
+     {t:'07:00',p:'calgary',n:'出发',s:'比原计划早 30 分钟'},
      {t:'—',p:'bowlake',n:'Bow Lake',s:'路边即停车场'},
-     {t:'—',p:'peyto',n:'Peyto Lake',s:'步道数分钟至观景台，坡缓有栏杆'},
-     {t:'—',p:'golden',n:'经 Golden',s:'加油'},
-     {t:'—',p:'revelstoke',n:'经 Revelstoke',s:''},
-     {t:'晚',p:'kamloops',n:'Kamloops 入住',s:''}]},
-   {d:'09.01',w:'二',t:'Kamloops → Burnaby',r:'bc',stay:'—',drive:4,
+     {t:'—',p:'peyto',n:'Peyto Lake',s:'步道数分钟至观景台，坡缓有栏杆。停车场中午满'},
+     {t:'—',p:'golden',n:'经 Golden',s:'加油+午饭'},
+     {t:'—',p:'revelstoke',n:'经 Revelstoke',s:'退路：体力不支可在此过夜'},
+     {t:'—',p:'sicamous',n:'Sicamous 转 97A 南下',s:'离开 Trans-Canada'},
+     {t:'—',p:'vernon',n:'经 Vernon',s:'此后沿湖 0.5 小时'},
+     {t:'晚',p:'kelowna',n:'Kelowna 入住',s:''}]},
+   {d:'09.01',w:'二',t:'Kelowna → Burnaby',r:'bc',stay:'—',drive:4.5,
     sig:'全程正常。',
-    note:'约 4 小时。避开温哥华晚高峰 → 中午前出发。',stops:[
-     {t:'早',p:'kamloops',n:'出发',s:''},
-     {t:'—',p:'kamloopslake',n:'Kamloops Lake 观景点',s:''},
+    note:'两条路线：97C 经 Merritt 转 Coquihalla，4.5 小时，最快。或 Hwy 3 经 Princeton 到 Hope，5.5–6 小时，风景更好、不走 Coquihalla。避开温哥华晚高峰 → 午前上路。',stops:[
+     {t:'早',p:'citypark',n:'City Park 湖边散步',s:'平坦步道 30 分钟。或改酒庄'},
+     {t:'—',p:'missionhill',n:'Mission Hill（二选一）',s:'建筑+视野最佳，参观需预约'},
+     {t:'—',p:'quailsgate',n:'Quails Gate（二选一）',s:'餐厅评价高，湖景座位需订位'},
+     {t:'午',p:'merritt',n:'Merritt 加油+午饭',s:'回程唯一完整服务区'},
      {t:'—',p:'burnaby',n:'到家',s:''}]}
   ]},
 
@@ -329,7 +372,7 @@ D:{k:'D',gr:'丁',name:'深度 8 天 · 含 Jasper',met:'8 DAYS · 示例 2027.0
 
 E:{k:'E',gr:'戊',name:'冬季滑雪 7 天 · Kicking Horse + SkiBig3',met:'7 DAYS · 示例 2028.02',hex:'#1F6FA8',tag:'雪季',
   start:'2028-02-05', dates:'2028.02.05 → 02.11',
-  pitch:'冬季滑雪。Golden 滑 2 天 Kicking Horse，再进 Banff 滑 SkiBig3。\n\n'
+  pitch:'冬季专攻滑雪。Golden 滑 2 天 Kicking Horse，再进 Banff 滑 SkiBig3。\n\n'
     +'Kicking Horse 落差 1260 m，陡峭碗状地形著称。SkiBig3 = Sunshine + Lake Louise + Norquay，'
     +'一票通刷，免费班车串联各雪场+Banff 镇。',
   cons:'冬季 Moraine Lake Road 全封，湖不可达。Icefields Parkway 冬季服务点关闭，'
@@ -384,7 +427,7 @@ const TODOS=[
 /* ══════ 每晚住宿 + 餐饮 ══════
    方向 + 筛选条件，非具体房源清单。q = Booking/Google 搜索词。 */
 const STAY={
- 'Golden':{area:'Golden, BC',
+ 'Golden':{area:'Golden, BC',nav:'Golden BC',
   opts:[{n:'1 号公路边连锁酒店',tier:'$$',pick:true,q:'Golden BC hotel highway 1',
     why:'进出方便，早晨无需绕镇。本次预订 Holiday Inn Express Golden-Kicking Horse 位于此区。'},
    {n:'镇中心小旅馆',tier:'$',q:'Golden BC downtown motel',
@@ -395,7 +438,7 @@ const STAY={
    {n:'Ethos Cafe',jp:'Ethos Cafe Golden BC',why:'早餐+外带咖啡。次日出发前采购。'},
    {n:'Raven + Pine',jp:'Raven and Pine Golden BC',why:'Wolfs Den 满位时的备选。'}]},
 
- 'Calgary':{area:'Downtown Calgary',
+ 'Calgary':{area:'Downtown Calgary',nav:'Hilton Garden Inn Calgary Downtown',
   opts:[{n:'Downtown（Eau Claire 一带）',tier:'$$',pick:true,q:'Downtown Calgary hotel Eau Claire',
     why:'晚饭+江边散步步行可达，无需驾车。本次预订 Hilton Garden Inn Downtown 位于此区。'},
    {n:'机场 / 北区',tier:'$',q:'Calgary airport hotel',
@@ -406,7 +449,7 @@ const STAY={
    {n:'Stephen Avenue 一带',jp:'Stephen Avenue Calgary restaurants',why:'步行街，选择多，适合临时决定。'},
    {n:'Alberta 牛排',jp:'steakhouse Calgary',why:'当地特色。人均价高，需订位。'}]},
 
- 'Banff 镇':{area:'Town of Banff',
+ 'Banff 镇':{area:'Town of Banff',nav:'Banff AB',
   opts:[{n:'Banff Ave 步行范围内',tier:'$$$',pick:true,q:'Banff Avenue hotel',
     why:'7 点可达湖边，夜间步行返回用餐。冬季可坐免费班车至 3 雪场。旺季价高。'},
    {n:'Tunnel Mountain 一带',tier:'$$',q:'Tunnel Mountain Banff accommodation',
@@ -415,14 +458,17 @@ const STAY={
     why:'同价位通常高一档，开进 Banff 20 分钟。三姐妹峰在镇后。'}],
   food:[{n:'Farm and Fire',jp:'Farm and Fire Banff',why:'柴火烤炉，晚市需订位。'},
    {n:'Banff Social',jp:'Banff Social Banff Ave',why:'菜单杂，出餐快。适合带长辈，等位短。'},
+   {n:'Seoul Korean Restaurant',jp:'Seoul Korean Restaurant Banff',why:'网友实测：味道中规中矩，牛尾汤偏腻，冷面一般，菜量小。人均约 40 CAD，为该行程最贵一餐。'},
    {n:'Banff Ave 自选',jp:'restaurants Banff Avenue',why:'主街一条走完。旺季 19 点后普遍需等位。'}]},
 
- 'Canmore':{area:'Canmore, Alberta',
+ 'Canmore':{area:'Canmore, Alberta',nav:'Canmore AB',
   opts:[{n:'主街 Main Street 附近',tier:'$$',pick:true,q:'Canmore Main Street hotel',
     why:'国家公园门外，免园区停车费，开进 Banff 20 分钟。餐厅密度高。'}],
-  food:[{n:'Canmore 主街',jp:'restaurants Main Street Canmore',why:'价低于 Banff，本地客源多。'}]},
+  food:[{n:'Rocky Mountain Pizza',jp:'Rocky Mountain Flatbread Canmore',why:'网友实测：用料足，薄饼皮带炭火香。8 寸牛肉披萨约 37 CAD。'},
+   {n:'Ramen Arashi',jp:'Ramen Arashi Canmore',why:'网友实测：汤头第一口惊艳，久喝略腻。炸鸡一般。人均约 20 CAD。'},
+   {n:'Canmore 主街',jp:'restaurants Main Street Canmore',why:'价低于 Banff，本地客源多。'}]},
 
- 'Lake Louise':{area:'Lake Louise Village',
+ 'Lake Louise':{area:'Lake Louise Village',nav:'Lake Louise Village AB',
   opts:[{n:'Lake Louise 村内',tier:'$$$',pick:true,q:'Lake Louise Village hotel',
     why:'距 Park and Ride 最近，早班车最省事。房源少，价高。'},
    {n:'退一步：Field 或 Golden',tier:'$$',q:'Field BC accommodation',
@@ -430,17 +476,32 @@ const STAY={
   food:[{n:'Bill Peytos Cafe',jp:'Bill Peytos Cafe Lake Louise',why:'村内青旅餐厅，价低于湖边。'},
    {n:'村内超市自备',jp:'Lake Louise village grocery',why:'湖边无平价餐食，晨间购三明治带上山。'}]},
 
- 'Jasper':{area:'Jasper, Alberta',
+ 'Jasper':{area:'Jasper, Alberta',nav:'Jasper AB',
   opts:[{n:'镇中心',tier:'$$',pick:true,q:'Jasper Alberta hotel downtown',
     why:'2024 山火后住宿供应恢复中，出发前确认。暗夜保护区，晴天见银河。'}],
   food:[{n:'Patricia Street 一带',jp:'restaurants Patricia Street Jasper',why:'镇上餐厅集中于此两条街。'}]},
 
  'Kamloops':{area:'Kamloops, BC',
   opts:[{n:'1 号公路边连锁酒店',tier:'$',pick:true,q:'Kamloops BC hotel highway',
-    why:'仅过夜，进出方便优先。次日到家仅需 4 小时。'},
+    why:'仅过夜，进出方便优先。'},
    {n:'市中心 Victoria Street 一带',tier:'$$',q:'Kamloops downtown hotel',
     why:'餐厅步行可达，想吃好一点选此区。'}],
-  food:[{n:'Victoria Street 一带',jp:'restaurants Victoria Street Kamloops',why:'镇上餐厅集中于此街。'},
-   {n:'Red Collar Brewing',jp:'Red Collar Brewing Kamloops',why:'本地精酿，驾车者不饮酒。'}]},
+  food:[{n:'Maaza Indian Kitchen',jp:'Maaza Indian Kitchen Kamloops',why:'网友实测：lamb korma 出色，配 garlic naan。烧烤拼盘+羊肉炒饭量大。人均约 25 CAD。'},
+   {n:'Victoria Street 一带',jp:'restaurants Victoria Street Kamloops',why:'镇上餐厅集中于此街。'},
+   {n:'Red Collar Brewing',jp:'Red Collar Brewing Kamloops',why:'本地精酿。驾车者不饮酒。'}]},
+
+ 'Kelowna':{area:'Kelowna, BC',nav:'Kelowna BC',
+  opts:[{n:'市中心（近 City Park / 湖滨）',tier:'$$',pick:true,q:'Downtown Kelowna hotel lakefront',
+    why:'次晨湖边散步步行可达，免再上车。餐饮密度高。'},
+   {n:'Hwy 97 沿线连锁',tier:'$',q:'Kelowna Highway 97 hotel',
+    why:'价低，进出快。夜间无步行区域。'},
+   {n:'西岸酒庄区（West Kelowna）',tier:'$$$',q:'West Kelowna winery accommodation',
+    why:'靠近 Mission Hill/Quails Gate，次日直接出发。离市区 20 分钟。'}],
+  food:[{n:'Zabb Thai Restaurant',jp:'Zabb Thai Restaurant Kelowna',why:'网友实测：satay 与菠萝炒饭香，penang 咖喱浓郁。beef pad 略咸。人均约 20 CAD。'},
+   {n:'湖滨 Bernard Ave 一带',jp:'restaurants Bernard Avenue Kelowna',why:'市中心主街，选择最多。'},
+   {n:'Quails Gate 酒庄餐厅',jp:'Quails Gate Winery restaurant',why:'湖景座位需订位。次日午餐可选。'}]},
+ 'Merritt 中途':{area:'Merritt, BC',nav:'Merritt BC',
+  opts:[],
+  food:[{n:'Cocos Restaurant',jp:'Cocos Restaurant Merritt BC',why:'网友实测：炸鸡外脆内嫩量足，寿司食材新鲜，house roll 评价高。人均约 20 CAD。'}]},
  '机上':{area:'',opts:[],food:[]}
 };
