@@ -68,8 +68,8 @@ const uid=()=>Math.random().toString(36).slice(2,10);
 let tT;const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('show'),2500)};
 /* ═══════ 6. 地图 ═══════ */
 const BASES=[
- {n:'地形',u:'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',a:'&copy; OpenStreetMap · SRTM | &copy; OpenTopoMap (CC-BY-SA)',max:17},
- {n:'街道',u:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',a:'&copy; OpenStreetMap contributors',max:19}
+ {n:'街道',u:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',a:'&copy; OpenStreetMap contributors',max:19},
+ {n:'地形',u:'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',a:'&copy; OpenStreetMap · SRTM | &copy; OpenTopoMap (CC-BY-SA)',max:17}
 ];
 let map,bi=0,bl,lPl,lPin,lRt,mReg={},adding=false,mapOK=false;
 function initMap(){
@@ -87,8 +87,9 @@ function initMap(){
 }
 function setBase(i){if(!mapOK&&bl)return;bi=i;if(bl)map.removeLayer(bl);const b=BASES[i];
   bl=L.tileLayer(b.u,{attribution:b.a,maxZoom:b.max,subdomains:'abc'}).addTo(map);$('#baseBtn').textContent='底图 · '+b.n}
-const ico=(hex,txt,sz)=>L.divIcon({className:'',html:`<div class="pinico" style="background:${hex};width:${sz}px;height:${sz}px">${esc(txt)}</div>`,iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]});
-const icoU=(hex,txt)=>L.divIcon({className:'',html:`<div class="pinico usr" style="background:${hex};width:21px;height:21px">${esc(txt)}</div>`,iconSize:[21,21],iconAnchor:[10,19]});
+/* 图钉：纸色底、墨色描边的小圆，区域色只出现在描边上（样式在 skin.css 的 .pinico） */
+const ico=(hex,txt,sz)=>L.divIcon({className:'',html:`<div class="pinico" style="--pc:${hex}">${esc(txt)}</div>`,iconSize:[22,22],iconAnchor:[11,11]});
+const icoU=(hex,txt)=>L.divIcon({className:'',html:`<div class="pinico usr" style="--pc:${hex}"><span>${esc(txt)}</span></div>`,iconSize:[22,22],iconAnchor:[11,11]});
 const GC={green:'#1F8F5F',red:'#D63C33',black:'#141A22'};
 
 function drawPl(){
@@ -286,7 +287,7 @@ function imJ(){openM(`<h3>导入</h3><p class="mp">粘贴一份导出的 JSON，
 let sT;const save=()=>{clearTimeout(sT);sT=setTimeout(()=>S.set(K.cfg(),
  {room:st.room,opt:st.opt,me:st.me,budget:st.budget,done:st.done,rate:st.rate,perPerson:st.perPerson,ccy:st.ccy}),320)};
 /* ═══════ 12. 手机抽屉 ═══════ */
-const SNAP=[0.14,0.55,0.90];let si=1,spx=0;const VH=()=>innerHeight;
+const SNAP=[0.14,0.40,0.90];let si=1,spx=0;const VH=()=>innerHeight;
 function snap(i){if(innerWidth>900)return;si=Math.max(0,Math.min(2,i));spx=SNAP[si]*VH();
  document.documentElement.style.setProperty('--sheet-h',spx+'px')}
 (function(){const p=$('#panel'),g=$('#grab'),sc=$('#scroll');

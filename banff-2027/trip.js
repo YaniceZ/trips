@@ -364,7 +364,7 @@ function vPrep(s){
   s.appendChild(el('h2','sec',LABELS.drive));
   qBlock(s);
   s.appendChild(el('p','tx',TXT.drive));
-  {const t=el('p','tx');t.style.cssText='font-size:12px;color:var(--mist)';t.innerHTML='行程日期可以改：右上角「📅 改日期」，天数不变、整段平移，星期几和下面的天气窗口会自动跟着变。';s.appendChild(t)}
+  {const t=el('p','tx');t.style.cssText='font-size:12px;color:var(--mist)';t.innerHTML='日期可在右上角「改日期」修改。天数不变，整段平移，星期和天气窗口随之更新。';s.appendChild(t)}
   s.appendChild(el('h2','sec',LABELS.rules));
   RULES.forEach(([n,d])=>{const w=el('div','bl');
     w.innerHTML=`<div class="nm">${esc(n)}<small style="margin-top:3px;display:block">${esc(d)}</small></div>`;

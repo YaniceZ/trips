@@ -42,7 +42,7 @@ header{flex:0 0 auto;background:var(--card);border-bottom:1px solid var(--line);
 .opt .met{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;color:var(--mist);
   white-space:nowrap;margin-top:1px}
 main{flex:1 1 auto;display:flex;min-height:0;position:relative;overflow:clip}
-#panel{flex:0 0 432px;background:var(--card);border-right:1px solid var(--line);
+#panel{flex:0 0 392px;background:var(--card);border-right:1px solid var(--line);
   display:flex;flex-direction:column;min-height:0;z-index:2}
 .tabs{flex:0 0 auto;display:flex;border-bottom:1px solid var(--line);background:var(--card);
   padding:0 8px;gap:2px;overflow-x:auto;scrollbar-width:none}

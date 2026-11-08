@@ -47,7 +47,7 @@ function save(){
       const r=await window.storage.get(KEY,true);
       if(r&&r.value) X=merge(JSON.parse(r.value),X);
       await window.storage.set(KEY,JSON.stringify(X),true);
-    }catch(e){ say('没存上，再试一次') }
+    }catch(e){ say('保存失败，请重试') }
   });
   return savingQ;
 }
@@ -125,12 +125,12 @@ function nextEvent(now){
 
 function vTrip(s){
   stopTick();
-  s.appendChild(mk('p','lede','顶部「此刻关注」会倒数这里填的航班和租车。时间都按当地时间加时区算，跨时区打开也不会错。'));
+  s.appendChild(mk('p','lede','顶部倒计时使用此处填写的航班和租车，时间按当地时区计算。'));
 
   /* 航班 */
   s.appendChild(mk('h2','sec','航班'));
   const fl=[...X.flights].sort((a,b)=>absMs(a.dep,a.depTz)-absMs(b.dep,b.depTz));
-  if(!fl.length) s.appendChild(mk('div','xempty','还没有航班。把订单上的航班号和时间填进来，会自动算飞行时长和中转时间。'));
+  if(!fl.length) s.appendChild(mk('div','xempty','暂无航班。填写航班号和时间，自动计算飞行时长和中转时间。'));
   fl.forEach((f,i)=>{
     if(i>0){
       const gap=absMs(f.dep,f.depTz)-absMs(fl[i-1].arr,fl[i-1].arrTz);
@@ -158,7 +158,7 @@ function vTrip(s){
   s.appendChild(mk('h2','sec','租车'));
   const r=X.rental;
   if(!r){
-    s.appendChild(mk('div','xempty','没租车就不用填。租了的话，记下取还车时间，页面会倒数最晚还车。'));
+    s.appendChild(mk('div','xempty','无租车可跳过。填写取还车时间后，显示最晚还车倒计时。'));
     const b=mk('button','btn','＋ 添加租车信息'); b.onclick=()=>rentalModal(); s.appendChild(b);
   }else{
     const pk=absMs(r.pick,r.tz), dr=absMs(r.drop,r.tz), left=dr-Date.now();
@@ -176,8 +176,8 @@ function vTrip(s){
     s.appendChild(mk('h2','sec','取还车检查'));
     [['取车','核对订单、驾照和国际驾照（或翻译件）'],['取车','绕车一圈拍照或录像，已有的刮痕让工作人员标上'],
      ['取车','拍下油表和里程表，问清还车要不要加满'],['取车','确认导航语言、ETC 卡和车载充电线'],
-     ['还车前','按要求加满油，小票留着'],['还车前','清掉垃圾，别落东西'],
-     ['还车前','到还车点至少留 1.5 小时，去机场的话更多'],['还车时','再拍一轮车身和油表，拿还车确认单']
+     ['还车前','按要求加满油，小票留着'],['还车前','清理垃圾，检查随身物品'],
+     ['还车前','预留至少 1.5 小时到达还车点，前往机场时增加'],['还车时','再拍一轮车身和油表，拿还车确认单']
     ].forEach(([ph,t],i)=>{
       const k='rc'+i, done=!!X.chk[k];
       const b=mk('button','xchk'+(done?' done':''),`<span class="box"></span><span>${ph==='取车'||ph==='还车前'||ph==='还车时'?`<b style="font-weight:500;color:var(--mist);margin-right:8px">${ph}</b>`:''}${esc(t)}</span>`);
@@ -196,7 +196,7 @@ function flightModal(f){
   const today=todayISO();
   const depTz=f.depTz!=null?f.depTz:defDepTz(f.dep||today);
   const arrTz=f.arrTz!=null?f.arrTz:DEF.arrTz;
-  openMod(`<h3>${edit?'编辑航班':'添加航班'}</h3><p class="mp">时间都按机场当地时间填，再选对应的时区。</p>
+  openMod(`<h3>${edit?'编辑航班':'添加航班'}</h3><p class="mp">按机场当地时间填写，并选择对应时区。</p>
     <div class="xgrid">${field('航班号',`<input type="text" id="fno" maxlength="12" value="${esc(f.no||'')}" placeholder="AC23">`)}
       ${field('航空公司',`<input type="text" id="fal" maxlength="20" value="${esc(f.airline||'')}">`)}</div>
     <div class="xgrid">${field('出发机场',`<input type="text" id="ffr" maxlength="20" value="${esc(f.from||'')}" placeholder="YVR">`)}
@@ -227,7 +227,7 @@ function flightModal(f){
 
 function rentalModal(){
   const r=X.rental||{};
-  openMod(`<h3>租车信息</h3><p class="mp">时间按取还车地点的当地时间填。</p>
+  openMod(`<h3>租车信息</h3><p class="mp">按取还车地点的当地时间填写。</p>
     ${field('租车公司',`<input type="text" id="rco" maxlength="30" value="${esc(r.company||'')}">`)}
     ${field('取车地点',`<input type="text" id="rpa" maxlength="60" value="${esc(r.pickAt||'')}">`)}
     ${field('取车时间',`<input type="datetime-local" id="rpk" value="${esc(r.pick||'')}">`)}
@@ -299,8 +299,8 @@ function vLedger(s){
   s.appendChild(bar);
 
   if(!items.length){
-    const e=mk('div','xempty','还没有开销。谁付的钱、几个人分，记一笔就行，结算时自动算出谁转给谁。'); e.style.marginTop='16px'; s.appendChild(e);
-    s.appendChild(mk('p','lede','账目只存在这台设备的浏览器里。换设备或者两人要对账，用下面的「导出」发给对方。'));
+    const e=mk('div','xempty','暂无开销。记录付款人和分摊人，自动计算结算。'); e.style.marginTop='16px'; s.appendChild(e);
+    s.appendChild(mk('p','lede','账目保存在本设备浏览器中。换设备或核对账目，使用「导出」。'));
   }else{
     const ccys=[...new Set(items.map(i=>i.ccy))];
     s.appendChild(mk('h2','sec','合计'));
@@ -315,7 +315,7 @@ function vLedger(s){
       const bal=balances(c), tr=transfers(bal,c);
       tr.forEach(t=>{ any=true; s.appendChild(mk('div','xrow',`<span><b style="font-weight:500">${esc(t.from)}</b> → <b style="font-weight:500">${esc(t.to)}</b></span><span class="a">${fmtMoney(t.amt,c)}</span>`)) });
     });
-    if(!any) s.appendChild(mk('p','lede','目前互不相欠。'));
+    if(!any) s.appendChild(mk('p','lede','无需转账。'));
     const det=mk('div'); det.style.marginTop='10px';
     ccys.forEach(c=>{
       const bal=balances(c);
@@ -349,12 +349,12 @@ function vLedger(s){
       r.onclick=()=>expenseModal(i); s.appendChild(r);
     });
     const ex=mk('button','btn','↓ 导出 CSV'); ex.style.marginTop='18px'; ex.onclick=exportCSV; s.appendChild(ex);
-    s.appendChild(mk('p','lede','<span style="font-size:13px;color:var(--mist)">账目只存在这台设备的浏览器里，清除浏览数据会丢。要对账就导出发给同伴。</span>'));
+    s.appendChild(mk('p','lede','<span style="font-size:13px;color:var(--mist)">账目保存在本设备浏览器中，清除浏览数据会丢失。核对账目请导出。</span>'));
   }
 }
 
 function peopleModal(){
-  openMod(`<h3>成员</h3><p class="mp">一行一个名字，最多 8 个。改名字不会改已有的账，删掉的人旧账里仍会保留。</p>
+  openMod(`<h3>成员</h3><p class="mp">每行一个名字，最多 8 个。改名不影响已有账目，删除的成员在旧账中保留。</p>
     <div class="fd"><textarea id="pp" style="min-height:120px">${esc(people().join('\n'))}</textarea></div>
     <div class="row"><button class="btn" data-close>取消</button><button class="btn pri" id="pok">保存</button></div>`,
   b=>{ b.querySelector('#pok').onclick=()=>{
@@ -466,7 +466,7 @@ function paintBar(){
   else if(evOK) showEv();
   else if(iso0&&today>isoN){ main='已结束'; sub='这趟旅程'; }
   else { main='—'; sub=''; }
-  b.querySelector('.nl').innerHTML='<b>此刻关注</b>'+(sub?'　'+esc(sub):'');
+  b.querySelector('.nl').textContent=sub;
   const nv=b.querySelector('.nv'); nv.textContent=main; nv.className='nv'+(warn?' xwarn':'');
 }
 setInterval(paintBar,1000);
@@ -485,12 +485,12 @@ function refreshChip(){
 function syncModal(){
   const T=window.tripSync;
   if(!T||!T.available()){
-    openMod(`<h3>多人同步</h3><p class="mp">想让你和同伴看到同一份收藏点、预订、账目、航班，需要一个免费的 Supabase 项目。步骤写在仓库里的 SUPABASE.md，大约 10 分钟。配好之后，这里会出现「创建共享空间」。</p>
-      <p class="mp">没配的时候，所有内容只存在这台设备的浏览器里。</p><div class="row"><button class="btn" data-close>知道了</button></div>`);
+    openMod(`<h3>多人同步</h3><p class="mp">多人共享收藏点、预订、账目和航班，需要配置 Supabase 项目，步骤见仓库中的 SUPABASE.md。配置后可在此创建共享空间。</p>
+      <p class="mp">未配置时，内容仅保存在本设备浏览器中。</p><div class="row"><button class="btn" data-close>知道了</button></div>`);
     return;
   }
   if(!T.on()){
-    openMod(`<h3>开启同步</h3><p class="mp">创建一个共享空间，把邀请链接发给同伴。拿到链接的人都能看到和修改，所以别公开发。</p>
+    openMod(`<h3>开启同步</h3><p class="mp">创建共享空间，并将邀请链接发给同伴。持有链接的人可查看和修改，请勿公开。</p>
       <div class="row"><button class="btn pri" id="sCreate">创建共享空间</button></div>
       <div class="fd" style="margin-top:16px"><label class="lb">或者粘贴同伴发来的邀请链接</label><input type="text" id="sLink" placeholder="https://…#room=…"></div>
       <div class="row"><button class="btn" data-close>取消</button><button class="btn" id="sJoin">加入</button></div>`,
@@ -498,13 +498,13 @@ function syncModal(){
       b.querySelector('#sCreate').onclick=()=>{ T.join(T.create()); closeMod(); say('已创建，正在同步'); setTimeout(()=>location.reload(),600) };
       b.querySelector('#sJoin').onclick=()=>{
         const m=b.querySelector('#sLink').value.match(/room=([A-Za-z0-9_-]{16,64})/)||b.querySelector('#sLink').value.trim().match(/^([A-Za-z0-9_-]{16,64})$/);
-        if(!m) return say('没认出这个链接');
+        if(!m) return say('链接无效');
         T.join(m[1]); closeMod(); say('已加入'); setTimeout(()=>location.reload(),600);
       };
     });
     return;
   }
-  openMod(`<h3>已同步</h3><p class="mp">下面是邀请链接。拿到的人都能看到和修改，别发到公开的地方。六个行程共用同一个共享空间。</p>
+  openMod(`<h3>已同步</h3><p class="mp">邀请链接如下。持有链接的人可查看和修改，请勿公开。所有行程共用同一个共享空间。</p>
     <div class="fd"><input type="text" id="sOut" readonly value="${esc(T.link())}"></div>
     <div class="row"><button class="btn pri" id="sCopy">复制链接</button><button class="btn" id="sLeave">退出同步</button></div>
     <div class="row" style="margin-top:8px"><button class="btn" data-close>关闭</button></div>`,

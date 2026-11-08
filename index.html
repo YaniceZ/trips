@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>旅行计划</title>
-<meta name="theme-color" content="#F4F0E6">
+<meta name="theme-color" content="#EDEFE7">
 <style>
 :root{
-  --paper:#F4F0E6; --card:#FCFAF4; --ink:#2A2620; --slate:#4D473C; --mist:#756E60; --faint:#A0988A;
-  --line:#D8D0BD; --acc:#A8432E;
+  --paper:#EDEFE7; --card:#F6F7F1; --ink:#2B3D33; --slate:#455A4C; --mist:#68796B; --faint:#95A38F;
+  --line:#B3BFA9; --acc:#A8432E;
   --disp:'Noto Serif SC','Source Han Serif SC','Songti SC','Noto Serif CJK SC',serif;
   --body:'Noto Sans SC','PingFang SC','Microsoft YaHei','Hiragino Sans GB',sans-serif;
 }
@@ -67,8 +67,8 @@ footer{margin-top:40px;color:var(--mist);font-size:13.5px;line-height:1.9}
   <main id="list"></main>
 
   <footer>
-    每个目的地各有一页，里面有地图、逐日行程、住宿、预算，还能记航班、租车和分账。<br>
-    在手机上选「添加到主屏幕」，没网的地方也能打开。
+    每个目的地一页：地图、逐日行程、住宿、预算，可记录航班、租车和分账。<br>
+    手机上可「添加到主屏幕」，离线可打开。
   </footer>
 </div>
 
@@ -88,27 +88,27 @@ const TRIPS=[
  {href:'./fall-2027/', c:'#A8432E', start:'2027-09-24', end:'2027-10-06',
   name:'加拿大赏枫', zh:'Algonquin / Charlevoix / Cape Breton / Yukon',
   when:'9.24 → 10.06', len:'6–8 天', plans:'4 条线路', key:'变色窗口图',
-  desc:'枫叶自北向南变红，四条线的高峰期差 1–2 周。页面会按你选的日期算和各线高峰重叠几天。'},
+  desc:'枫叶自北向南变色，四条线的高峰期相差 1–2 周。页面按所选日期计算与各线高峰的重叠天数。'},
 
  {href:'./kansai-2027/', c:'#B3432F', start:'2027-09-17', end:'2027-10-06',
   name:'関西・四国・熊野古道', zh:'大阪 · 四国自驾 · 京都旅居 · 熊野徒步',
   when:'9.17 → 10.06', len:'18 晚', plans:'4 个方案', key:'熊野中边路 3 天',
-  desc:'先在大阪倒时差，再环四国自驾，京都住 6 晚，最后走熊野中边路。顺序是按台风季风险排的。'},
+  desc:'大阪倒时差，四国自驾环线，京都住 6 晚，最后走熊野中边路。顺序按台风季风险排列。'},
 
  {href:'./japow-2027/', c:'#2F5D8A', start:'2027-01-08', end:'2027-01-24',
   name:'JAPOW 留寿都 / 白马', zh:'Epic Pass · 5+5 天',
   when:'1.08 → 1.24', len:'17 天', plans:'10 个滑雪日', key:'实时雪情',
-  desc:'Epic 在日本只含两家雪场，各 5 天且必须连续用。页面带未来 7 天降雪预报和去年同期实测。'},
+  desc:'Epic 在日本仅含两家雪场，各 5 天且须连续使用。页面含未来 7 天降雪预报和去年同期实测。'},
 
  {href:'./camino-2027/', c:'#946414', start:'2027-05-08', end:'2027-05-23',
   name:'Camino de Santiago', zh:'朝圣之路，最后 100 公里，西班牙北部',
   when:'5.08 → 5.23', len:'16 天', plans:'4 条路线', key:'115 km 步行',
-  desc:'Sarria 走到 Santiago，115 公里，走满即可领 Compostela 证书。剩下的天数留给圣塞瓦斯蒂安、毕尔巴鄂和马德里。'},
+  desc:'Sarria 步行至 Santiago，115 公里，满足里程可领 Compostela 证书。其余天数安排圣塞瓦斯蒂安、毕尔巴鄂和马德里。'},
 
  {href:'./andes-2027/', c:'#A23B30', start:'2027-06-12', end:'2029-01-24',
   name:'Los Andes', zh:'南美四程：秘鲁 / 玻利维亚 / 巴塔哥尼亚 / 哥伦比亚',
   when:'2027.06 → 2029.01', len:'54 天，分四趟', plans:'最高 4278 m', key:'海拔曲线',
-  desc:'四地最佳季节互不重叠，所以拆成四趟分年去。页面按每晚睡眠海拔算高反风险，超标的日子标红。'}
+  desc:'四地最佳季节互不重叠，拆成四趟分年前往。页面按每晚睡眠海拔计算高反风险，超标日期标红。'}
 ];
 
 const $=s=>document.querySelector(s);
@@ -116,7 +116,8 @@ const D=s=>new Date(s+'T00:00:00');
 const today=new Date(); today.setHours(0,0,0,0);
 const sorted=[...TRIPS].sort((a,b)=>D(a.start)-D(b.start));
 
-$('#sub').textContent=`${sorted[0].start.slice(0,4)} — ${sorted[sorted.length-1].end.slice(0,4)}，${TRIPS.length} 个目的地`;
+{const y0=sorted[0].start.slice(0,4), y1=TRIPS.map(t=>t.end.slice(0,4)).sort().pop();
+ $('#sub').textContent=`${y0===y1?y0:y0+' — '+y1}，${TRIPS.length} 个目的地`;}
 
 /* 下一次出发 */
 const up=sorted.find(t=>D(t.end)>=today);

@@ -14,14 +14,14 @@ const CUR=Object.assign({home:'CNY',alt:'',rate:1,people:2,label:'两人合计',
 (function(){
   const L={season:'最佳时机',cost:'代价',compare:'对比',switchPlan:'换个方案',ourPins:'收藏点',places:'沿途地点',
     weather:'天气',rules:'要点',reconcile:'对账',prepList:'行前待办',aboutPage:'关于此页'};
-  const T={wxNote:'降水单位 mm。7 天预报出发前两周开始查看有效。去年同期为实测存档。数据 Open-Meteo（CC BY 4.0）。',
-    itinHint:'点任意一天展开，地图会跟着定位并画出当天的路线。',
-    pinsEmpty:'还没有收藏点。点「添加地点」，或在地图上长按落点。',
-    bookingIntro:'这里是预订记录，不是建议。订好的勾上，填确认号和实付金额，预算页会自动对账。',
-    prepIntro:'按当前方案筛选。',budgetNote:'数字是估算，不是报价，可以拖动调整。',
-    noteHint:'记实地信息：人流时段、价格、闭店、路线修正。显示在描述上方。',
-    aboutPage:'收藏点、笔记和预订记录存在这台设备的浏览器里。换设备或清除浏览数据会丢，需要的话用下面的导出备份。',
-    aboutFoot:'数据只存在本机。坐标为示意精度，开放状态和票价以官方当日公告为准。'};
+  const T={wxNote:'降水单位 mm。7 天预报在出发前两周内有参考价值。去年同期为实测数据。数据来源 Open-Meteo（CC BY 4.0）。',
+    itinHint:'点击任意一天展开，地图定位并显示当天路线。',
+    pinsEmpty:'暂无收藏点。点「添加地点」，或在地图上长按。',
+    bookingIntro:'预订记录。订好后勾选，填写确认号和实付金额，预算页自动对账。',
+    prepIntro:'按当前方案筛选。',budgetNote:'数字为估算，可拖动调整。',
+    noteHint:'记录实地信息：人流时段、价格、闭店、路线修正。显示在描述上方。',
+    aboutPage:'收藏点、笔记和预订记录保存在本设备浏览器中。更换设备或清除浏览数据会丢失，可用下方导出备份。',
+    aboutFoot:'数据仅保存在本机。坐标为示意精度，开放状态和票价以官方公告为准。'};
   if(typeof LABELS==='undefined') window.LABELS={}; if(typeof TXT==='undefined') window.TXT={};
   for(const k in L) if(!(k in LABELS)) LABELS[k]=L[k];
   for(const k in T) if(!(k in TXT)) TXT[k]=T[k];
@@ -344,7 +344,7 @@ function vBud(s){
   const paid=bks.reduce((a,x)=>a+(bkGet(x.id)?.amt||0),0);
   const nbk=bks.filter(x=>bkGet(x.id)?.state==='ok').length;
   s.appendChild(el('h2','sec',LABELS.reconcile));
-  if(!nbk){s.appendChild(el('p','tx','还没有登记任何已订项目。去「准备」页把订好的东西打勾并填金额，这里会自动汇总。'))}
+  if(!nbk){s.appendChild(el('p','tx','暂无已登记的预订。在「准备」页勾选并填写金额后，此处自动汇总。'))}
   else{
    const w=el('div','btot');
    w.innerHTML=`<div><div class="cap">已登记 ${nbk} / ${bks.length} 项</div><div class="big">${sym(CUR.home)}${Math.round(paid/dv).toLocaleString()}</div></div>
@@ -361,7 +361,7 @@ function vBud(s){
 function vPrep(s){
   if(WXP.length){ s.appendChild(el('h2','sec',LABELS.weather)); wxBlock(s); }
   {const t=el('p','tx');t.style.cssText='font-size:12px;color:var(--mist)';
-   t.innerHTML='行程日期可以改：右上角「📅 改日期」，天数不变、整段平移，星期几和天气窗口会自动跟着变。';s.appendChild(t)}
+   t.innerHTML='日期可在右上角「改日期」修改。天数不变，整段平移，星期和天气窗口随之更新。';s.appendChild(t)}
   if(typeof TRIP.prepExtra==='function') TRIP.prepExtra(s);
   if(typeof RULES!=='undefined'){
     s.appendChild(el('h2','sec',LABELS.rules));

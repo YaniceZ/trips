@@ -332,7 +332,7 @@ function vPrep(s){
   s.appendChild(el('h2','sec',LABELS.stats));
   qBlock(s);
   {const dtip=el('p','tx');dtip.style.cssText='font-size:12px;color:var(--faint)';
-   dtip.innerHTML='行程日期可以改：右上角「📅 改日期」，天数不变、整段平移，星期几和上面的天气窗口会自动跟着变。';
+   dtip.innerHTML='日期可在右上角「改日期」修改。天数不变，整段平移，星期和天气窗口随之更新。';
    s.appendChild(dtip);}
   /* ── 预订清单 ── */
   const bks=bookings();
