@@ -12,10 +12,18 @@ if(window.__BAD) return;                                          // 内容检�
 if(typeof st==='undefined'||typeof TABS==='undefined') return;   // 不是行程页就不动
 
 const TRIP=document.documentElement.dataset.trip||'';
+
+/* 手绘感：一个让线条轻微抖动的 SVG 滤镜，skin.css 里卡片和按钮的描边用它（只作用在描边上，文字不受影响） */
+if(!document.getElementById('wobsvg')){
+  document.body.insertAdjacentHTML('beforeend',
+   '<svg id="wobsvg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="wob" x="-4%" y="-4%" width="108%" height="108%">'
+   +'<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" result="n"/>'
+   +'<feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/></filter></svg>');
+}
 /* ── 数据：存进 window.storage（见 storage.js）。开了同步就是 Supabase，没开就是本机。
       每条记录带 u（修改时间），删除记 tomb（墓碑），两个人同时改时按这两样合并，不会互相覆盖。 ── */
 const KEY='tripx';
-const blank=()=>({flights:[],rental:null,chk:{},ledger:{people:[],items:[],ccy:'',pu:0},tomb:{}});
+const blank=()=>({flights:[],fares:[],rental:null,chk:{},ledger:{people:[],items:[],ccy:'',pu:0},tomb:{}});
 const norm=o=>{ const b=blank(), x=Object.assign(b,o||{}); x.ledger=Object.assign(blank().ledger,x.ledger||{}); x.tomb=x.tomb||{}; return x };
 const newer=(a,b)=>((a.u||0)>=(b.u||0)?a:b);
 function mergeList(r,l,tomb){
@@ -27,6 +35,7 @@ function merge(r,l){
   r=norm(r); l=norm(l);
   const tomb=Object.assign({},r.tomb,l.tomb), out=norm({tomb});
   out.flights=mergeList(r.flights,l.flights,tomb);
+  out.fares=mergeList(r.fares,l.fares,tomb);
   out.ledger.items=mergeList(r.ledger.items,l.ledger.items,tomb);
   const lp=(l.ledger.pu||0)>=(r.ledger.pu||0);
   out.ledger.people=(lp?l:r).ledger.people; out.ledger.pu=Math.max(l.ledger.pu||0,r.ledger.pu||0);
@@ -66,7 +75,7 @@ const pad=n=>String(n).padStart(2,'0');
 const DEF={
   kansai:{arrTz:9,  ccy:'JPY'}, japow:{arrTz:9, ccy:'JPY'},
   banff: {arrTz:-6, ccy:'CAD'}, fall: {arrTz:-4,ccy:'CAD'},
-  camino:{arrTz:2,  ccy:'EUR'}, andes:{arrTz:-5,ccy:'USD'}
+  camino:{arrTz:2,  ccy:'EUR'}, andes:{arrTz:-5,ccy:'USD'}, 'aurora-2027':{arrTz:-7,ccy:'CAD'}
 }[TRIP]||{arrTz:0,ccy:'CAD'};
 const CCYS=['CAD','JPY','EUR','USD','CNY','PEN','BOB','CLP','ARS','COP'];
 const ZERO_DEC=new Set(['JPY','CLP','COP']);
@@ -117,7 +126,7 @@ function nextEvent(now){
   }
   // 正在飞
   const flying=ev.find(e=>e.kind==='dep'&&e.t<=now&&e.end>now);
-  if(flying) return {label:'飞行中，距抵达',sub:flying.sub,t:flying.end,flying:true};
+  if(flying) return {label:'飞行中，距到',sub:flying.sub,t:flying.end,flying:true};
   const fut=ev.filter(e=>e.t>now).sort((a,b)=>a.t-b.t)[0];
   if(fut) return fut;
   return ev.length?{done:true}:null;
@@ -125,7 +134,7 @@ function nextEvent(now){
 
 function vTrip(s){
   stopTick();
-  s.appendChild(mk('p','lede','顶部倒计时使用此处填写的航班和租车，时间按当地时区计算。'));
+  s.appendChild(mk('p','lede','顶部倒计时使用这里填写的航班和租车，时间按当地时区计算。'));
 
   /* 航班 */
   s.appendChild(mk('h2','sec','航班'));
@@ -154,6 +163,8 @@ function vTrip(s){
       const l=fl[fl.length-1]; flightModal({from:l.to,to:l.from,depTz:l.arrTz,arrTz:l.depTz,airline:l.airline}) }; row.appendChild(back) }
   s.appendChild(row);
 
+  fareBlock(s);
+
   /* 租车 */
   s.appendChild(mk('h2','sec','租车'));
   const r=X.rental;
@@ -177,7 +188,7 @@ function vTrip(s){
     [['取车','核对订单、驾照和国际驾照（或翻译件）'],['取车','绕车一圈拍照或录像，已有的刮痕让工作人员标上'],
      ['取车','拍下油表和里程表，问清还车要不要加满'],['取车','确认导航语言、ETC 卡和车载充电线'],
      ['还车前','按要求加满油，小票留着'],['还车前','清理垃圾，检查随身物品'],
-     ['还车前','预留至少 1.5 小时到达还车点，前往机场时增加'],['还车时','再拍一轮车身和油表，拿还车确认单']
+     ['还车前','留至少 1.5 小时到达还车点，去机场时增加'],['还车时','再拍一轮车身和油表，拿还车确认单']
     ].forEach(([ph,t],i)=>{
       const k='rc'+i, done=!!X.chk[k];
       const b=mk('button','xchk'+(done?' done':''),`<span class="box"></span><span>${ph==='取车'||ph==='还车前'||ph==='还车时'?`<b style="font-weight:500;color:var(--mist);margin-right:8px">${ph}</b>`:''}${esc(t)}</span>`);
@@ -186,6 +197,88 @@ function vTrip(s){
       s.appendChild(b);
     });
   }
+}
+
+/* ── 查价：生成携程、Trip.com、Expedia 等站点的搜索链接，并记录自己查到的价格。
+      页面本身是静态的，不会自动抓价格（需要服务器和接口密钥），所以价格要自己看一眼再记下来。 ── */
+const FARE_DEF={
+  kansai:{to:'KIX',city:'Osaka',d1:'2027-09-17',d2:'2027-10-06'}, banff:{to:'YYC',city:'Banff',d1:'2027-08-27',d2:'2027-09-01'},
+  fall:{to:'YYZ',city:'Toronto',d1:'2027-09-24',d2:'2027-10-06'}, japow:{to:'CTS',city:'Niseko',d1:'2027-01-08',d2:'2027-01-24'},
+  camino:{to:'SCQ',city:'Santiago de Compostela',d1:'2027-05-08',d2:'2027-05-23'}, andes:{to:'LIM',city:'Cusco',d1:'2027-06-12',d2:'2027-06-26'},
+  'aurora-2027':{to:'YZF',city:'Yellowknife',d1:'2027-02-04',d2:'2027-02-08'}
+}[TRIP]||{to:'',city:'',d1:'',d2:''};
+const FKEY='tripsFare:'+TRIP;
+function fareState(){
+  let v={}; try{ v=JSON.parse(localStorage.getItem(FKEY)||'{}') }catch(e){}
+  const o=Object.assign({kind:'flight',from:'YVR',to:FARE_DEF.to,city:FARE_DEF.city,d1:FARE_DEF.d1,d2:FARE_DEF.d2,n:2},v);
+  return o;
+}
+function fareSave(o){ try{ localStorage.setItem(FKEY,JSON.stringify(o)) }catch(e){} }
+function fareLinks(o){
+  const f=o.from.toLowerCase(), t=o.to.toLowerCase(), F=o.from.toUpperCase(), T=o.to.toUpperCase();
+  const yy=d=>d.slice(2).replace(/-/g,''), c=encodeURIComponent(o.city);
+  if(o.kind==='flight') return [
+    ['携程机票',`https://flights.ctrip.com/online/list/round-${f}-${t}?depdate=${o.d1}_${o.d2}&cabin=y_s_c_f&adult=${o.n}&child=0&infant=0`],
+    ['Trip.com',`https://www.trip.com/flights/${f}-to-${t}/tickets-${f}-${t}?dcity=${f}&acity=${t}&ddate=${o.d1}&rdate=${o.d2}&flighttype=rt&adult=${o.n}`],
+    ['Expedia',`https://www.expedia.com/Flights-Search?trip=roundtrip&leg1=from:${F},to:${T},departure:${o.d1}TANYT&leg2=from:${T},to:${F},departure:${o.d2}TANYT&passengers=adults:${o.n}&mode=search`],
+    ['Google Flights',`https://www.google.com/travel/flights?q=${encodeURIComponent(`Flights from ${F} to ${T} on ${o.d1} through ${o.d2}`)}`],
+    ['Skyscanner',`https://www.skyscanner.com/transport/flights/${f}/${t}/${yy(o.d1)}/${yy(o.d2)}/?adultsv2=${o.n}`],
+    ['Kayak',`https://www.kayak.com/flights/${F}-${T}/${o.d1}/${o.d2}/${o.n}adults`]
+  ];
+  return [
+    ['携程酒店','https://hotels.ctrip.com/'],
+    ['Trip.com',`https://www.trip.com/hotels/`],
+    ['Expedia',`https://www.expedia.com/Hotel-Search?destination=${c}&startDate=${o.d1}&endDate=${o.d2}&adults=${o.n}`],
+    ['Booking',`https://www.booking.com/searchresults.html?ss=${c}&checkin=${o.d1}&checkout=${o.d2}&group_adults=${o.n}&no_rooms=1`],
+    ['Agoda',`https://www.agoda.com/search?textToSearch=${c}&checkIn=${o.d1}&checkOut=${o.d2}&adults=${o.n}&rooms=1`],
+    ['Google 酒店',`https://www.google.com/travel/search?q=${encodeURIComponent(`hotels in ${o.city} ${o.d1} to ${o.d2}`)}`]
+  ];
+}
+function fareBlock(s){
+  s.appendChild(mk('h2','sec','查价'));
+  const o=fareState();
+  const box=mk('div','xcard');
+  box.innerHTML=`<div class="row" style="margin:0 0 8px"><button class="btn${o.kind==='flight'?' pri':''}" data-k="flight">机票</button><button class="btn${o.kind==='hotel'?' pri':''}" data-k="hotel">酒店</button></div>
+    <div class="xgrid">${o.kind==='flight'?field('出发',`<input type="text" id="qfr" maxlength="4" value="${esc(o.from)}">`)+field('到达',`<input type="text" id="qto" maxlength="4" value="${esc(o.to)}">`)
+      :field('城市（英文）',`<input type="text" id="qcy" maxlength="40" value="${esc(o.city)}">`)+field('人数',`<input type="number" id="qn" min="1" max="9" value="${o.n}">`)}</div>
+    <div class="xgrid">${field(o.kind==='flight'?'去程':'入住',`<input type="date" id="qd1" value="${esc(o.d1)}">`)}${field(o.kind==='flight'?'返程':'退房',`<input type="date" id="qd2" value="${esc(o.d2)}">`)}</div>
+    ${o.kind==='flight'?field('人数',`<input type="number" id="qn" min="1" max="9" value="${o.n}">`):''}
+    <div class="qlinks row" style="flex-wrap:wrap;gap:6px"></div>
+    <div class="nt">点按钮会在新窗口打开对应网站的搜索页。各站链接格式偶尔会变，打不开就在站内重新搜一次。</div>`;
+  const links=box.querySelector('.qlinks');
+  const read=()=>{ const g=id=>{const e=box.querySelector(id);return e?e.value.trim():''};
+    Object.assign(o,{from:(g('#qfr')||o.from).toUpperCase(),to:(g('#qto')||o.to).toUpperCase(),city:g('#qcy')||o.city,d1:g('#qd1')||o.d1,d2:g('#qd2')||o.d2,n:Math.max(1,+g('#qn')||o.n)});
+    fareSave(o) };
+  const draw=()=>{ links.innerHTML=''; fareLinks(o).forEach(([n,u])=>{ const a=mk('a','btn',esc(n)); a.href=u; a.target='_blank'; a.rel='noopener'; links.appendChild(a) }) };
+  box.querySelectorAll('input').forEach(i=>i.oninput=()=>{ read(); draw() });
+  box.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{ read(); o.kind=b.dataset.k; fareSave(o); renderBody() });
+  draw(); s.appendChild(box);
+
+  const mine=X.fares.filter(f=>f.kind===o.kind);
+  s.appendChild(mk('div','xday',o.kind==='flight'?'我查到的机票价格':'我查到的酒店价格'));
+  if(!mine.length) s.appendChild(mk('div','xempty','在上面的网站看到价格后，点「记一笔」存下来，最低价会标出来。'));
+  const low=mine.length?Math.min(...mine.map(f=>f.price)):0;
+  [...mine].sort((a,b)=>a.price-b.price).forEach(f=>{
+    const c=mk('div','xcard');
+    c.innerHTML=`<div class="r1"><span class="t">${esc(f.site||'—')}${f.price===low&&mine.length>1?'　<span class="xwarn" style="color:var(--gr)">最低</span>':''}</span><span class="m">${esc(f.ccy)} ${f.price.toLocaleString('zh-CN')}</span></div>
+      ${f.note?`<div class="nt">${esc(f.note)}</div>`:''}<div class="nt">记录于 ${esc(f.at||'')}</div>
+      <div class="acts"><span class="xlink d" data-a="d">删除</span></div>`;
+    c.querySelector('[data-a=d]').onclick=()=>{ X.fares=X.fares.filter(x=>x.id!==f.id); X.tomb[f.id]=Date.now(); save(); renderBody() };
+    s.appendChild(c);
+  });
+  const add=mk('button','btn','＋ 记一笔'); add.onclick=()=>fareModal(o.kind); s.appendChild(add);
+}
+function fareModal(kind){
+  openMod(`<h3>${kind==='flight'?'记录机票价格':'记录酒店价格'}</h3><p class="mp">${kind==='flight'?'填总价（全部人数）':'填入住期间的总价'}，方便横向比较。</p>
+    ${field('来源网站',`<input type="text" id="fsi" maxlength="30" placeholder="携程 / Expedia / 航司官网">`)}
+    ${field('价格',`<input type="number" id="fpr" min="0" step="1">`)}
+    ${field('币种',`<select id="fcc">${CCYS.map(c=>`<option${c===DEF.ccy?' selected':''}>${c}</option>`).join('')}</select>`)}
+    ${field('备注（航班、房型、是否可退）',`<input type="text" id="fnt2" maxlength="80">`)}
+    <div class="row"><button class="btn" data-close>取消</button><button class="btn pri" id="fok2">保存</button></div>`,
+  b=>{ b.querySelector('#fok2').onclick=()=>{
+    const price=+b.querySelector('#fpr').value; if(!(price>0)) return say('先填价格');
+    X.fares.push({id:rid(),u:Date.now(),kind,site:b.querySelector('#fsi').value.trim(),price,ccy:b.querySelector('#fcc').value,note:b.querySelector('#fnt2').value.trim(),at:todayISO()});
+    save(); closeMod(); renderBody(); say('已记录') } });
 }
 
 function field(label,inner){ return `<div class="fd"><label class="lb">${label}</label>${inner}</div>` }

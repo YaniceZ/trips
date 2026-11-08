@@ -40,8 +40,8 @@ const TXT={
 
   drive:
     '横条 = 每日驾驶小时数。>5 小时标红。'
-    +'<br><br>赏枫本质是公路旅行，景观在路上而非终点，每日车程不宜过满。'
-    +'预留随时靠边停车的余量。',
+    +'<br><br>赏枫以公路旅行为主，景色在路上，每天车程不要排太满。'
+    +'留随时靠边停车的余量。',
 
   wxNote:
     '降水单位 mm。7 天预报出发前一周开始每日查看。上栏为去年同期实测。'
@@ -55,7 +55,7 @@ const TXT={
     +'地图长按可直接落点。',
 
   bookingIntro:
-    '本栏为预订记录，非建议。勾选完成项，填确认号+实付金额，预算页自动对账。',
+    '预订记录。勾选已订项目，填写确认号和实付金额，预算页自动对账。',
 
   prepIntro:
     '按当前线路筛选。赏枫季住宿最紧张：热门区域提前 6–8 周预订。',
@@ -67,12 +67,12 @@ const TXT={
     +'<br><br>住宿差异最大：Algonquin/Charlevoix 乡村旅舍旺季翻倍，'
     +'育空为淡季价格（夏季旅游团已离场）。',
 
-  noteHint: '记实地信息：观景台停车位/最佳光线时段/闭店/路线修正。显示在描述上方。',
+  noteHint: '记录实地信息：观景台停车位、最佳光线时段、闭店、路线修正。显示在描述上方。',
 
   aboutPage:
-    '收藏点、笔记和预订记录存在这台设备的浏览器里。换设备或清除浏览数据会丢，需要的话用下面的导出备份。',
+    '收藏点、笔记和预订记录保存在本设备浏览器中。换设备或清除浏览数据会丢失，可用下方导出备份。',
   aboutFoot:
-    '数据只存在本机。坐标为示意精度，变色窗口为常年区间，实际以各省当季色彩地图为准。'
+    '数据仅保存在本机。坐标为示意精度，变色窗口为常年区间，实际以各省当季色彩地图为准。'
 };
 
 /* ── 变色窗口：a/b 是高峰期，ea/eb 是有色但未到顶的区间 ── */
@@ -86,15 +86,15 @@ const PEAK=[
 /* ── 关于赏枫的三件事 ── */
 const RULES=[
  ['颜色自北向南推进','育空 9 月中结束，Algonquin/Charlevoix 9 月底–10 月初，Cape Breton 高地 10 月头两周。同期不同地，实为不同阶段。'],
- ['年际浮动 5–10 天','冷夜+晴天出最艳红色；暖而多云的 9 月偏黄。强风暴雨可致高峰期骤止。出发前 1–2 周查实时色彩地图，不依赖常年区间。'],
- ['10 月感恩节长周末为高峰','加拿大感恩节为 10 月第 2 个周一。该周末全国出游，热门区域住宿价格+路上车流翻倍。能避开则避开。']
+ ['年际浮动 5–10 天','冷夜加晴天，红色最浓；暖而多云的 9 月偏黄。强风暴雨会让高峰期提前结束。出发前 1–2 周查实时色彩地图，不要只看常年区间。'],
+ ['10 月感恩节长周末为高峰','加拿大感恩节在 10 月第 2 个周一。该周末全国出游，热门地区住宿价格和车流都会翻倍，尽量避开。']
 ];
 
 const COMPARE=[
  ['甲 · Algonquin + Muskoka','经典森林+湖泊组合。Highway 60 走廊路边可观，免徒步。深入可划独木舟进内湖。近多伦多，机票+租车成本最低。'],
- ['乙 · 魁北克 + Charlevoix','秋色外含法语古城+沿河小镇。Route 362 段为全国最佳赏枫公路之一。内容最丰富，非纯自然行程。'],
+ ['乙 · 魁北克 + Charlevoix','除了秋色，还有法语古城和沿河小镇。Route 362 一段是加拿大有名的赏枫公路。内容最丰富，不是纯自然行程。'],
  ['丙 · Cape Breton + 新斯科舍','Cabot Trail = 海岸线+高地组合，色彩映射大西洋。10 月上旬 Celtic Colours 音乐节同期举办。高峰期晚于另两条 1–2 周。'],
- ['丁 · 育空','荒野尺度显著不同，白桦+杨树金色铺满山谷，兼具极光机会。9 月下旬已近尾声，去晚见落叶后褐色。']
+ ['丁 · 育空','荒野尺度和东部完全不同，白桦和杨树的金黄铺满山谷，也有机会看极光。9 月下旬已近尾声，去晚了只剩落叶后的褐色。']
 ];
 
 /* ══════ 区域与地点 ══════ */
@@ -106,45 +106,45 @@ const def=(id,zh,en,lat,lng,r,note,kind)=>P[id]={id,zh,en,lat,lng,r,note,kind};
 
 /* — 安大略 — */
 def('yyz','多伦多机场','Toronto Pearson YYZ',43.6777,-79.6248,'city','温哥华飞过来约 4.5 小时。租车柜台在航站楼，赏枫季提前订。','way');
-def('toronto','多伦多','Toronto',43.6532,-79.3832,'city','头尾各留半天。市区本身的秋色一般，主要作为进出点。');
+def('toronto','多伦多','Toronto',43.6532,-79.3832,'city','头尾各留半天。市区秋色不突出，主要作进出点。');
 def('huntsville','Huntsville','Huntsville Ontario',45.3268,-79.2170,'on','进 Algonquin 前的最后一个像样的镇子，补给和加油在这里。');
-def('algonquin','Algonquin 省立公园','Algonquin Provincial Park',45.5350,-78.6800,'on','加拿大最老的省立公园。Highway 60 走廊全长 56 公里，路边观景点一个接一个，不用徒步也能看饱。需要买日票。');
-def('lookout','Lookout Trail','Lookout Trail Algonquin',45.5522,-78.5081,'on','来回 2.1 公里，最后一段爬坡，顶上是整片枫林的俯瞰。公园里最出名的短线，中午停车场会满。');
-def('canoelake','Canoe Lake','Canoe Lake Algonquin',45.5333,-78.7167,'on','租独木舟的地方。划出去二十分钟就能离开人群，水面倒影是这条线最好的画面。');
+def('algonquin','Algonquin 省立公园','Algonquin Provincial Park',45.5350,-78.6800,'on','加拿大最老的省立公园。Highway 60 走廊全长 56 公里，路边观景点很多，不徒步也能看到。要买日票。');
+def('lookout','Lookout Trail','Lookout Trail Algonquin',45.5522,-78.5081,'on','来回 2.1 公里，最后一段爬坡，山顶可俯瞰整片枫林。是公园里最有名的短线，中午停车场会满。');
+def('canoelake','Canoe Lake','Canoe Lake Algonquin',45.5333,-78.7167,'on','租独木舟的地方。划出去 20 分钟就远离人群，水面能倒映秋色。');
 def('bataclan','Beaver Pond Trail','Beaver Pond Trail Algonquin',45.5900,-78.4200,'on','来回 1.5 公里，平缓。清晨和傍晚常见到驼鹿。');
-def('dorset','Dorset 观景塔','Dorset Lookout Tower',45.2400,-78.8900,'on','30 米高的塔，登顶看 Lake of Bays 的全景。赏枫季周末排队，工作日随到随上。');
-def('arrowhead','Arrowhead 省立公园','Arrowhead Provincial Park',45.4000,-79.2000,'on','比 Algonquin 小得多也安静得多，适合 Algonquin 人太多时的替代。');
+def('dorset','Dorset 观景塔','Dorset Lookout Tower',45.2400,-78.8900,'on','30 米高的塔，登顶看 Lake of Bays 全景。赏枫季周末要排队，工作日基本不用等。');
+def('arrowhead','Arrowhead 省立公园','Arrowhead Provincial Park',45.4000,-79.2000,'on','比 Algonquin 小，也安静，Algonquin 人多时可以替代。');
 def('bracebridge','Bracebridge','Bracebridge Ontario',45.0400,-79.3000,'on','Muskoka 的中心镇，瀑布就在镇里。');
 def('portcarling','Port Carling','Port Carling Ontario',45.1167,-79.5833,'on','Muskoka 湖区的船闸小镇，两湖之间的通道。');
 def('bala','Bala','Bala Ontario',45.0167,-79.6167,'on','蔓越莓产区，十月初有 Cranberry Festival。');
 
 /* — 魁北克 — */
 def('yul','蒙特利尔机场','Montréal YUL',45.4706,-73.7408,'city','温哥华直飞约 5 小时。','way');
-def('montreal','蒙特利尔','Montréal',45.5017,-73.5673,'qc','皇家山公园的观景台能俯瞰全城秋色。老城石板路适合走一整天。');
-def('tremblant','Mont-Tremblant','Mont-Tremblant',46.1185,-74.5962,'qc','缆车上山看整片劳伦琴山脉，是最省力的全景。山下村子是行人区。');
-def('quebeccity','魁北克老城','Vieux-Québec',46.8123,-71.2050,'qc','北美唯一还保留城墙的城市。石板街配秋色，走路就够，不用开车进城。');
-def('montmorency','Montmorency 瀑布','Chute Montmorency',46.8905,-71.1475,'qc','83 米，比尼亚加拉还高。悬索桥横在瀑布顶上，秋天两侧全是红黄。');
+def('montreal','蒙特利尔','Montréal',45.5017,-73.5673,'qc','皇家山公园的观景台能俯瞰全城秋色。老城石板路可以走一整天。');
+def('tremblant','Mont-Tremblant','Mont-Tremblant',46.1185,-74.5962,'qc','坐缆车上山，可看整片劳伦琴山脉，不用爬山。山下的村子是步行区。');
+def('quebeccity','魁北克老城','Vieux-Québec',46.8123,-71.2050,'qc','北美唯一保留城墙的城市。石板街很适合步行，不用开车进城。');
+def('montmorency','Montmorency 瀑布','Chute Montmorency',46.8905,-71.1475,'qc','落差 83 米，比尼亚加拉瀑布高。悬索桥横跨瀑布顶部，秋天两侧是红黄色的树。');
 def('orleans','奥尔良岛','Île d Orléans',46.9167,-70.9833,'qc','环岛一圈 67 公里，全是农场和果园。苹果酒和枫糖直接在农场买。');
 def('baiestpaul','Baie-Saint-Paul','Baie-Saint-Paul',47.4419,-70.5044,'qc','Charlevoix 的门户，画廊小镇，太阳马戏团的发源地。');
-def('route362','Route 362 沿河公路','Route 362 Charlevoix',47.5500,-70.3500,'qc','Baie-Saint-Paul 到 La Malbaie 之间的老路，一路起伏、圣劳伦斯河在右手边。被认为是全国最好的赏枫公路之一。别走 138 高速。');
+def('route362','Route 362 沿河公路','Route 362 Charlevoix',47.5500,-70.3500,'qc','Baie-Saint-Paul 到 La Malbaie 之间的老路，一路起伏，圣劳伦斯河在右手边。是加拿大有名的赏枫公路之一。不要走 138 高速。');
 def('lamalbaie','La Malbaie','La Malbaie',47.6533,-70.1533,'qc','Charlevoix 的另一端，河谷加悬崖。');
-def('hautesgorges','Hautes-Gorges 国家公园','Parc national des Hautes-Gorges',47.8833,-70.4667,'qc','加拿大东部最深的峡谷之一。可以坐船进去看两侧的峭壁，秋天颜色从水面一直铺到山顶。');
+def('hautesgorges','Hautes-Gorges 国家公园','Parc national des Hautes-Gorges',47.8833,-70.4667,'qc','加拿大东部最深的峡谷之一。可以坐船进去看两侧峭壁，秋天树色从水边铺到山顶。');
 def('lemassif','Le Massif 缆车','Le Massif de Charlevoix',47.2833,-70.5833,'qc','落差 770 米，缆车上去正对圣劳伦斯河。');
-def('tadoussac','Tadoussac','Tadoussac',48.1400,-69.7167,'qc','萨格奈峡湾口，看鲸的季节到九月底基本结束，去晚了可能只剩风景。');
+def('tadoussac','Tadoussac','Tadoussac',48.1400,-69.7167,'qc','萨格奈峡湾口，看鲸季节到 9 月底基本结束，去晚了可能看不到鲸。');
 
 /* — 新斯科舍 — */
 def('yhz','哈利法克斯机场','Halifax YHZ',44.8808,-63.5086,'city','温哥华飞过来通常要转一次，全程 8 到 10 小时。','way');
 def('halifax','哈利法克斯','Halifax',44.6488,-63.5752,'ns','进出点。城堡山和海滨步道半天够。');
-def('peggys','Peggys Cove','Peggys Cove',44.4919,-63.9169,'ns','花岗岩上的白色灯塔，新斯科舍最有名的一张照片。岩石湿滑时不要靠近水线。');
+def('peggys','Peggys Cove','Peggys Cove',44.4919,-63.9169,'ns','花岗岩上的白色灯塔，新斯科舍最有名的取景点。岩石湿滑时不要靠近水边。');
 def('lunenburg','Lunenburg','Lunenburg Nova Scotia',44.3777,-64.3158,'ns','世界遗产的彩色木屋老城，十八世纪的街道格局原样保留。');
 def('mahonebay','Mahone Bay','Mahone Bay',44.4494,-64.3819,'ns','三座教堂并排在海湾边。十月整月镇上摆满稻草人。');
 def('baddeck','Baddeck','Baddeck Nova Scotia',46.1000,-60.7500,'ns','Cabot Trail 的传统起点，贝尔的故居和博物馆在这里。');
 def('cabottrail','Cabot Trail','Cabot Trail',46.7000,-60.6000,'ns','全长约 300 公里的环线，三分之一穿过 Cape Breton 高地国家公园。逆时针开的话内侧车道靠山，顺时针则靠海。');
-def('skyline','Skyline Trail','Skyline Trail Cape Breton',46.7503,-60.8836,'ns','环线 7.5 公里，尽头是伸向大西洋的木栈台。日落时最好，但要留出走回来的时间和头灯。');
+def('skyline','Skyline Trail','Skyline Trail Cape Breton',46.7503,-60.8836,'ns','环线 7.5 公里，尽头是伸向大西洋的木栈台。日落时景色最好，要留出走回来的时间，并带头灯。');
 def('cheticamp','Chéticamp','Cheticamp Nova Scotia',46.6333,-61.0000,'ns','阿卡迪亚人的渔镇，法语区。环线西侧的住宿基地。');
-def('ingonish','Ingonish','Ingonish Nova Scotia',46.6833,-60.3833,'ns','环线东侧的基地，Keltic Lodge 那片海岬视野很好。');
-def('meatcove','Meat Cove','Meat Cove Nova Scotia',47.0333,-60.5500,'ns','岛的最北端，最后十几公里是碎石路。开过去的人不多，因此也最安静。');
-def('louisbourg','Louisbourg 要塞','Fortress of Louisbourg',45.9214,-59.9714,'ns','北美最大的历史重建项目，穿着十八世纪服装的工作人员在里面生活。十月中之后关门。');
+def('ingonish','Ingonish','Ingonish Nova Scotia',46.6833,-60.3833,'ns','环线东侧的基地，Keltic Lodge 所在的海岬视野开阔。');
+def('meatcove','Meat Cove','Meat Cove Nova Scotia',47.0333,-60.5500,'ns','岛的最北端，最后十几公里是碎石路。去的人不多，比较安静。');
+def('louisbourg','Louisbourg 要塞','Fortress of Louisbourg',45.9214,-59.9714,'ns','北美最大的历史重建项目，工作人员穿十八世纪服装在里面生活。10 月中之后关门。');
 def('wolfville','Wolfville / Annapolis Valley','Wolfville Nova Scotia',45.0917,-64.3644,'ns','苹果和葡萄酒产区，秋收季节。颜色比高地晚两周。');
 
 /* — 育空 — */
@@ -152,13 +152,13 @@ def('yxy','白马机场','Whitehorse YXY',60.7096,-135.0678,'city','温哥华直
 def('whitehorse','白马市','Whitehorse',60.7212,-135.0568,'yt','育空首府，人口两万多。所有补给、租车、极光团都从这里出发。');
 def('milescanyon','Miles Canyon','Miles Canyon Whitehorse',60.6800,-135.0000,'yt','育空河切出的玄武岩峡谷，离市区十分钟，步道平缓。');
 def('carcross','Carcross','Carcross Yukon',60.1667,-134.7000,'yt','世界最小沙漠就在镇边。往南开是通往阿拉斯加的 South Klondike Highway。');
-def('emeraldyt','Emerald Lake','Emerald Lake Yukon',60.4833,-134.7167,'yt','碳酸钙让湖水呈现不真实的绿松色，路边就能看。');
+def('emeraldyt','Emerald Lake','Emerald Lake Yukon',60.4833,-134.7167,'yt','碳酸钙让湖水呈绿松色，路边就能看。');
 def('kluane','Kluane 国家公园','Kluane National Park',60.7522,-137.5108,'yt','加拿大最高峰所在地，也是世界最大的非极地冰原。Haines Junction 是门户镇。');
 def('kathleen','Kathleen Lake','Kathleen Lake Kluane',60.5667,-137.3667,'yt','Kluane 里最容易到达的湖，湖边步道平缓，背后是雪山。');
-def('takhini','Takhini 温泉','Takhini Hot Pools',60.8833,-135.3500,'yt','白马市外三十分钟，露天温泉。看极光等待的时候泡着最舒服。');
+def('takhini','Takhini 温泉','Takhini Hot Pools',60.8833,-135.3500,'yt','白马市外 30 分钟，有露天温泉。等极光时可以泡温泉。');
 def('tombstone','Tombstone territorial 公园','Tombstone Territorial Park',64.5167,-138.2167,'yt','Dempster Highway 上的苔原公园，秋色是矮灌木的红和金，和森林完全不同。从白马开过去很远，要单独安排两三天。');
 def('dawson','Dawson City','Dawson City Yukon',64.0601,-139.4333,'yt','淘金热留下的木板路小镇，全城没有铺装路面。从白马开过去六小时。');
-def('aurora','极光观测点','Aurora Viewing Whitehorse',60.8500,-135.2000,'yt','白马市郊的暗天区。九月下旬开始夜长足够，晴天概率也不错。团通常晚上十点出发，凌晨两点回。');
+def('aurora','极光观测点','Aurora Viewing Whitehorse',60.8500,-135.2000,'yt','白马市郊的暗天区。9 月下旬起夜晚足够长，晴天概率也不错。极光团通常晚上 10 点出发，凌晨 2 点回。');
 
 /* ══════ 季节表 ══════ */
 const GCOL=['#E6E2D8','#DCCBA6','#D19A4E','#C8412B'];
@@ -198,7 +198,7 @@ A:{k:'A',gr:'甲',name:'Algonquin + Muskoka',met:'6 天 · 安大略',hex:'#C841
      {t:'—',p:'bataclan',n:'Beaver Pond Trail',s:'来回 1.5 公里，平缓，清晨傍晚常见驼鹿'}]},
    {d:'09.29',w:'',t:'Algonquin · 独木舟日',r:'on',stay:'Huntsville',drive:2.5,
     sig:'湖上完全无信号。',
-    note:'划出去二十分钟就能离开人群，水面倒影是这条线最好的画面。风大就取消。',stops:[
+    note:'划出去 20 分钟就远离人群，水面能倒映秋色。风大就取消。',stops:[
      {t:'早',p:'canoelake',n:'Canoe Lake 租独木舟',s:'半天足够，救生衣必穿'},
      {t:'下午',p:'algonquin',n:'游客中心 + 色彩报告',s:'每天更新变色进度'}]},
    {d:'09.30',w:'',t:'Muskoka 湖区',r:'on',stay:'Bracebridge',drive:3,
@@ -230,7 +230,7 @@ B:{k:'B',gr:'乙',name:'魁北克 + Charlevoix',met:'8 天 · 魁北克',hex:'#E
     sig:'全程正常。',note:'直飞约 5 小时，时差 3 小时。今天不开长途。',stops:[
      {t:'—',p:'yul',n:'YUL 落地取车',s:''},{t:'晚',p:'montreal',n:'蒙特利尔入住',s:''}]},
    {d:'09.27',w:'',t:'Mont-Tremblant',r:'qc',stay:'Mont-Tremblant',drive:2,
-    sig:'村里有 wifi，山上信号弱。',note:'缆车上山看整片劳伦琴山脉，是最省力的全景。',stops:[
+    sig:'村里有 wifi，山上信号弱。',note:'坐缆车上山看劳伦琴山脉，不用爬山。',stops:[
      {t:'—',p:'tremblant',n:'缆车 + 山下村子',s:'行人区，车停外面'}]},
    {d:'09.28',w:'',t:'→ 魁北克城',r:'qc',stay:'魁北克城',drive:3.5,
     sig:'高速沿线正常。',note:'车停城外，老城全程步行。',stops:[
@@ -249,10 +249,10 @@ B:{k:'B',gr:'乙',name:'魁北克 + Charlevoix',met:'8 天 · 魁北克',hex:'#E
      {t:'—',p:'hautesgorges',n:'Hautes-Gorges',s:'颜色从水面铺到山顶'},
      {t:'晚',p:'lamalbaie',n:'La Malbaie',s:''}]},
    {d:'10.02',w:'',t:'Tadoussac 或 返程',r:'qc',stay:'魁北克城',drive:4,
-    sig:'峡湾一带弱。',note:'看鲸季节到九月底基本结束，去晚了可能只剩风景。不去直接慢慢开回魁北克城。',stops:[
+    sig:'峡湾一带弱。',note:'看鲸季节到 9 月底基本结束。不去就直接慢慢开回魁北克城。',stops:[
      {t:'—',p:'tadoussac',n:'Tadoussac（可选）',s:'萨格奈峡湾口'}]},
    {d:'10.03',w:'',t:'→ 蒙特利尔 → 温哥华',r:'city',stay:'—',drive:3,
-    sig:'正常。',note:'魁北克城到 YUL 约 3 小时，留足还车时间。',stops:[{t:'—',p:'yul',n:'还车',s:''}]}
+    sig:'正常。',note:'魁北克城到 YUL 约 3 小时，要留出还车时间。',stops:[{t:'—',p:'yul',n:'还车',s:''}]}
   ]},
 
 C:{k:'C',gr:'丙',name:'Cape Breton + 新斯科舍',met:'8 天 · 大西洋',hex:'#B85C2E',tag:'海岸线',
@@ -275,7 +275,7 @@ C:{k:'C',gr:'丙',name:'Cape Breton + 新斯科舍',met:'8 天 · 大西洋',hex
      {t:'—',p:'mahonebay',n:'Mahone Bay',s:'三座教堂并排；十月整月摆稻草人'},
      {t:'晚',p:'lunenburg',n:'Lunenburg',s:'世界遗产的彩色木屋老城'}]},
    {d:'10.03',w:'',t:'→ Baddeck',r:'ns',stay:'Baddeck',drive:5.5,
-    sig:'高速沿线正常。',note:'今天开得最久，中途在 Truro 一带停一次。',stops:[
+    sig:'高速沿线正常。',note:'今天车程最长，中途在 Truro 一带停一次。',stops:[
      {t:'晚',p:'baddeck',n:'Baddeck',s:'Cabot Trail 的传统起点'}]},
    {d:'10.04',w:'',t:'Cabot Trail 西段',r:'ns',stay:'Chéticamp',drive:3,
     sig:'高地公园内大段无信号。',note:'逆时针开，内侧靠山；想靠海就顺时针。',stops:[
@@ -283,14 +283,14 @@ C:{k:'C',gr:'丙',name:'Cape Breton + 新斯科舍',met:'8 天 · 大西洋',hex
      {t:'傍晚',p:'skyline',n:'Skyline Trail',s:'环线 7.5 公里，日落最好，带头灯'},
      {t:'晚',p:'cheticamp',n:'Chéticamp',s:'阿卡迪亚渔镇，法语区'}]},
    {d:'10.05',w:'',t:'北端 · Meat Cove',r:'ns',stay:'Ingonish',drive:3.5,
-    sig:'北端几乎完全无信号。',note:'最后十几公里是碎石路，开慢一点。天气不好就跳过。',stops:[
+    sig:'北端几乎完全无信号。',note:'最后十几公里是碎石路，要开慢。天气不好就不去。',stops:[
      {t:'—',p:'meatcove',n:'Meat Cove',s:'岛的最北端，最安静'},
      {t:'晚',p:'ingonish',n:'Ingonish',s:'环线东侧的基地'}]},
    {d:'10.06',w:'',t:'Louisbourg 要塞',r:'ns',stay:'Baddeck',drive:3,
     sig:'正常。',note:'十月中之后关门，去之前查开放日。',stops:[
      {t:'—',p:'louisbourg',n:'Louisbourg',s:'北美最大的历史重建项目'}]},
    {d:'10.07',w:'',t:'→ Annapolis Valley',r:'ns',stay:'Wolfville',drive:5,
-    sig:'正常。',note:'苹果和葡萄酒产区，秋收季节。这里的颜色比高地晚两周。',stops:[
+    sig:'正常。',note:'苹果和葡萄酒产区，秋收季节。树色比高地晚两周。',stops:[
      {t:'晚',p:'wolfville',n:'Wolfville',s:''}]},
    {d:'10.08',w:'',t:'→ 哈利法克斯 → 温哥华',r:'city',stay:'—',drive:1.5,
     sig:'正常。',note:'',stops:[{t:'—',p:'yhz',n:'还车',s:''}]}
@@ -302,16 +302,16 @@ D:{k:'D',gr:'丁',name:'育空 · 荒野与极光',met:'6 天 · 育空',hex:'#6
     +'背景为 Kluane 雪山+冰原。9 月下旬起夜长足够，兼具极光机会。\n\n'
     +'温哥华直飞白马市仅 2.5 小时，4 条线中飞行时间最短。',
   cons:'<b>时机窗口最窄</b>：育空秋色 9 月中结束，9 月下旬已近尾声，'
-    +'去晚见落叶后褐色。赏枫须将日期提前至 9 月上中旬。\n\n'
-    +'主要目标为极光则相反：越晚越佳，此时不应按赏枫排程。\n\n'
-    +'Tombstone+Dawson City 位于极北，6 天无法容纳，须另加 2–3 天。',
+    +'去晚了只剩落叶后的褐色。赏枫要把日期提前到 9 月上中旬。\n\n'
+    +'如果主要为看极光则相反：越晚越好，不要按赏枫来排日期。\n\n'
+    +'Tombstone+Dawson City 位于极北，6 天放不下，要另加 2–3 天。',
   budget:{air:900,car:750,stay:900,food:700,park:80,tickets:400,shop:150,misc:300},
   days:[
    {d:'09.12',w:'',t:'温哥华 → 白马市',r:'city',stay:'白马市',drive:0.5,
-    sig:'市区正常。',note:'直飞 2.5 小时。今天轻松，晚上晴就先看一次极光。',stops:[
+    sig:'市区正常。',note:'直飞 2.5 小时。今天行程轻松，晚上天晴就先看一次极光。',stops:[
      {t:'—',p:'yxy',n:'YXY 落地取车',s:''},
      {t:'—',p:'whitehorse',n:'白马市入住',s:'补给在这里做完，出城后没有超市'},
-     {t:'夜',p:'aurora',n:'极光（看天）',s:'团通常十点出发，凌晨两点回'}]},
+     {t:'夜',p:'aurora',n:'极光（看天）',s:'团通常 10 点出发，凌晨 2 点回'}]},
    {d:'09.13',w:'',t:'白马周边 + 南线',r:'yt',stay:'白马市',drive:3,
     sig:'南线公路时断时续。',note:'',stops:[
      {t:'早',p:'milescanyon',n:'Miles Canyon',s:'离市区十分钟，步道平缓'},
@@ -322,10 +322,10 @@ D:{k:'D',gr:'丁',name:'育空 · 荒野与极光',met:'6 天 · 育空',hex:'#6
      {t:'—',p:'kluane',n:'Haines Junction 游客中心',s:''},
      {t:'—',p:'kathleen',n:'Kathleen Lake',s:'湖边步道平缓，背后是雪山'}]},
    {d:'09.15',w:'',t:'Kluane 深入 或 观光飞行',r:'yt',stay:'Haines Junction',drive:2,
-    sig:'无信号。',note:'冰原观光飞行是看 Kluane 的唯一实际方式，天气说了算，要留备用日。',stops:[
+    sig:'无信号。',note:'冰原观光飞行是看 Kluane 冰原的主要方式，取决于天气，要留备用日。',stops:[
      {t:'—',p:'kluane',n:'冰原观光飞行（可选）',s:'天气不好会取消，提前订并留缓冲'}]},
    {d:'09.16',w:'',t:'回白马 + 温泉 + 极光',r:'yt',stay:'白马市',drive:2,
-    sig:'市区正常。',note:'泡着温泉等极光是本地人的做法。',stops:[
+    sig:'市区正常。',note:'可以泡着温泉等极光。',stops:[
      {t:'—',p:'takhini',n:'Takhini 温泉',s:'市外三十分钟，露天'},
      {t:'夜',p:'aurora',n:'极光',s:''}]},
    {d:'09.17',w:'',t:'白马市 → 温哥华',r:'city',stay:'—',drive:0.5,
@@ -335,7 +335,7 @@ D:{k:'D',gr:'丁',name:'育空 · 荒野与极光',met:'6 天 · 育空',hex:'#6
 
 const BROWS=[
  {k:'air', n:'国际机票', s:'YVR ⇄ 目的地 · 两人', max:5000},
- {k:'car', n:'租车', s:'赏枫季涨价，感恩节长周末尤甚', max:2000},
+ {k:'car', n:'租车', s:'赏枫季涨价，感恩节长周末涨得更多', max:2000},
  {k:'stay',n:'住宿', s:'热门区域提前六到八周订', max:4000},
  {k:'food',n:'餐饮', s:'小镇餐厅关得早，备些干粮', max:2500},
  {k:'park',n:'公园门票', s:'省立 / 国家公园日票', max:400},
@@ -345,17 +345,17 @@ const BROWS=[
 ];
 
 const TODOS=[
- {id:'f1',n:'订住宿（最紧的一项）',s:'赏枫季热门区域提前六到八周。Algonquin 周边和 Charlevoix 尤其难订',due:'现在',v:'ABCD'},
- {id:'f2',n:'订机票和租车',s:'四条线都要飞。租车在赏枫季涨价明显，越早越好',due:'现在',v:'ABCD'},
- {id:'f3',n:'避开感恩节长周末',s:'加拿大感恩节是十月第二个周一。那个周末住宿翻倍、路上堵',due:'现在',v:'ABC'},
+ {id:'f1',n:'订住宿（最紧的一项）',s:'赏枫季热门地区提前 6–8 周订。Algonquin 周边和 Charlevoix 尤其难订',due:'现在',v:'ABCD'},
+ {id:'f2',n:'订机票和租车',s:'四条线都要坐飞机。租车在赏枫季涨价明显，早订更好',due:'现在',v:'ABCD'},
+ {id:'f3',n:'避开感恩节长周末',s:'加拿大感恩节在 10 月第 2 个周一。那个周末住宿翻倍，路上也堵',due:'现在',v:'ABC'},
  {id:'f4',n:'查实时色彩地图',s:'安大略省立公园、Bonjour Québec、新斯科舍自然资源厅都有每周更新的色彩报告。出发前一两周开始看',due:'出发前 2 周',v:'ABCD'},
  {id:'f5',n:'买公园日票',s:'Algonquin、Cape Breton 高地、Hautes-Gorges 都要单独买票，部分可线上先买',due:'出发前 1 周',v:'ABC'},
- {id:'f6',n:'订独木舟 / 缆车 / 观光飞行',s:'Canoe Lake 租船、Tremblant 和 Le Massif 缆车、Kluane 冰原飞行都提前',due:'出发前 1 周',v:'ABD'},
+ {id:'f6',n:'订独木舟 / 缆车 / 观光飞行',s:'Canoe Lake 租船、Tremblant 和 Le Massif 缆车、Kluane 冰原飞行都要提前订',due:'出发前 1 周',v:'ABD'},
  {id:'f7',n:'查 Celtic Colours 演出表',s:'十月上旬 Cape Breton 全岛几十个村子有演出，票要单独买',due:'出发前 1 月',v:'C'},
- {id:'f8',n:'极光准备',s:'查 KP 指数和月相，满月会压低对比。带三脚架、备用电池、手套',due:'出发前 1 周',v:'D'},
+ {id:'f8',n:'极光准备',s:'查 Kp 指数和月相，满月时极光对比度会下降。带三脚架、备用电池、手套',due:'出发前 1 周',v:'D'},
  {id:'f9',n:'分层衣物',s:'东部早晚接近零度、白天可能十五度以上。育空更冷，要带真正的冬装',due:'出发前',v:'ABCD'},
  {id:'f10',n:'下载离线地图',s:'Algonquin、Cape Breton 高地、Kluane 都有大段无信号',due:'出发前',v:'ABCD'},
- {id:'f11',n:'注意驼鹿和野生动物',s:'清晨傍晚是活动高峰，公路上撞到驼鹿危险。天黑后减速',due:'出发前',v:'ABD'},
+ {id:'f11',n:'注意驼鹿和野生动物',s:'驼鹿清晨和傍晚最活跃，撞上很危险。天黑后要减速',due:'出发前',v:'ABD'},
  {id:'f12',n:'带现金',s:'小镇的农场摊位和部分渔村店只收现金',due:'出发前',v:'ABC'}
 ];
 
@@ -363,11 +363,11 @@ const TODOS=[
 const STAY={
  'Huntsville':{area:'Huntsville, Ontario',
   opts:[{n:'镇上或 Deerhurst 一带',tier:'$$',pick:true,q:'Huntsville Ontario hotel',
-    why:'进 Algonquin 西门 40 分钟，补给齐全。赏枫季一房难求，提前六到八周订。'},
+    why:'到 Algonquin 西门 40 分钟，补给齐全。赏枫季房源紧张，提前 6–8 周订。'},
    {n:'Algonquin 门口的 lodge',tier:'$$$',q:'Algonquin Park lodge',
     why:'省掉每天的通勤，但价格高、选择少，且多数不含 wifi。'}],
   food:[{n:'镇上的主街',jp:'restaurants Main Street Huntsville',why:'小镇餐厅关得早，八点后基本只剩快餐。'},
-   {n:'超市备干粮',jp:'grocery Huntsville Ontario',why:'公园里没有像样的吃的，早上买好带进去。'}]},
+   {n:'超市备干粮',jp:'grocery Huntsville Ontario',why:'公园里没有正式的餐厅，早上买好带进去。'}]},
  'Bracebridge':{area:'Bracebridge, Muskoka',
   opts:[{n:'镇中心',tier:'$$',pick:true,q:'Bracebridge Ontario hotel',why:'瀑布就在镇里，走路可达餐厅。'}],
   food:[{n:'主街',jp:'restaurants Bracebridge',why:''}]},
@@ -383,28 +383,28 @@ const STAY={
   opts:[{n:'山下行人村',tier:'$$$',pick:true,q:'Mont Tremblant village hotel',
     why:'车停外面，村里全是行人区。缆车站就在旁边。'},
    {n:'Saint-Jovite（老镇）',tier:'$$',q:'Saint Jovite Mont Tremblant hotel',
-    why:'开车十分钟，便宜一档，本地感更强。'}],
+    why:'开车 10 分钟，价格低一档。'}],
   food:[{n:'村里的餐厅',jp:'restaurants Mont Tremblant village',why:'旅游价，但位置方便。'}]},
  '魁北克城':{area:'Vieux-Québec',
   opts:[{n:'老城城墙内',tier:'$$$',pick:true,q:'Vieux Quebec hotel',
     why:'石板街走路就够，不用开车进城。停车要另外找车位。'},
    {n:'Saint-Roch 区',tier:'$$',q:'Saint Roch Quebec City hotel',
-    why:'走上去老城十五分钟，价格低一截，餐厅更本地。'}],
+    why:'走到老城 15 分钟，价格低一些，餐厅偏本地。'}],
   food:[{n:'Petit-Champlain 一带',jp:'Petit Champlain Quebec restaurants',why:'游客多但确实好看。'},
    {n:'Poutine',jp:'poutine Quebec City',why:'来都来。'}]},
  'Baie-Saint-Paul':{area:'Baie-Saint-Paul, Charlevoix',
   opts:[{n:'主街上的乡村旅舍',tier:'$$',pick:true,q:'Baie Saint Paul auberge',
     why:'画廊小镇，走路逛完。赏枫季提前订，感恩节长周末会翻倍。'}],
-  food:[{n:'主街的小馆子',jp:'restaurants Baie Saint Paul',why:'Charlevoix 是美食产区，本地奶酪值得试。'}]},
+  food:[{n:'主街的小馆子',jp:'restaurants Baie Saint Paul',why:'Charlevoix 是美食产区，有本地奶酪。'}]},
  'La Malbaie':{area:'La Malbaie, Charlevoix',
-  opts:[{n:'河谷或悬崖边',tier:'$$',pick:true,q:'La Malbaie hotel',why:'挑能看到圣劳伦斯河的房间。'}],
+  opts:[{n:'河谷或悬崖边',tier:'$$',pick:true,q:'La Malbaie hotel',why:'尽量选能看到圣劳伦斯河的房间。'}],
   food:[{n:'镇上',jp:'restaurants La Malbaie',why:''}]},
  '哈利法克斯':{area:'Halifax waterfront',
   opts:[{n:'海滨一带',tier:'$$',pick:true,q:'Halifax waterfront hotel',why:'走路到步道和餐厅，头尾各一晚。'}],
   food:[{n:'龙虾卷和海鲜',jp:'lobster roll Halifax',why:'秋天是龙虾季的开始。'}]},
  'Lunenburg':{area:'Old Town Lunenburg',
   opts:[{n:'老城的彩色木屋 B&B',tier:'$$',pick:true,q:'Lunenburg Nova Scotia inn',
-    why:'世界遗产老城，房子本身就是看点。停车在坡上。'}],
+    why:'世界遗产老城，建筑本身就是景点。停车在坡上。'}],
   food:[{n:'海滨餐厅',jp:'restaurants Lunenburg waterfront',why:'十月中之后不少店转淡季营业时间。'}]},
  'Baddeck':{area:'Baddeck, Cape Breton',
   opts:[{n:'湖边旅馆',tier:'$$',pick:true,q:'Baddeck Nova Scotia inn',
@@ -413,10 +413,10 @@ const STAY={
  'Chéticamp':{area:'Chéticamp, Cape Breton',
   opts:[{n:'镇上或海边',tier:'$$',pick:true,q:'Cheticamp Nova Scotia accommodation',
     why:'环线西侧的基地，阿卡迪亚渔镇，法语区。'}],
-  food:[{n:'阿卡迪亚菜',jp:'Acadian restaurant Cheticamp',why:'和新斯科舍其他地方的口味不一样。'}]},
+  food:[{n:'阿卡迪亚菜',jp:'Acadian restaurant Cheticamp',why:'口味和新斯科舍其他地方不同。'}]},
  'Ingonish':{area:'Ingonish, Cape Breton',
   opts:[{n:'Keltic Lodge 一带',tier:'$$$',pick:true,q:'Ingonish Nova Scotia lodge',
-    why:'海岬上视野最好，十月中之后部分关门。'},
+    why:'海岬上视野开阔，10 月中之后部分店关门。'},
    {n:'Ingonish Beach 附近的汽车旅馆',tier:'$',q:'Ingonish motel',why:'便宜很多。'}],
   food:[{n:'镇上',jp:'restaurants Ingonish',why:'淡季选择很少，提前确认营业。'}]},
  'Wolfville':{area:'Wolfville, Annapolis Valley',
@@ -429,7 +429,7 @@ const STAY={
    {n:'超市备干粮',jp:'grocery Whitehorse',why:'出城后没有超市。'}]},
  'Haines Junction':{area:'Haines Junction, Yukon',
   opts:[{n:'镇上的小旅馆',tier:'$',pick:true,q:'Haines Junction Yukon motel',
-    why:'Kluane 的门户，选择极少，须提前订。'}],
+    why:'Kluane 的门户，选择极少，要提前订。'}],
   food:[{n:'镇上',jp:'restaurants Haines Junction',why:'只有几家，关得很早。'}]},
  '机上':{area:'',opts:[],food:[]}
 };

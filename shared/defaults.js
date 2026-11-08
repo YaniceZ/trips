@@ -344,7 +344,7 @@ function vBud(s){
   const paid=bks.reduce((a,x)=>a+(bkGet(x.id)?.amt||0),0);
   const nbk=bks.filter(x=>bkGet(x.id)?.state==='ok').length;
   s.appendChild(el('h2','sec',LABELS.reconcile));
-  if(!nbk){s.appendChild(el('p','tx','暂无已登记的预订。在「准备」页勾选并填写金额后，此处自动汇总。'))}
+  if(!nbk){s.appendChild(el('p','tx','暂无已登记的预订。在「准备」页勾选并填写金额后，这里自动汇总。'))}
   else{
    const w=el('div','btot');
    w.innerHTML=`<div><div class="cap">已登记 ${nbk} / ${bks.length} 项</div><div class="big">${sym(CUR.home)}${Math.round(paid/dv).toLocaleString()}</div></div>
@@ -611,7 +611,7 @@ function addM(pre){
       $res.innerHTML='<div class="tiny">搜索中…</div>';
       const rs=await geoSearch(q);
       $res.innerHTML='';
-      if(!rs){ $res.innerHTML='<div class="tiny warn">没搜到，或服务暂时不可用。用②粘贴链接更稳。</div>'; return }
+      if(!rs){ $res.innerHTML='<div class="tiny warn">没搜到，或服务暂时不能用。用②粘贴链接更稳。</div>'; return }
       if(!rs.length){ $res.innerHTML='<div class="tiny warn">没有结果。换个写法，或加上城市名。</div>'; return }
       rs.forEach(x=>{
         const r=el('button','gitem');

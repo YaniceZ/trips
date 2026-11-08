@@ -500,7 +500,7 @@ function addM(pre){
       $res.innerHTML='<div class="tiny">搜索中…</div>';
       const rs=await geoSearch(q);
       $res.innerHTML='';
-      if(!rs){ $res.innerHTML='<div class="tiny warn">没搜到，或服务暂时不可用。用②粘贴链接更稳。</div>'; return }
+      if(!rs){ $res.innerHTML='<div class="tiny warn">没搜到，或服务暂时不能用。用②粘贴链接更稳。</div>'; return }
       if(!rs.length){ $res.innerHTML='<div class="tiny warn">没有结果。换个写法，或加上城市名。</div>'; return }
       rs.forEach(x=>{
         const r=el('button','gitem');

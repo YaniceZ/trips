@@ -20,56 +20,56 @@ const LABELS={
 /* ── 成段说明 ─────────────────────────────────────────────── */
 const TXT={
   season:
-    '推荐 <b>5 月</b>或 <b>9 月上中旬</b>。5 月气温 12–21°C，基础设施全开，田野未枯，'
+    '推荐 <b>5 月</b>或 <b>9 月上中旬</b>。5 月气温 12–21°C，设施全部开放，田野还没枯黄，'
     +'价格低于 7 月 10–20%。9 月条件相近，首周后人流下降。'
-    +'<br><br>7–8 月避开：Meseta 段热浪期可超 40°C，多数人天亮前出发，庇护所早满。'
+    +'<br><br>7–8 月避开：Meseta 段热浪期可超 40°C，多数人天亮前出发，庇护所很早满员。'
     +'沿海线路（葡萄牙之路/北方之路）受海风调节，夏季相对温和。'
-    +'<br><br>冬季仅部分路段可通行：法国之路末 100 km/葡萄牙中央线/英国之路全年开放。',
+    +'<br><br>冬季只有部分路段可走：法国之路末 100 km、葡萄牙中央线、英国之路全年开放。',
 
   wxNote:
     '降水单位 mm。7 天预报出发前两周开始查看。上栏为去年同期实测，'
-    +'用于判断该时间窗降雨+气温。加利西亚全年多雨，预留 2 日雨天预案。数据 Open-Meteo（CC BY 4.0）。',
+    +'用于判断该时间窗的降雨和气温。加利西亚全年多雨，要留 2 天雨天备用。数据来源 Open-Meteo（CC BY 4.0）。',
 
-  itinHint: '点任意一天，地图跟随。左侧数字 = 距 Santiago 剩余公里数，按石碑标注方式。',
+  itinHint: '点击任意一天，地图定位。左侧数字 = 距 Santiago 剩余公里数，和路上石碑标注方式一致。',
 
   pinsEmpty:
     '暂无收藏点。'
     +'地图长按可直接落点。',
 
   bookingIntro:
-    '本栏为预订记录，非建议。勾选完成项，填确认号+实付金额，预算页自动对账。',
+    '预订记录。勾选已订项目，填写确认号和实付金额，预算页自动对账。',
 
   prepIntro:
-    '按方案筛选。朝圣者证书（credencial）+5 月住宿，优先处理。',
+    '按方案筛选。朝圣者证书（credencial）和 5 月住宿，优先办。',
 
   budgetNote:
     '单位加元，1 CAD ≈ 0.63 EUR。数字为估算，可调整。'
     +'<br><br>住宿差异最大：公立庇护所 8–15 欧/晚，私立 15–25 欧，乡村旅馆 50–90 欧。'
     +'按庇护所计算：40–55 欧/日覆盖住宿+三餐。选旅馆成本接近翻倍。'
-    +'行李托运 5–7 欧/件/段，肩部负荷大 → 此项值得支出。',
+    +'行李托运 5–7 欧/件/段。肩部负担大时可以选。',
 
-  noteHint: '记实地信息：哪家庇护所需早到/无补水段/路线修正。显示在描述上方。',
+  noteHint: '记录实地信息：哪家庇护所要早到、哪段没有补水点、路线修正。显示在描述上方。',
 
   aboutPage:
-    '收藏点、笔记和预订记录存在这台设备的浏览器里。换设备或清除浏览数据会丢，需要的话用下面的导出备份。',
+    '收藏点、笔记和预订记录保存在本设备浏览器中。换设备或清除浏览数据会丢失，可用下方导出备份。',
   aboutFoot:
-    '数据只存在本机。坐标为示意精度，公里数为路书常见值，实际以石碑为准。'
+    '数据仅保存在本机。坐标为示意精度，公里数为路书常见值，实际以石碑为准。'
 };
 
 /* ── Compostela 规则 ─────────────────────────────────────── */
 const RULES=[
- ['步行 ≥100 km','骑行 ≥200 km。须为连续末段，中断需重新计算。'],
- ['携带 credencial 证书','出发前教堂/朝圣者协会/线上申请。每日 2 章（庇护所/教堂/酒吧均可）。'],
+ ['步行 ≥100 km','骑行不少于 200 km，且要是连续的最后一段，中断需重新计算。'],
+ ['携带 credencial 证书','出发前在教堂、朝圣者协会或线上申请。每天 2 个章（庇护所、教堂、酒吧都可以）。'],
  ['末 100 km 每日 2 章','加利西亚段额外要求。前段每日 1 章即可。'],
  ['Santiago 朝圣者办公室换证','携 credencial 排队登记，免费。旺季排队 >1 小时。']
 ];
 
 /* ── 四条路的区别 ─────────────────────────────────────────── */
 const COMPARE=[
- ['法国之路 Francés','780 km，30–35 天。设施最完善，同行者最多，社交性最强。末 100 km（Sarria 起）为最热门段。缺点：Meseta 段夏季酷热，Sarria 后人流密集。'],
- ['葡萄牙之路 Portugués','Porto 起，240–280 km，10–14 天。地形最平缓，气候温和，海岸变体沿大西洋。适合首次徒步+不想爬山者。'],
- ['原始之路 Primitivo','321 km，14–16 天。最古老最难，翻越坎塔布连山脉，服务点少，人流最少。适合有经验+偏好安静者。'],
- ['北方之路 Norte','825 km，35–40 天。沿比斯开湾，海景最佳，起伏不断，难度仅次于原始之路。时间不足 → 不考虑。']
+ ['法国之路 Francés','780 km，30–35 天。设施最完善，同行的人最多，社交最方便。最后 100 km（Sarria 起）是最热门的一段。缺点：Meseta 段夏季酷热，Sarria 后人流密集。'],
+ ['葡萄牙之路 Portugués','Porto 起，240–280 km，10–14 天。地形最平缓，气候温和，海岸线版本沿大西洋。适合第一次徒步、不想爬山的人。'],
+ ['原始之路 Primitivo','321 km，14–16 天。最古老也最难，翻越坎塔布连山脉，服务点少，人最少。适合有经验、喜欢安静的人。'],
+ ['北方之路 Norte','825 km，35–40 天。沿比斯开湾，海景最好，起伏不断，难度仅次于原始之路。时间不够就不考虑。']
 ];
 
 /* ══════ 区域与地点 ══════ */
@@ -79,59 +79,59 @@ const P={};
 const def=(id,zh,es,lat,lng,r,note,km,kind)=>P[id]={id,zh,es,lat,lng,r,note,km,kind};
 
 /* — 法国之路 最后 100 公里 — */
-def('sarria','Sarria 萨里亚','Sarria',42.7772,-7.4139,'cam','最后 100 公里的起点，也是全程人最密集的一段的开始。镇上有大量庇护所和装备店，缺什么在这里补。',111.5);
+def('sarria','Sarria 萨里亚','Sarria',42.7772,-7.4139,'cam','最后 100 公里的起点，也是人最密集一段的开始。镇上有很多庇护所和装备店，缺什么在这里补。',111.5);
 def('portomarin','Portomarín 波托马林','Portomarín',42.8072,-7.6156,'cam','水库淹村后整体搬迁上山的镇子，教堂是拆散编号后重砌的。进镇要爬一段很长的台阶。',89);
 def('palas','Palas de Rei 帕拉斯','Palas de Rei',42.8731,-7.8686,'cam','规模不大的中转镇，前后两段都长，多数人在这里过夜。',64);
 def('melide','Melide 梅利德','Melide',42.9142,-8.0142,'cam','原始之路在这里汇入法国之路，人流明显增加。加利西亚章鱼 pulpo á feira 的代表小镇，Ezequiel 那家最有名。',50);
 def('arzua','Arzúa 阿尔苏阿','Arzúa',42.9278,-8.1614,'cam','奶酪产区，本地 queixo de Arzúa 是 DOP 认证。之后进入桉树林路段。',39);
-def('pedrouzo','O Pedrouzo 佩德鲁索','O Pedrouzo',42.9075,-8.3625,'cam','进 Santiago 前最后一晚，离机场很近，飞机低空掠过。多数人第二天清早出发赶中午的朝圣者弥撒。',19);
+def('pedrouzo','O Pedrouzo 佩德鲁索','O Pedrouzo',42.9075,-8.3625,'cam','进 Santiago 前的最后一晚，离机场很近，飞机会低空飞过。多数人第二天清早出发，赶中午的朝圣者弥撒。',19);
 def('gozo','Monte do Gozo 欢喜山','Monte do Gozo',42.8836,-8.5033,'cam','第一次能看到大教堂尖顶的山头，名字由此而来。现在山上有大型庇护所群，视野被树挡掉不少。',4.7);
 def('santiago','Santiago 大教堂','Catedral de Santiago',42.8806,-8.5449,'gal','终点。朝圣者弥撒每天中午 12 点和晚上 7 点半，香炉 botafumeiro 不是每场都摆，看当天安排。',0);
 def('pilgrimoffice','朝圣者办公室','Oficina del Peregrino',42.8817,-8.5442,'gal','换 Compostela 证书的地方，离大教堂几分钟。带好 credencial，旺季排队可能超过一小时。');
-def('finisterre','Finisterre 世界尽头','Cabo Fisterra',42.8828,-9.2717,'gal','古人认为的大陆尽头，从 Santiago 再走 3 天或坐 1.5 小时巴士。海角看日落，传统上在这里烧掉一件旧衣服。');
-def('muxia','Muxía 穆希亚','Muxía',43.1050,-9.2183,'gal','比 Finisterre 安静的海角，教堂建在礁石上，风浪很大。');
+def('finisterre','Finisterre 世界尽头','Cabo Fisterra',42.8828,-9.2717,'gal','古人认为的大陆尽头，从 Santiago 再走 3 天或坐 1.5 小时巴士。可在海角看日落，传统上会在这里烧掉一件旧衣服。');
+def('muxia','Muxía 穆希亚','Muxía',43.1050,-9.2183,'gal','比 Finisterre 安静的海角，教堂建在礁石上，风浪大。');
 
 /* — 法国之路 全程节点（方案丁） — */
-def('sjpdp','Saint-Jean-Pied-de-Port','SJPdP',43.1636,-1.2372,'cam','法国之路传统起点，法国境内。第二天翻比利牛斯山是全程最难的一天，天气不好走 Valcarlos 低线。',780);
+def('sjpdp','Saint-Jean-Pied-de-Port','SJPdP',43.1636,-1.2372,'cam','法国之路的传统起点，在法国境内。第二天翻比利牛斯山是全程最难的一天，天气不好走 Valcarlos 低线。',780);
 def('roncesvalles','Roncesvalles 龙塞斯瓦列斯','Roncesvalles',43.0092,-1.3197,'cam','翻过比利牛斯山后的第一站，修道院庇护所有 180 张床。',765);
-def('pamplona','Pamplona 潘普洛纳','Pamplona',42.8125,-1.6458,'cam','奔牛节的城市，老城和 pintxos 值得多留半天。',705);
+def('pamplona','Pamplona 潘普洛纳','Pamplona',42.8125,-1.6458,'cam','奔牛节的城市，老城和 pintxos 可以多留半天。',705);
 def('logrono','Logroño 洛格罗尼奥','Logroño',42.4650,-2.4456,'cam','里奥哈葡萄酒产区首府，Calle Laurel 一条街全是小酒馆。',610);
 def('burgos','Burgos 布尔戈斯','Burgos',42.3408,-3.6997,'cam','哥特式大教堂是世界遗产，熙德的墓在里面。之后进入 Meseta 高原段。',490);
-def('meseta','Meseta 高原段','La Meseta',42.2500,-4.5000,'cam','约 200 公里的平坦麦田，遮荫极少。夏季白天可超 40°C，天亮前出发是常态。也是很多人觉得最难熬、又最有收获的一段。',430);
-def('leon','León 莱昂','León',42.5987,-5.5671,'cam','大教堂的彩窗是全西班牙最好的之一，高迪的 Casa Botines 也在这儿。',310);
+def('meseta','Meseta 高原段','La Meseta',42.2500,-4.5000,'cam','约 200 公里的平坦麦田，遮荫极少。夏季白天可超 40°C，天亮前出发是常态。很多人觉得这是最难熬的一段，也有人觉得收获最大。',430);
+def('leon','León 莱昂','León',42.5987,-5.5671,'cam','大教堂的彩窗在西班牙很有名，高迪的 Casa Botines 也在这里。',310);
 def('astorga','Astorga 阿斯托加','Astorga',42.4589,-6.0525,'cam','高迪设计的主教宫，还有 cocido maragato 那道反着上菜的炖菜。',260);
 def('cruzferro','Cruz de Ferro 铁十字','Cruz de Ferro',42.4894,-6.3617,'cam','海拔 1505 米，全程最高点。传统是从家里带一块石头放在杆下。',230);
 def('ponferrada','Ponferrada 蓬费拉达','Ponferrada',42.5461,-6.5911,'cam','圣殿骑士城堡就在路边。',210);
 def('cebreiro','O Cebreiro 塞布雷罗','O Cebreiro',42.7078,-7.0433,'cam','进入加利西亚的第一个村，海拔 1300 米，圆形石屋 pallozas。上坡很陡，雾很大。',155);
 
 /* — 葡萄牙之路（方案乙） — */
-def('porto','Porto 波尔图','Porto',41.1435,-8.6110,'por','起点。大教堂领第一个章，然后沿杜罗河出城。多留一天喝波特酒。',240);
+def('porto','Porto 波尔图','Porto',41.1435,-8.6110,'por','起点。在大教堂领第一个章，然后沿杜罗河出城。可多留一天喝波特酒。',240);
 def('viladoconde','Vila do Conde','Vila do Conde',41.3517,-8.7425,'por','海岸线变体的第一晚，长长的木栈道贴着大西洋。',215);
 def('barcelos','Barcelos 巴塞卢什','Barcelos',41.5314,-8.6186,'por','葡萄牙公鸡传说的发源地，周四有全国最大的集市之一。',185);
 def('pontedelima','Ponte de Lima','Ponte de Lima',41.7681,-8.5836,'por','葡萄牙最古老的城镇之一，罗马桥横跨利马河。',150);
 def('tui','Tui 图伊','Tui',42.0472,-8.6439,'por','跨过米尼奥河进入西班牙。从这里到 Santiago 刚好 115 公里，是葡萄牙之路拿证书的最短起点。',115);
 def('redondela','Redondela','Redondela',42.2833,-8.6094,'por','海岸线和中央线在这里合并。',85);
-def('pontevedra','Pontevedra 蓬特维德拉','Pontevedra',42.4310,-8.6444,'gal','老城完全步行化，是西班牙城市改造的样板。',63);
+def('pontevedra','Pontevedra 蓬特维德拉','Pontevedra',42.4310,-8.6444,'gal','老城完全步行化，是西班牙城市改造的典型例子。',63);
 def('caldas','Caldas de Reis','Caldas de Reis',42.6047,-8.6425,'gal','温泉小镇，路边有免费的热泉洗脚池。',43);
 def('padron','Padrón 帕德龙','Padrón',42.7383,-8.6606,'gal','padrón 青椒的产地，十个里有一个是辣的。传说圣雅各的石船停靠于此。',25);
 
 /* — 原始之路（方案丙） — */
-def('oviedo','Oviedo 奥维耶多','Oviedo',43.3619,-5.8494,'nor','原始之路起点，最古老的朝圣路，9 世纪阿方索二世走的就是这条。老城的苹果酒馆值得留一晚。',321);
+def('oviedo','Oviedo 奥维耶多','Oviedo',43.3619,-5.8494,'nor','原始之路起点，最古老的朝圣路，9 世纪阿方索二世走的就是这条。老城有苹果酒馆，可以住一晚。',321);
 def('grado','Grado','Grado',43.3900,-6.0700,'nor','第一天终点，开始进入阿斯图里亚斯山区。',296);
 def('tineo','Tineo','Tineo',43.3350,-6.4147,'nor','山脊上的镇子，视野很好。',245);
 def('polaallande','Pola de Allande','Pola de Allande',43.2733,-6.6100,'nor','第二天要翻 Puerto del Palo，全程爬升最大的一段之一。',215);
-def('grandas','Grandas de Salime','Grandas de Salime',43.2211,-6.8747,'nor','水库边下坡再上坡，民族博物馆很值得看。',185);
+def('grandas','Grandas de Salime','Grandas de Salime',43.2211,-6.8747,'nor','水库边先下坡再上坡，民族博物馆值得看。',185);
 def('fonsagrada','A Fonsagrada','A Fonsagrada',43.1233,-7.0678,'nor','进入加利西亚，海拔 950 米，全年多雾。',155);
 def('lugo','Lugo 卢戈','Lugo',43.0097,-7.5567,'gal','完整的罗马城墙绕城一圈，可在墙顶走完 2 公里。离 Santiago 正好 100 公里出头，也是原始之路上拿证书的常见起点。',101);
 
 /* — 西班牙城市 — */
-def('madrid','Madrid 马德里','Madrid',40.4168,-3.7038,'cit','进出西班牙最方便的枢纽。普拉多、索菲亚王后、提森三馆步行可达，Retiro 公园就在旁边。');
-def('sansebastian','San Sebastián 圣塞瓦斯蒂安','Donostia',43.3183,-1.9812,'nor','老城 pintxos 一条街，贝壳湾在城中间。米其林星级密度全球前列。');
-def('bilbao','Bilbao 古根海姆','Guggenheim Bilbao',43.2687,-2.9340,'nor','盖里的钛金属外壳，周边旧城改造得很好。离圣塞瓦斯蒂安一小时。');
-def('toledo','Toledo 托莱多','Toledo',39.8628,-4.0273,'cit','马德里坐 AVE 半小时。基督教、伊斯兰、犹太三种建筑挤在一座山城里。当天来回够，住一晚更好。');
+def('madrid','Madrid 马德里','Madrid',40.4168,-3.7038,'cit','进出西班牙最方便的枢纽。普拉多、索菲亚王后、提森三座博物馆步行可达，Retiro 公园就在旁边。');
+def('sansebastian','San Sebastián 圣塞瓦斯蒂安','Donostia',43.3183,-1.9812,'nor','老城有一条 pintxos 街，贝壳湾在城中间。米其林星级餐厅密度在全球靠前。');
+def('bilbao','Bilbao 古根海姆','Guggenheim Bilbao',43.2687,-2.9340,'nor','盖里设计的钛金属外壳建筑。离圣塞瓦斯蒂安一小时。');
+def('toledo','Toledo 托莱多','Toledo',39.8628,-4.0273,'cit','马德里坐 AVE 半小时。基督教、伊斯兰、犹太三种建筑集中在一座山城里。当天往返够，住一晚更从容。');
 def('segovia','Segovia 塞戈维亚','Segovia',40.9481,-4.1184,'cit','罗马水道桥保存完整，没有用灰浆。烤乳猪是本地招牌。');
-def('granada','Granada 阿尔罕布拉宫','Alhambra',37.1761,-3.5881,'cit','必须提前很久在官网买票，现场基本买不到。纳斯里王宫是分时段入场，迟到不让进。');
-def('sevilla','Sevilla 塞维利亚','Sevilla',37.3886,-5.9823,'cit','大教堂、王宫、都市阳伞。5 月有春会 Feria de Abril 前后的余热，也是最好的季节。');
+def('granada','Granada 阿尔罕布拉宫','Alhambra',37.1761,-3.5881,'cit','必须提前很久在官网买票，现场基本买不到。纳斯里王宫分时段入场，迟到不让进。');
+def('sevilla','Sevilla 塞维利亚','Sevilla',37.3886,-5.9823,'cit','大教堂、王宫、都市阳伞。5 月是 Feria de Abril 春会前后，也是最合适的季节。');
 def('cordoba','Córdoba 大清真寺','Mezquita',37.8790,-4.7794,'cit','清真寺里盖了座教堂，两套建筑语言叠在一起。5 月庭院节 Patios 期间老城开放私人庭院。');
 def('barcelona','Barcelona 巴塞罗那','Barcelona',41.3851,2.1734,'cit','圣家堂和公园大道的高迪建筑都要提前订票。');
 
@@ -160,74 +160,74 @@ A:{k:'A',gr:'I',name:'最后 100 公里 + 西班牙北部',met:'16 天 · 5 天�
   dates:'2027.05.08 → 05.23', walkDays:5, walkKm:115,
   pitch:'Sarria 走到 Santiago，6 天 115 km，达 Compostela 证书门槛。'
     +'余下时间：圣塞瓦斯蒂安/毕尔巴鄂/马德里。\n\n'
-    +'首次徒步朝圣最常见选择：路标密集，庇护所多，同行者多。'
-    +'无需数月体能储备，无需月假。',
-  cons:'Sarria 后为全程人流最密段，5 月尤甚。庇护所提前订/每日早到。'
-    +'\n\n仅走末 100 km 会错过 Meseta/比利牛斯，多数人认为那才是法国之路核心。',
+    +'首次徒步朝圣最常见的选择：路标密集，庇护所多，同行的人多。'
+    +'不需要数月的体能准备，也不需要请一个月假。',
+  cons:'Sarria 之后是全程人流最密的一段，5 月尤其多。庇护所要提前订，或每天早到。'
+    +'\n\n只走最后 100 km 会错过 Meseta 和比利牛斯，多数人认为那才是法国之路的核心。',
   budget:{air:3000,walkStay:900,cityStay:1600,food:1500,transfer:250,train:500,tickets:300,misc:400},
   days:[
    {d:'05.08',w:'六',t:'温哥华 → 马德里',r:'cit',stay:'机上',km:null,note:'多数航班在多伦多或欧洲枢纽转一次，全程 14–17 小时。',stops:[{t:'—',p:null,n:'YVR 出发',s:''}]},
-   {d:'05.09',w:'日',t:'抵马德里',r:'cit',stay:'马德里',km:null,note:'时差 9 小时。今天不安排硬行程。',stops:[
+   {d:'05.09',w:'日',t:'抵马德里',r:'cit',stay:'马德里',km:null,note:'时差 9 小时。今天不安排硬性行程。',stops:[
      {t:'下午',p:'mad',n:'入境',s:'机场地铁直达市区'},{t:'晚',p:'madrid',n:'走一圈 Retiro 公园',s:'撑到当地时间 22 点再睡'}]},
-   {d:'05.10',w:'一',t:'马德里 · 普拉多',r:'cit',stay:'马德里',km:null,note:'博物馆日。也可换成托莱多当天来回。',stops:[
+   {d:'05.10',w:'一',t:'马德里 · 普拉多',r:'cit',stay:'马德里',km:null,note:'博物馆日。也可换成托莱多当天往返。',stops:[
      {t:'10:00',p:'madrid',n:'普拉多美术馆',s:'提前网上买票避开排队'},{t:'—',p:'toledo',n:'托莱多（可选）',s:'AVE 半小时'}]},
-   {d:'05.11',w:'二',t:'马德里 → Sarria',r:'cam',stay:'Sarria',km:111.5,note:'火车到 Sarria 需换乘，也可飞 SCQ 再坐巴士。到了先领 credencial、买 credencial 章。',stops:[
+   {d:'05.11',w:'二',t:'马德里 → Sarria',r:'cam',stay:'Sarria',km:111.5,note:'火车到 Sarria 要换乘，也可飞 SCQ 再坐巴士。到了先领 credencial 并盖章。',stops:[
      {t:'—',p:'sarria',n:'Sarria 入住',s:'镇上装备店齐全，缺什么在这里补'}]},
-   {d:'05.12',w:'三',t:'Sarria → Portomarín',r:'cam',stay:'Portomarín',km:89,walk:22.5,note:'第一天 22.5 公里，前半段爬升，橡树林和石墙小路。进镇前那段长台阶在一天结束时相当难受。',stops:[
+   {d:'05.12',w:'三',t:'Sarria → Portomarín',r:'cam',stay:'Portomarín',km:89,walk:22.5,note:'第一天 22.5 公里，前半段爬升，走橡树林和石墙小路。进镇前那段长台阶在一天结束时很费力。',stops:[
      {t:'07:00',p:'sarria',n:'出发',s:'从这里开始每天盖两个章'},
      {t:'14:00',p:'portomarin',n:'Portomarín',s:'水库淹村后整体搬上山的镇子'}]},
    {d:'05.13',w:'四',t:'Portomarín → Palas de Rei',r:'cam',stay:'Palas de Rei',km:64,walk:25,note:'25 公里，全程缓上，中段有一长段沿公路。今天最长。',stops:[
      {t:'07:00',p:'portomarin',n:'出发',s:'出镇过桥直接上坡'},{t:'15:00',p:'palas',n:'Palas de Rei',s:''}]},
-   {d:'05.14',w:'五',t:'Palas de Rei → Arzúa',r:'cam',stay:'Arzúa',km:39,walk:29,note:'29 公里，全程最长的一天。想拆成两段就在 Melide 停，多一晚。',stops:[
+   {d:'05.14',w:'五',t:'Palas de Rei → Arzúa',r:'cam',stay:'Arzúa',km:39,walk:29,note:'29 公里，全程最长的一天。想拆成两段就在 Melide 停，多住一晚。',stops:[
      {t:'07:00',p:'palas',n:'出发',s:''},
      {t:'12:00',p:'melide',n:'Melide 吃章鱼',s:'原始之路在这里汇入，人明显变多'},
      {t:'16:30',p:'arzua',n:'Arzúa',s:'本地奶酪是 DOP 认证'}]},
-   {d:'05.15',w:'六',t:'Arzúa → O Pedrouzo',r:'cam',stay:'O Pedrouzo',km:19,walk:19,note:'19 公里，桉树林居多，相对轻松。今天早点睡，明天要赶中午的弥撒。',stops:[
+   {d:'05.15',w:'六',t:'Arzúa → O Pedrouzo',r:'cam',stay:'O Pedrouzo',km:19,walk:19,note:'19 公里，桉树林居多，相对轻松。今天早点休息，明天要赶中午的弥撒。',stops:[
      {t:'07:30',p:'arzua',n:'出发',s:''},{t:'14:00',p:'pedrouzo',n:'O Pedrouzo',s:'离机场很近，飞机低空掠过'}]},
-   {d:'05.16',w:'日',t:'走进 Santiago',r:'gal',stay:'Santiago',km:0,walk:19,note:'最后 19 公里。多数人 5 点半就出发，为了赶 12 点的朝圣者弥撒。',stops:[
+   {d:'05.16',w:'日',t:'走进 Santiago',r:'gal',stay:'Santiago',km:0,walk:19,note:'最后 19 公里。多数人 5 点半就出发，赶 12 点的朝圣者弥撒。',stops:[
      {t:'05:30',p:'pedrouzo',n:'摸黑出发',s:'带头灯，前两小时天没亮'},
      {t:'10:00',p:'gozo',n:'Monte do Gozo',s:'第一次看到大教堂尖顶'},
      {t:'11:30',p:'santiago',n:'Praza do Obradoiro',s:'12 点朝圣者弥撒'},
      {t:'15:00',p:'pilgrimoffice',n:'换 Compostela 证书',s:'带 credencial，旺季排队超过一小时'}]},
-   {d:'05.17',w:'一',t:'Finisterre 世界尽头',r:'gal',stay:'Santiago',km:null,note:'巴士来回约 1.5 小时单程。体力好可再走三天到这里。',stops:[
-     {t:'09:00',p:'finisterre',n:'Cabo Fisterra',s:'海角看日落，传统是烧掉一件旧衣服'},
+   {d:'05.17',w:'一',t:'Finisterre 世界尽头',r:'gal',stay:'Santiago',km:null,note:'巴士单程约 1.5 小时。体力好的话可以再走三天到这里。',stops:[
+     {t:'09:00',p:'finisterre',n:'Cabo Fisterra',s:'可在海角看日落，传统是烧掉一件旧衣服'},
      {t:'—',p:'muxia',n:'Muxía（可选）',s:'比 Finisterre 安静'}]},
    {d:'05.18',w:'二',t:'Santiago → 毕尔巴鄂',r:'nor',stay:'毕尔巴鄂',km:null,note:'飞行约 1 小时 20 分，陆路很远，飞。',stops:[
      {t:'—',p:'scq',n:'SCQ 出发',s:''},{t:'下午',p:'bilbao',n:'古根海姆',s:'盖里的钛金属外壳'}]},
-   {d:'05.19',w:'三',t:'圣塞瓦斯蒂安',r:'nor',stay:'圣塞瓦斯蒂安',km:null,note:'离毕尔巴鄂一小时。晚上老城 pintxos 一家一家吃过去。',stops:[
+   {d:'05.19',w:'三',t:'圣塞瓦斯蒂安',r:'nor',stay:'圣塞瓦斯蒂安',km:null,note:'离毕尔巴鄂一小时。晚上在老城一家一家吃 pintxos。',stops:[
      {t:'—',p:'sansebastian',n:'贝壳湾 + 老城',s:'pintxos 站着吃，一家一两样就换下家'}]},
-   {d:'05.20',w:'四',t:'圣塞瓦斯蒂安 慢一天',r:'nor',stay:'圣塞瓦斯蒂安',km:null,note:'不安排硬行程。乌尔古尔山看全湾，或去附近的 Getaria。',stops:[
+   {d:'05.20',w:'四',t:'圣塞瓦斯蒂安 慢一天',r:'nor',stay:'圣塞瓦斯蒂安',km:null,note:'不安排硬性行程。可去乌尔古尔山看全湾，或去附近的 Getaria。',stops:[
      {t:'—',p:'sansebastian',n:'随意',s:''}]},
    {d:'05.21',w:'五',t:'回马德里',r:'cit',stay:'马德里',km:null,note:'火车约 5 小时，飞机 1 小时。',stops:[
      {t:'—',p:'madrid',n:'马德里',s:'最后采买'}]},
    {d:'05.22',w:'六',t:'马德里 或 塞戈维亚',r:'cit',stay:'马德里',km:null,note:'缓冲日。',stops:[
      {t:'—',p:'segovia',n:'塞戈维亚（可选）',s:'罗马水道桥，AVE 半小时'}]},
-   {d:'05.23',w:'日',t:'马德里 → 温哥华',r:'cit',stay:'—',km:null,note:'',stops:[{t:'—',p:'mad',n:'MAD',s:'退税柜台排队久，提前三小时'}]}
+   {d:'05.23',w:'日',t:'马德里 → 温哥华',r:'cit',stay:'—',km:null,note:'',stops:[{t:'—',p:'mad',n:'MAD',s:'退税柜台排队时间长，提前三小时到'}]}
   ]},
 
 B:{k:'B',gr:'II',name:'葡萄牙之路 · Porto 出发',met:'18 天 · 11 天步行',hex:'#C0532F',tag:'最平缓',
   dates:'2027.05.06 → 05.23', walkDays:11, walkKm:263,
-  pitch:'Porto 出发，240 km 全程，12 天。主线中地形最平缓，'
-    +'气候优于内陆。海岸变体沿大西洋，长段木栈道。\n\n'
-    +'适合首次徒步+需完整路线体验+不想爬山者。',
-  cons:'名义跨 2 国，实际以乡村公路+小镇为主，'
-    +'观赏性不及原始之路/北方之路。\n\nTui 后并入主流人群，末 100 km 同样拥挤。',
+  pitch:'Porto 出发，240 km 全程，12 天。主线里地形最平缓，'
+    +'气候比内陆好。海岸线版本沿大西洋，有很长的木栈道。\n\n'
+    +'适合第一次徒步、想走完整路线、不想爬山的人。',
+  cons:'名义上跨 2 个国家，实际以乡村公路和小镇为主，'
+    +'景色不如原始之路和北方之路。\n\nTui 之后并入主流人群，最后 100 km 同样拥挤。',
   budget:{air:3100,walkStay:1500,cityStay:900,food:1700,transfer:400,train:350,tickets:250,misc:400},
   days:[
    {d:'05.06',w:'四',t:'温哥华 → Porto',r:'por',stay:'机上',km:null,note:'',stops:[{t:'—',p:null,n:'YVR 出发',s:''}]},
    {d:'05.07',w:'五',t:'抵 Porto',r:'por',stay:'Porto',km:240,note:'时差第一天不走路。',stops:[{t:'—',p:'opo',n:'OPO 入境',s:'地铁直达市区'},{t:'—',p:'porto',n:'大教堂领第一个章',s:''}]},
-   {d:'05.08',w:'六',t:'Porto 一天',r:'por',stay:'Porto',km:240,note:'喝波特酒，走杜罗河两岸。明天开始连走 12 天。',stops:[{t:'—',p:'porto',n:'Ribeira + 酒窖',s:''}]},
+   {d:'05.08',w:'六',t:'Porto 一天',r:'por',stay:'Porto',km:240,note:'喝波特酒，沿杜罗河两岸走。明天开始连续走 12 天。',stops:[{t:'—',p:'porto',n:'Ribeira + 酒窖',s:''}]},
    {d:'05.09',w:'日',t:'Porto → Vila do Conde',r:'por',stay:'Vila do Conde',km:215,walk:26,note:'海岸线变体第一天，长木栈道贴着大西洋。',stops:[{t:'07:00',p:'porto',n:'出发',s:''},{t:'15:00',p:'viladoconde',n:'Vila do Conde',s:''}]},
    {d:'05.10',w:'一',t:'沿海北上',r:'por',stay:'Esposende',km:190,walk:25,note:'',stops:[{t:'—',p:'viladoconde',n:'出发',s:''}]},
    {d:'05.11',w:'二',t:'转内陆 → Barcelos',r:'por',stay:'Barcelos',km:185,walk:24,note:'',stops:[{t:'—',p:'barcelos',n:'Barcelos',s:'周四有大集市'}]},
    {d:'05.12',w:'三',t:'Barcelos → Ponte de Lima',r:'por',stay:'Ponte de Lima',km:150,walk:33,note:'今天最长，33 公里。可拆成两段。',stops:[{t:'—',p:'pontedelima',n:'罗马桥',s:''}]},
-   {d:'05.13',w:'四',t:'翻 Labruja 山口',r:'por',stay:'Rubiães',km:132,walk:19,note:'葡萄牙段唯一一段像样的爬升。',stops:[{t:'—',p:null,n:'Alto da Portela Grande',s:'海拔 405 米'}]},
+   {d:'05.13',w:'四',t:'翻 Labruja 山口',r:'por',stay:'Rubiães',km:132,walk:19,note:'葡萄牙段唯一一段较大的爬升。',stops:[{t:'—',p:null,n:'Alto da Portela Grande',s:'海拔 405 米'}]},
    {d:'05.14',w:'五',t:'过境进西班牙 → Tui',r:'por',stay:'Tui',km:115,walk:20,note:'跨米尼奥河，从这里到 Santiago 正好 115 公里。',stops:[{t:'—',p:'tui',n:'Tui',s:'从这里开始每天盖两章'}]},
    {d:'05.15',w:'六',t:'Tui → Redondela',r:'gal',stay:'Redondela',km:85,walk:31,note:'31 公里，今天很长。',stops:[{t:'—',p:'redondela',n:'Redondela',s:'海岸线在这里并入'}]},
    {d:'05.16',w:'日',t:'→ Pontevedra',r:'gal',stay:'Pontevedra',km:63,walk:20,note:'',stops:[{t:'—',p:'pontevedra',n:'Pontevedra',s:'老城完全步行化'}]},
    {d:'05.17',w:'一',t:'→ Caldas de Reis',r:'gal',stay:'Caldas de Reis',km:43,walk:21,note:'',stops:[{t:'—',p:'caldas',n:'Caldas de Reis',s:'路边有免费热泉洗脚池'}]},
    {d:'05.18',w:'二',t:'→ Padrón',r:'gal',stay:'Padrón',km:25,walk:19,note:'',stops:[{t:'—',p:'padron',n:'Padrón',s:'青椒产地，十个里一个辣'}]},
-   {d:'05.19',w:'三',t:'走进 Santiago',r:'gal',stay:'Santiago',km:0,walk:25,note:'最后 25 公里。早出发赶中午弥撒。',stops:[
+   {d:'05.19',w:'三',t:'走进 Santiago',r:'gal',stay:'Santiago',km:0,walk:25,note:'最后 25 公里。早出发，赶中午的弥撒。',stops:[
      {t:'06:00',p:'padron',n:'出发',s:''},{t:'11:30',p:'santiago',n:'大教堂',s:''},{t:'15:00',p:'pilgrimoffice',n:'换证书',s:''}]},
    {d:'05.20',w:'四',t:'Finisterre',r:'gal',stay:'Santiago',km:null,note:'',stops:[{t:'—',p:'finisterre',n:'Cabo Fisterra',s:''}]},
    {d:'05.21',w:'五',t:'Santiago 休整',r:'gal',stay:'Santiago',km:null,note:'',stops:[{t:'—',p:'santiago',n:'老城',s:''}]},
@@ -239,9 +239,9 @@ C:{k:'C',gr:'III',name:'原始之路 · Oviedo 出发',met:'20 天 · 13 天步�
   dates:'2027.05.04 → 05.23', walkDays:13, walkKm:315,
   pitch:'321 km，14 天，最古老路线，9 世纪阿方索二世原路。'
     +'翻越坎塔布连山脉，服务点少，同行者少。\n\n'
-    +'汇入法国之路（Melide）前，多数日仅遇十余人。',
-  cons:'难度显著高于其他三条：连续爬升+山区服务稀疏+天气多变，'
-    +'需数月体能储备。\n\n阿斯图里亚斯+加利西亚山区全年多雨雾，'
+    +'汇入法国之路（Melide）前，多数日子只会遇到十几个人。',
+  cons:'难度明显高于其他三条：连续爬升、山区服务点稀少、天气多变，'
+    +'需要数月的体能准备。\n\n阿斯图里亚斯和加利西亚山区全年多雨雾，'
     +'5 月降雨概率不低。',
   budget:{air:3000,walkStay:1600,cityStay:700,food:1700,transfer:300,train:400,tickets:200,misc:450},
   days:[
@@ -271,29 +271,29 @@ C:{k:'C',gr:'III',name:'原始之路 · Oviedo 出发',met:'20 天 · 13 天步�
 D:{k:'D',gr:'IV',name:'法国之路全程 · SJPdP 出发',met:'38 天 · 33 天步行 · 节点示意',hex:'#8C4A6B',tag:'全程',
   dates:'2027.05.01 → 06.07', walkDays:33, walkKm:780,
   pitch:'780 km，33 步行日，法国边境至 Santiago。'
-    +'即多数人所指「朝圣之路」标准全程。\n\n'
+    +'即多数人所说的「朝圣之路」标准全程。\n\n'
     +'涵盖比利牛斯/里奥哈酒区/Meseta 高原/铁十字/加利西亚山区，'
     +'各段地貌+节奏均不同。\n\n注：行程页仅列关键节点，非逐日拆解。全程需按体力重新分段 33 天。',
-  cons:'须连续休假 ≥5 周，提前数月体能训练。'
-    +'\n\n首日翻比利牛斯为全程最难段，天气不佳须改走 Valcarlos 低线。'
+  cons:'要连续休假至少 5 周，提前几个月做体能训练。'
+    +'\n\n首日翻比利牛斯是全程最难的一段，天气不好要改走 Valcarlos 低线。'
     +'Meseta 段约 200 km 平坦麦田，遮荫极少，多数人此段搭车跳过。',
   budget:{air:3000,walkStay:3600,cityStay:400,food:3800,transfer:900,train:400,tickets:250,misc:700},
   days:[
    {d:'05.01',w:'六',t:'温哥华 → 巴黎 → SJPdP',r:'cam',stay:'机上',km:780,note:'到 Saint-Jean 通常要转两次，留足时间。',stops:[{t:'—',p:null,n:'YVR 出发',s:''}]},
    {d:'05.02',w:'日',t:'抵 SJPdP',r:'cam',stay:'SJPdP',km:780,note:'朝圣者办公室领 credencial 和第一个章，顺便问明天的天气和路线。',stops:[
      {t:'—',p:'sjpdp',n:'Saint-Jean-Pied-de-Port',s:''}]},
-   {d:'05.03',w:'一',t:'翻比利牛斯 → Roncesvalles',r:'cam',stay:'Roncesvalles',km:765,walk:25,note:'全程最难的一天，爬升 1250 米。天气不好走 Valcarlos 低线，不要逞强。',stops:[
+   {d:'05.03',w:'一',t:'翻比利牛斯 → Roncesvalles',r:'cam',stay:'Roncesvalles',km:765,walk:25,note:'全程最难的一天，爬升 1250 米。天气不好走 Valcarlos 低线，不要勉强。',stops:[
      {t:'06:30',p:'sjpdp',n:'出发',s:''},{t:'16:00',p:'roncesvalles',n:'Roncesvalles',s:'修道院庇护所 180 张床'}]},
    {d:'05.06',w:'四',t:'→ Pamplona',r:'cam',stay:'Pamplona',km:705,walk:22,note:'第 4 天。老城和 pintxos 值得多留半天。',stops:[{t:'—',p:'pamplona',n:'Pamplona',s:''}]},
    {d:'05.10',w:'一',t:'→ Logroño',r:'cam',stay:'Logroño',km:610,walk:20,note:'第 8 天，进入里奥哈酒区。',stops:[{t:'—',p:'logrono',n:'Logroño',s:'Calle Laurel 一条街全是小酒馆'}]},
    {d:'05.15',w:'六',t:'→ Burgos',r:'cam',stay:'Burgos',km:490,walk:21,note:'第 13 天。大教堂是世界遗产。之后进入 Meseta。',stops:[{t:'—',p:'burgos',n:'Burgos 大教堂',s:''}]},
    {d:'05.19',w:'三',t:'Meseta 中段',r:'cam',stay:'Carrión',km:430,walk:26,note:'第 17 天。约 200 公里平坦麦田，遮荫极少，天亮前出发是常态。',stops:[{t:'—',p:'meseta',n:'Meseta',s:'夏季可超 40°C，5 月还好'}]},
-   {d:'05.24',w:'一',t:'→ León',r:'cam',stay:'León',km:310,walk:24,note:'第 22 天。大教堂彩窗是全西班牙最好的之一。在这里休一天。',stops:[{t:'—',p:'leon',n:'León 大教堂',s:''}]},
+   {d:'05.24',w:'一',t:'→ León',r:'cam',stay:'León',km:310,walk:24,note:'第 22 天。大教堂的彩窗在西班牙很有名。在这里休息一天。',stops:[{t:'—',p:'leon',n:'León 大教堂',s:''}]},
    {d:'05.27',w:'四',t:'→ Astorga',r:'cam',stay:'Astorga',km:260,walk:22,note:'第 25 天。高迪设计的主教宫。',stops:[{t:'—',p:'astorga',n:'Astorga',s:'cocido maragato 反着上菜'}]},
    {d:'05.29',w:'六',t:'Cruz de Ferro → Ponferrada',r:'cam',stay:'Ponferrada',km:210,walk:27,note:'第 27 天。全程最高点 1505 米，传统是从家里带一块石头放在杆下。',stops:[
      {t:'—',p:'cruzferro',n:'Cruz de Ferro',s:'1505 米'},{t:'—',p:'ponferrada',n:'圣殿骑士城堡',s:''}]},
    {d:'06.01',w:'二',t:'→ O Cebreiro',r:'cam',stay:'O Cebreiro',km:155,walk:28,note:'第 30 天。进入加利西亚，海拔 1300 米，上坡很陡。',stops:[{t:'—',p:'cebreiro',n:'O Cebreiro',s:'圆形石屋 pallozas'}]},
-   {d:'06.03',w:'四',t:'→ Sarria',r:'cam',stay:'Sarria',km:111.5,walk:24,note:'第 32 天。从明天开始人流骤增，且要每天盖两章。',stops:[{t:'—',p:'sarria',n:'Sarria',s:''}]},
+   {d:'06.03',w:'四',t:'→ Sarria',r:'cam',stay:'Sarria',km:111.5,walk:24,note:'第 32 天。从明天开始人流骤增，且要每天盖两个章。',stops:[{t:'—',p:'sarria',n:'Sarria',s:''}]},
    {d:'06.06',w:'日',t:'走进 Santiago',r:'gal',stay:'Santiago',km:0,walk:19,note:'第 35 天，终点。',stops:[
      {t:'—',p:'gozo',n:'Monte do Gozo',s:''},{t:'11:30',p:'santiago',n:'大教堂',s:''},{t:'15:00',p:'pilgrimoffice',n:'换证书',s:''}]},
    {d:'06.07',w:'一',t:'Santiago → 回程',r:'gal',stay:'—',km:null,note:'时间够再走三天到 Finisterre。',stops:[{t:'—',p:'finisterre',n:'Finisterre（可选）',s:''}]}
@@ -306,7 +306,7 @@ const BROWS=[
  {k:'walkStay',n:'路上住宿', s:'庇护所 8–25 欧 / 乡村旅馆 50–90 欧', max:6000},
  {k:'cityStay',n:'城市住宿', s:'马德里 / 圣塞瓦斯蒂安 / Santiago', max:3500},
  {k:'food',n:'餐饮', s:'朝圣者套餐 12–15 欧含酒；pintxos 另算', max:5000},
- {k:'transfer',n:'行李托运', s:'每件每段 5–7 欧，肩膀不好就花这笔', max:1200},
+ {k:'transfer',n:'行李托运', s:'每件每段 5–7 欧，肩膀不舒服可以选', max:1200},
  {k:'train',n:'境内交通', s:'AVE / 区域火车 / 国内航段 / 巴士', max:1500},
  {k:'tickets',n:'门票', s:'普拉多 / 古根海姆 / 阿尔罕布拉宫', max:900},
  {k:'misc',n:'装备 · 保险 · 杂项', s:'credencial 2 欧 · 证书免费', max:1500}
@@ -315,14 +315,14 @@ const BROWS=[
 /* ══════ 行前待办 ══════ */
 const TODOS=[
  {id:'p1',n:'办朝圣者证书 credencial',s:'出发前在朝圣者协会或线上申请，也可到 Sarria / Porto / Oviedo 当地领。约 2 欧',due:'现在',v:'ABCD'},
- {id:'p2',n:'订机票',s:'温哥华没有直飞，多在多伦多或欧洲枢纽转一次。5 月是欧洲旺季前，早订差价明显',due:'现在',v:'ABCD'},
- {id:'p3',n:'订最后 100 公里的住宿',s:'Sarria 之后 5 月挤。公立庇护所不接受预订，私立和旅馆要提前订',due:'现在',v:'ABCD'},
- {id:'p4',n:'买徒步鞋并提前磨合',s:'至少提前两个月开始穿，累计走够 100 公里再上路。新鞋直接上阵必起水泡',due:'现在',v:'ABCD'},
- {id:'p5',n:'体能准备',s:'提前 2–3 个月，每天 15–20 公里，背上实际要背的包。目标 6–8 公斤，约体重的 10%',due:'出发前 2 月',v:'ABCD'},
- {id:'p6',n:'预约阿尔罕布拉宫 / 普拉多',s:'阿尔罕布拉宫必须提前很久官网买票，分时段入场，迟到不让进',due:'出发前 2 月',v:'AB'},
- {id:'p7',n:'确认比利牛斯路线',s:'第一天走 Napoleón 高线或 Valcarlos 低线，看当天天气。SJPdP 朝圣者办公室会给',due:'出发前',v:'D'},
+ {id:'p2',n:'订机票',s:'温哥华没有直飞，多在多伦多或欧洲枢纽转一次。5 月在欧洲旺季前，早订价差明显',due:'现在',v:'ABCD'},
+ {id:'p3',n:'订最后 100 公里的住宿',s:'Sarria 之后 5 月人多。公立庇护所不接受预订，私立和旅馆要提前订',due:'现在',v:'ABCD'},
+ {id:'p4',n:'买徒步鞋并提前磨合',s:'至少提前两个月开始穿，累计走够 100 公里再上路。新鞋直接上路容易起水泡',due:'现在',v:'ABCD'},
+ {id:'p5',n:'体能准备',s:'提前 2–3 个月，每天走 15–20 公里，背上实际要背的包。目标 6–8 公斤，约体重的 10%',due:'出发前 2 月',v:'ABCD'},
+ {id:'p6',n:'预约阿尔罕布拉宫 / 普拉多',s:'阿尔罕布拉宫要提前很久在官网买票，分时段入场，迟到不让进',due:'出发前 2 月',v:'AB'},
+ {id:'p7',n:'确认比利牛斯路线',s:'第一天走 Napoleón 高线或 Valcarlos 低线，看当天天气。SJPdP 朝圣者办公室会告知',due:'出发前',v:'D'},
  {id:'p8',n:'旅行保险（含徒步）',s:'确认覆盖徒步和意外撤离。部分保单把多日徒步列为除外责任',due:'出发前',v:'ABCD'},
- {id:'p9',n:'打包清单 6–8 公斤',s:'两套速干衣、雨衣、凉鞋、水泡贴、护膝、登山杖。多带的每一克都会在第三天变成后悔',due:'出发前',v:'ABCD'},
+ {id:'p9',n:'打包清单 6–8 公斤',s:'两套速干衣、雨衣、凉鞋、水泡贴、护膝、登山杖。多带的每一克，第三天都会觉得重',due:'出发前',v:'ABCD'},
  {id:'p10',n:'下载离线地图 + 庇护所清单',s:'山区有大段没信号。原始之路尤其明显',due:'出发前',v:'ABCD'},
  {id:'p11',n:'带足现金',s:'小村庄的庇护所和酒吧很多只收现金，ATM 稀少',due:'出发前',v:'ABCD'}
 ];
@@ -334,17 +334,17 @@ const TODOS=[
 const STAY={
  '马德里':{area:'Madrid centro',
   opts:[{n:'太阳门 / 格兰大道一带',tier:'€€',pick:true,q:'Madrid Sol Gran Via hotel',
-    why:'地铁枢纽，走路能到普拉多和 Retiro。倒时差阶段离地铁近最要紧。'},
+    why:'地铁枢纽，走路能到普拉多和 Retiro。倒时差阶段，离地铁近最重要。'},
    {n:'阿托查车站附近',tier:'€',q:'Madrid Atocha hotel',
-    why:'去托莱多、塞戈维亚的 AVE 从这里发车，但晚上那一带安静。'}],
-  food:[{n:'圣米格尔市场',jp:'Mercado de San Miguel',why:'游客多但方便，落地当晚吃一圈 tapas。'},
+    why:'去托莱多、塞戈维亚的 AVE 从这里发车，但晚上这一带比较安静。'}],
+  food:[{n:'圣米格尔市场',jp:'Mercado de San Miguel',why:'游客多但方便，落地当晚可以去吃一圈 tapas。'},
    {n:'Casa Lucio 或同类老店',jp:'huevos rotos Madrid',why:'碎蛋配薯条火腿，马德里的家常做法。'}]},
 
  'Sarria':{area:'Sarria, Lugo',
   opts:[{n:'私立庇护所（albergue privado）',tier:'€',pick:true,q:'Sarria albergue',
     why:'6–8 张床的房间，15–25 欧。最后 100 公里起点，5 月要提前订。'},
    {n:'镇上的小旅馆 pensión',tier:'€€',q:'Sarria pension hotel',
-    why:'第一晚想睡好就选这个。40–70 欧，有独立卫浴。'}],
+    why:'第一晚想睡好可以选这个。40–70 欧，有独立卫浴。'}],
   food:[{n:'朝圣者套餐 menú del peregrino',jp:'menu del peregrino Sarria',why:'12–15 欧，三道菜含酒和面包。几乎每家酒吧都有。'}]},
 
  'Portomarín':{area:'Portomarín, Lugo',
@@ -359,22 +359,22 @@ const STAY={
   food:[{n:'朝圣者套餐',jp:'menu peregrino Palas de Rei',why:''}]},
 
  'Arzúa':{area:'Arzúa, A Coruña',
-  opts:[{n:'庇护所或小旅馆',tier:'€',pick:true,q:'Arzua albergue',why:'走完 29 公里的一天，离主街近最好。'}],
+  opts:[{n:'庇护所或小旅馆',tier:'€',pick:true,q:'Arzua albergue',why:'走完 29 公里的一天，离主街近一点更方便。'}],
   food:[{n:'Arzúa 奶酪',jp:'queixo Arzua',why:'DOP 认证的本地奶酪，配蜂蜜。'}]},
 
  'O Pedrouzo':{area:'O Pedrouzo (Arca)',
   opts:[{n:'庇护所（早睡型）',tier:'€',pick:true,q:'O Pedrouzo albergue',
-    why:'明天要 5 点半出发赶中午弥撒，选安静的。离机场近，飞机低空掠过。'}],
+    why:'明天要 5 点半出发赶中午弥撒，选安静的。离机场近，飞机会低空飞过。'}],
   food:[{n:'主街上的 bar',jp:'O Pedrouzo restaurante',why:'选择不多，早点吃早点睡。'}]},
 
  'Santiago':{area:'Santiago de Compostela, casco antiguo',
   opts:[{n:'老城内步行可达大教堂',tier:'€€',pick:true,q:'Santiago de Compostela old town hotel',
-    why:'走完全程的犒赏。老城石板路多，行李箱不好拖，但值得。'},
+    why:'走完全程后可以住好一点。老城石板路多，行李箱不好拖。'},
    {n:'Hostal dos Reis Católicos',tier:'€€€',q:'Parador Santiago de Compostela',
-    why:'广场边的古建筑改的 Parador，据说每天给前十名朝圣者免费餐。想住要很早订。'},
+    why:'广场边古建筑改的 Parador，据说每天给前十名朝圣者提供免费餐。想住要很早订。'},
    {n:'老城外的现代酒店',tier:'€',q:'Santiago de Compostela hotel',
     why:'便宜，有电梯，走去大教堂十五分钟。'}],
-  food:[{n:'Mercado de Abastos',jp:'Mercado de Abastos Santiago',why:'买海鲜可让隔壁摊现做。上午去。'},
+  food:[{n:'Mercado de Abastos',jp:'Mercado de Abastos Santiago',why:'买海鲜可以请隔壁摊现做。上午去。'},
    {n:'炖章鱼 + Albariño',jp:'pulpo a feira Santiago',why:'加利西亚组合。'},
    {n:'Tarta de Santiago',jp:'tarta de Santiago',why:'杏仁蛋糕，上面印圣雅各十字。'}]},
 
@@ -390,17 +390,17 @@ const STAY={
 
  'Pontevedra':{area:'Pontevedra casco vello',
   opts:[{n:'老城内',tier:'€€',pick:true,q:'Pontevedra old town hotel',
-    why:'老城完全步行化，晚上很舒服。'}],
+    why:'老城完全步行化，晚上可以散步。'}],
   food:[{n:'老城 tapas',jp:'tapas Pontevedra casco vello',why:'广场周围一圈都是。'}]},
 
  'Oviedo':{area:'Oviedo casco antiguo',
   opts:[{n:'老城内',tier:'€€',pick:true,q:'Oviedo old town hotel',
     why:'原始之路起点，大教堂领章。苹果酒馆 sidrería 都在这一带。'}],
-  food:[{n:'Sidrería 苹果酒馆',jp:'sidreria Oviedo',why:'倒酒有专门手法，让服务员倒。配 cachopo。'}]},
+  food:[{n:'Sidrería 苹果酒馆',jp:'sidreria Oviedo',why:'倒酒有专门手法，请服务员倒。配 cachopo。'}]},
 
  'Lugo':{area:'Lugo, dentro de la muralla',
   opts:[{n:'罗马城墙内',tier:'€€',pick:true,q:'Lugo muralla hotel',
-    why:'可在墙顶走完 2 公里。走完 30 公里的一天，住城里最省事。'}],
+    why:'可在墙顶走完 2 公里。走完 30 公里的一天，住城里最方便。'}],
   food:[{n:'Lugo 的 tapas（点酒送小食）',jp:'tapas Lugo',why:'卢戈的传统是点一杯酒白送一份 tapa。'}]},
 
  '毕尔巴鄂':{area:'Bilbao, Casco Viejo / Abandoibarra',
@@ -409,9 +409,9 @@ const STAY={
 
  '圣塞瓦斯蒂安':{area:'Donostia, Parte Vieja',
   opts:[{n:'老城 Parte Vieja 边缘',tier:'€€€',pick:true,q:'San Sebastian Parte Vieja hotel',
-    why:'晚上 pintxos 一家家吃过去，住在里面最好。旺季价格很高。'},
+    why:'晚上 pintxos 一家家吃过去，住在老城里最方便。旺季价格很高。'},
    {n:'Gros 区（河对岸）',tier:'€€',q:'San Sebastian Gros hotel',
-    why:'便宜一些，走过桥十分钟，本地感更强。'}],
+    why:'便宜一些，走过桥 10 分钟，更本地。'}],
   food:[{n:'Parte Vieja pintxos 巡回',jp:'pintxos Parte Vieja San Sebastian',why:'一家一两样就换下家，站着吃。'},
    {n:'La Viña 的芝士蛋糕',jp:'La Viña San Sebastian tarta de queso',why:'巴斯克焦香芝士蛋糕的原版。'}]},
 

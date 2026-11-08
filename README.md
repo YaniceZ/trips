@@ -60,3 +60,10 @@ python -m http.server 8000
 
 代码以 MIT 协议开放。`shared/vendor/leaflet` 是 [Leaflet](https://leafletjs.com)（BSD-2-Clause）。
 地图数据 © OpenStreetMap 贡献者，地形图 © OpenTopoMap，天气数据来自 Open-Meteo（CC BY 4.0）。
+
+## 新增功能
+
+- **中 / EN 切换**：页头右上角按钮。界面文字和地点名自动换成英文；正文英文放在各行程的 en.js（见 	emplate/en.js），没写到的句子保持中文。
+- **查价**：「出行」页签里生成携程、Trip.com、Expedia、Google Flights、Booking 等站点的搜索链接，并可记录自己查到的价格。页面是静态的，不会自动抓取价格。
+- **极光行程**：urora-2027/，准备页显示 NOAA 的 Kp 预报和 Open-Meteo 的夜间云量。
+
