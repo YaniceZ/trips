@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-trip="kansai">
 <head>
 <meta charset="utf-8">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#0C121C">
+<meta name="theme-color" content="#F4F0E6">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-<title>関西・四国・熊野 — 2026.09.17 → 10.06</title>
+<title>関西・四国・熊野 — 2027.09.17 → 10.06</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,7 +51,7 @@ header{
 }
 .brand h1 em{font-style:normal;color:var(--shu)}
 .brand .sub{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--faint);
+  font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:var(--faint);
   text-transform:uppercase;margin-top:4px;display:flex;gap:10px;flex-wrap:wrap;align-items:center
 }
 .brand .sub b{color:var(--dim);font-weight:500}
@@ -60,7 +60,7 @@ header{
 .hright{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:2px}
 .chip{
   display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);
-  border-radius:999px;padding:5px 11px;font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;color:var(--dim);
+  border-radius:999px;padding:5px 11px;font-family:var(--mono);font-size:12px;letter-spacing:.09em;color:var(--dim);
   transition:border-color .18s,color .18s
 }
 .chip:hover{border-color:var(--surface-3);color:var(--text)}
@@ -72,7 +72,7 @@ header{
 .avatars{display:flex}
 .av{
   width:23px;height:23px;border-radius:50%;display:grid;place-items:center;
-  font-family:var(--mono);font-size:10px;font-weight:700;color:#0C121C;
+  font-family:var(--mono);font-size:12px;font-weight:700;color:#0C121C;
   border:2px solid var(--ink);margin-left:-7px;flex:none
 }
 .av:first-child{margin-left:0}
@@ -99,7 +99,7 @@ header{
 .seal[aria-pressed=true] .mark{background:var(--sc);color:#0C121C}
 .seal .lab{display:block;font-size:13px;font-weight:500;letter-spacing:.02em;white-space:nowrap;line-height:1.35}
 .seal .met{
-  display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--faint);
+  display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--faint);
   text-transform:uppercase;white-space:nowrap;margin-top:1px
 }
 .seal[aria-pressed=true] .met{color:var(--dim)}
@@ -122,13 +122,13 @@ main{flex:1 1 auto;display:flex;min-height:0;position:relative;overflow:clip}
 }
 .tab:hover{color:var(--dim)}
 .tab[aria-selected=true]{color:var(--text);border-bottom-color:var(--shu);font-weight:500}
-.tab .n{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-left:4px}
+.tab .n{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-left:4px}
 .scroll{flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;padding:18px 18px 60px}
 .scroll::-webkit-scrollbar-thumb{border-color:var(--surface)}
 
 /* ─────────── typography bits ─────────── */
 h2.sec{
-  font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);
+  font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);
   margin:0 0 12px;font-weight:500;display:flex;align-items:center;gap:10px
 }
 h2.sec:after{content:'';flex:1;height:1px;background:var(--line-soft)}
@@ -139,8 +139,8 @@ h2.sec+ h2.sec{margin-top:26px}
 /* ─────────── typhoon band ─────────── */
 .risk{margin:0 0 22px}
 .riskbar{display:flex;height:26px;border-radius:6px;overflow:hidden;border:1px solid var(--line-soft)}
-.riskseg{flex:1;display:grid;place-items:center;font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;color:#0C121C;font-weight:700}
-.risklab{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--faint);margin-top:6px;text-transform:uppercase}
+.riskseg{flex:1;display:grid;place-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:#0C121C;font-weight:700}
+.risklab{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--faint);margin-top:6px;text-transform:uppercase}
 
 /* ─────────── itinerary spine (signature) ─────────── */
 .spine{position:relative;padding-left:34px}
@@ -155,16 +155,16 @@ h2.sec+ h2.sec{margin-top:26px}
 .node{
   position:absolute;left:-28px;top:16px;width:19px;height:19px;border-radius:50%;
   border:1.5px solid var(--nc);background:var(--surface);display:grid;place-items:center;
-  font-family:var(--mono);font-size:8.5px;font-weight:700;color:var(--nc);z-index:2;transition:background .2s,color .2s
+  font-family:var(--mono);font-size:10.5px;font-weight:700;color:var(--nc);z-index:2;transition:background .2s,color .2s
 }
 .day.open .node{background:var(--nc);color:#0C121C}
 .dhead{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
-.ddate{font-family:var(--mono);font-size:10px;letter-spacing:.11em;color:var(--faint);text-transform:uppercase}
+.ddate{font-family:var(--mono);font-size:12px;letter-spacing:.11em;color:var(--faint);text-transform:uppercase}
 .dtitle{font-family:var(--disp);font-size:16px;font-weight:600;letter-spacing:.03em;flex:1 1 100%;margin-top:2px}
 .dnote{font-size:12.5px;color:var(--dim);margin-top:5px;line-height:1.6}
 .dmeta{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
 .pill{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;padding:3px 8px;border-radius:5px;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;padding:3px 8px;border-radius:5px;
   background:var(--surface-3);color:var(--dim);text-transform:uppercase
 }
 .pill.stay{background:color-mix(in srgb,var(--nc) 16%,transparent);color:var(--nc)}
@@ -175,10 +175,10 @@ h2.sec+ h2.sec{margin-top:26px}
   transition:opacity .15s
 }
 .stop:hover{opacity:.72}
-.stop .t{font-family:var(--mono);font-size:10px;color:var(--faint);flex:0 0 46px;padding-top:3px;letter-spacing:.05em}
+.stop .t{font-family:var(--mono);font-size:12px;color:var(--faint);flex:0 0 46px;padding-top:3px;letter-spacing:.05em}
 .stop .n{font-size:13px;font-weight:400;line-height:1.5}
-.stop .n small{display:block;color:var(--faint);font-size:11.5px;margin-top:2px;line-height:1.5}
-.stop .n .jp{font-family:var(--disp);color:var(--dim);font-size:11.5px;letter-spacing:.04em}
+.stop .n small{display:block;color:var(--faint);font-size:12.5px;margin-top:2px;line-height:1.5}
+.stop .n .jp{font-family:var(--disp);color:var(--dim);font-size:12.5px;letter-spacing:.04em}
 
 /* ─────────── place cards ─────────── */
 .pcard{
@@ -189,13 +189,13 @@ h2.sec+ h2.sec{margin-top:26px}
 .pcard .top{display:flex;align-items:flex-start;gap:10px}
 .pcard .swatch{width:9px;height:9px;border-radius:50%;flex:none;margin-top:6px;background:var(--pc)}
 .pcard h3{margin:0;font-size:14px;font-weight:500;line-height:1.45;flex:1}
-.pcard h3 .jp{font-family:var(--disp);color:var(--faint);font-size:11.5px;margin-left:6px;letter-spacing:.04em}
+.pcard h3 .jp{font-family:var(--disp);color:var(--faint);font-size:12.5px;margin-left:6px;letter-spacing:.04em}
 .pcard p{margin:6px 0 0;font-size:12.5px;color:var(--dim);line-height:1.65}
 .pcard .foot{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
-.byline{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9.5px;color:var(--faint);letter-spacing:.06em}
+.byline{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11.5px;color:var(--faint);letter-spacing:.06em}
 .mini{width:15px;height:15px;border-radius:50%;display:grid;place-items:center;font-size:7.5px;font-weight:700;color:#0C121C;font-family:var(--mono)}
 .act{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;padding:4px 8px;border-radius:5px;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;padding:4px 8px;border-radius:5px;
   border:1px solid var(--line);color:var(--faint);transition:.15s;text-transform:uppercase
 }
 .act:hover{border-color:var(--surface-3);color:var(--text)}
@@ -205,7 +205,7 @@ h2.sec+ h2.sec{margin-top:26px}
 /* ─────────── forms ─────────── */
 .field{margin-bottom:13px}
 label.lb{
-  display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;color:var(--faint);
+  display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;color:var(--faint);
   text-transform:uppercase;margin-bottom:5px
 }
 input[type=text],input[type=number],input[type=date],select,textarea{
@@ -219,7 +219,7 @@ textarea{resize:vertical;min-height:64px;line-height:1.6}
 select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--faint) 50%),linear-gradient(135deg,var(--faint) 50%,transparent 50%);background-position:calc(100% - 15px) 17px,calc(100% - 10px) 17px;background-size:5px 5px;background-repeat:no-repeat}
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 15px;border-radius:8px;
-  border:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  border:1px solid var(--line);font-family:var(--mono);font-size:12px;letter-spacing:.1em;
   color:var(--dim);transition:.18s;text-transform:uppercase
 }
 .btn:hover{border-color:var(--surface-3);color:var(--text);background:var(--surface-2)}
@@ -234,13 +234,13 @@ select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,va
   display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap
 }
 .btot .big{font-family:var(--mono);font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1;color:var(--kin)}
-.btot .cap{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin-bottom:6px}
+.btot .cap{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin-bottom:6px}
 .btot .side{text-align:right}
 .btot .side div{font-family:var(--mono);font-size:12px;color:var(--dim)}
 .bline{padding:11px 0;border-bottom:1px solid var(--line-soft)}
 .bline .lr{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .bline .nm{font-size:13.5px;font-weight:400}
-.bline .nm small{display:block;color:var(--faint);font-size:11px;margin-top:1px}
+.bline .nm small{display:block;color:var(--faint);font-size:12.5px;margin-top:1px}
 .bline .vv{font-family:var(--mono);font-size:13.5px;color:var(--kin);white-space:nowrap;font-weight:500}
 input[type=range]{
   -webkit-appearance:none;appearance:none;width:100%;height:2px;background:var(--line);border-radius:2px;margin:12px 0 2px
@@ -260,8 +260,8 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
 .todo.done .box:after{content:'';width:4px;height:8px;border:solid #0C121C;border-width:0 2px 2px 0;transform:rotate(43deg) translate(-1px,-1px)}
 .todo.done .tx{color:var(--faint);text-decoration:line-through}
 .tx{font-size:13.5px;line-height:1.55;flex:1}
-.tx small{display:block;color:var(--faint);font-size:11px;margin-top:2px}
-.due{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;color:var(--shu);flex:none;margin-top:3px}
+.tx small{display:block;color:var(--faint);font-size:12.5px;margin-top:2px}
+.due{font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;color:var(--shu);flex:none;margin-top:3px}
 .due.ok{color:var(--faint)}
 
 /* ─────────── map overlay ─────────── */
@@ -270,18 +270,18 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
 }
 .mbtn{
   background:rgba(18,26,40,.93);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:8px;
-  padding:7px 11px;font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;color:var(--dim);
+  padding:7px 11px;font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;color:var(--dim);
   transition:.15s;text-transform:uppercase;white-space:nowrap
 }
 .mbtn:hover{color:var(--text);border-color:var(--surface-3)}
 .mbtn.on{color:var(--shu);border-color:var(--shu)}
 .hint{
   position:absolute;left:12px;bottom:12px;z-index:900;background:rgba(18,26,40,.93);backdrop-filter:blur(14px);
-  border:1px solid var(--line);border-radius:8px;padding:7px 11px;font-family:var(--mono);font-size:9.5px;
+  border:1px solid var(--line);border-radius:8px;padding:7px 11px;font-family:var(--mono);font-size:11.5px;
   letter-spacing:.07em;color:var(--faint);max-width:min(70%,300px);line-height:1.6;pointer-events:none
 }
 .leaflet-container{background:#0A0F17;font-family:var(--body)}
-.leaflet-control-attribution{background:rgba(12,18,28,.82)!important;color:var(--faint)!important;font-size:9px!important;font-family:var(--mono)!important}
+.leaflet-control-attribution{background:rgba(12,18,28,.82)!important;color:var(--faint)!important;font-size:11px!important;font-family:var(--mono)!important}
 .leaflet-control-attribution a{color:var(--dim)!important}
 .leaflet-control-zoom a{background:rgba(18,26,40,.93)!important;color:var(--dim)!important;border-color:var(--line)!important;backdrop-filter:blur(14px)}
 .leaflet-control-zoom a:hover{color:var(--text)!important;background:var(--surface-2)!important}
@@ -289,19 +289,19 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
 .leaflet-popup-tip{background:var(--surface-2);border:1px solid var(--line)}
 .leaflet-popup-content{margin:12px 14px;font-size:13px;line-height:1.6;font-weight:300}
 .leaflet-popup-content b{font-family:var(--disp);font-size:14.5px;font-weight:600;letter-spacing:.03em;display:block;margin-bottom:3px}
-.leaflet-popup-content .jp{font-family:var(--disp);color:var(--faint);font-size:11.5px}
-.leaflet-popup-content .mt{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--faint);text-transform:uppercase;margin-top:7px;display:block}
+.leaflet-popup-content .jp{font-family:var(--disp);color:var(--faint);font-size:12.5px}
+.leaflet-popup-content .mt{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;color:var(--faint);text-transform:uppercase;margin-top:7px;display:block}
 .leaflet-popup-close-button{color:var(--faint)!important}
 .pinico{display:grid;place-items:center;border-radius:50%;border:2px solid #0C121C;box-shadow:0 2px 8px rgba(0,0,0,.5);font-family:var(--mono);font-weight:700;color:#0C121C}
-.pinico.num{font-size:10px}
-.pinico.usr{border-radius:50% 50% 50% 2px;transform:rotate(-45deg);font-size:8.5px}
+.pinico.num{font-size:12px}
+.pinico.usr{border-radius:50% 50% 50% 2px;transform:rotate(-45deg);font-size:10.5px}
 .pinico.usr span{transform:rotate(45deg)}
 
 /* ─────────── toast ─────────── */
 #toast{
   position:fixed;left:50%;bottom:26px;transform:translate(-50%,90px);z-index:3000;
   background:var(--surface-3);border:1px solid var(--line);border-radius:9px;padding:10px 17px;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--text);
+  font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--text);
   transition:transform .32s cubic-bezier(.2,.9,.3,1.2);pointer-events:none;box-shadow:0 12px 40px rgba(0,0,0,.5);
   max-width:88vw;text-align:center
 }
@@ -317,7 +317,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
 
 /* 深链行 */
 .lkrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
-.lk2{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9.5px;
+.lk2{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:11.5px;
  letter-spacing:.05em;padding:4px 8px;border-radius:5px;border:1px solid var(--line);
  color:var(--dim);background:transparent;text-decoration:none;transition:.15s;white-space:nowrap}
 .lk2:hover{border-color:var(--ai);color:var(--ai)}
@@ -329,7 +329,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
 .note{position:relative;background:color-mix(in srgb,var(--kin) 9%,transparent);
  border-left:2px solid var(--kin);border-radius:0 7px 7px 0;padding:8px 26px 8px 10px}
 .note .nb{font-size:12.5px;line-height:1.7;color:var(--text)}
-.note .nm{font-family:var(--mono);font-size:9px;letter-spacing:.05em;color:var(--faint);margin-top:4px}
+.note .nm{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--faint);margin-top:4px}
 .ndel{position:absolute;top:5px;right:7px;color:var(--faint);font-size:14px;line-height:1;padding:2px 4px}
 .ndel:hover{color:var(--shu)}
 /* 天气 */
@@ -337,14 +337,14 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
 .wxh{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 11px;
  border-bottom:1px solid var(--line-soft)}
 .wxn{font-size:12.5px;font-weight:500}
-.wxm{font-family:var(--mono);font-size:9px;color:var(--faint);white-space:nowrap}
+.wxm{font-family:var(--mono);font-size:11px;color:var(--faint);white-space:nowrap}
 .wxd{display:flex}
 .wxc{flex:1;text-align:center;padding:8px 2px;border-right:1px solid var(--line-soft);min-width:0}
 .wxc:last-child{border-right:0}
-.wxc .dd{font-family:var(--mono);font-size:8.5px;color:var(--faint)}
+.wxc .dd{font-family:var(--mono);font-size:10.5px;color:var(--faint)}
 .wxc .sn{font-family:var(--mono);font-size:15px;font-weight:700;margin:3px 0;line-height:1.15;color:var(--text)}
-.wxc .sn small{font-size:9px;font-weight:400;color:var(--faint)}
-.wxc .tt{font-family:var(--mono);font-size:8.5px;color:var(--faint)}
+.wxc .sn small{font-size:11px;font-weight:400;color:var(--faint)}
+.wxc .tt{font-family:var(--mono);font-size:10.5px;color:var(--faint)}
 /* 预订 */
 .bkrow{border:1px solid var(--line-soft);border-radius:8px;padding:10px 11px;margin-bottom:6px;
  background:var(--surface-2);transition:.15s;cursor:pointer}
@@ -355,7 +355,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
 .bkrow .box.on{background:var(--sugi);border-color:var(--sugi)}
 .bkrow .box.on:after{content:'';width:4px;height:8px;border:solid #0C121C;border-width:0 2px 2px 0;
  transform:rotate(43deg) translate(-1px,-1px)}
-.vfy{display:inline-flex;font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:4px;
+.vfy{display:inline-flex;font-family:var(--mono);font-size:11px;padding:2px 6px;border-radius:4px;
  letter-spacing:.05em;margin-left:6px;vertical-align:1px}
 .vfy.todo{background:color-mix(in srgb,var(--kin) 18%,transparent);color:var(--kin)}
 .vfy.ok{background:color-mix(in srgb,var(--sugi) 18%,transparent);color:var(--sugi)}
@@ -367,20 +367,20 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
 .stayh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:8px 11px;
  border-bottom:1px solid var(--LN2);background:var(--BG3)}
 .sn2{font-size:12px;font-weight:500}
-.sa{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--FT)}
-.stayh2{padding:7px 11px 3px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+.sa{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--FT)}
+.stayh2{padding:7px 11px 3px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;
  color:var(--FT);text-transform:uppercase;border-top:1px solid var(--LN2)}
 .sopt,.sfood{padding:9px 11px;border-top:1px solid var(--LN2)}
 .sopt:first-of-type{border-top:0}
 .sopt.pick{background:var(--PICKBG)}
 .st{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
-.tier{font-family:var(--mono);font-size:10px;color:var(--FT);letter-spacing:.05em}
+.tier{font-family:var(--mono);font-size:12px;color:var(--FT);letter-spacing:.05em}
 .sname{font-size:12.5px;font-weight:500;flex:1;min-width:0}
-.fjp{font-family:var(--mono);font-size:10px;color:var(--FT)}
-.pk{font-family:var(--mono);font-size:9px;letter-spacing:.09em;padding:1px 6px;border-radius:3px;
+.fjp{font-family:var(--mono);font-size:12px;color:var(--FT)}
+.pk{font-family:var(--mono);font-size:11px;letter-spacing:.09em;padding:1px 6px;border-radius:3px;
  background:var(--PICK);color:var(--PICKTX)}
 .swhy{font-size:12px;color:var(--DM);line-height:1.65;margin-top:4px}
-.staynote{padding:8px 11px;border-top:1px solid var(--LN2);font-family:var(--mono);font-size:9.5px;
+.staynote{padding:8px 11px;border-top:1px solid var(--LN2);font-family:var(--mono);font-size:11.5px;
  line-height:1.75;color:var(--FT)}
 /* ── 加点搜索结果 ── */
 .gitem{display:flex;align-items:baseline;gap:8px;width:100%;text-align:left;padding:8px 10px;
@@ -388,14 +388,14 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
 .gitem:hover{border-color:var(--LN)}
 .gitem.on{border-color:var(--PICK)}
 .gn{flex:1;font-size:12.5px;line-height:1.5}
-.gk{font-family:var(--mono);font-size:9px;color:var(--FT)}
-.tiny{font-family:var(--mono);font-size:9.5px;line-height:1.8;color:var(--FT);margin-top:6px}
+.gk{font-family:var(--mono);font-size:11px;color:var(--FT)}
+.tiny{font-family:var(--mono);font-size:11.5px;line-height:1.8;color:var(--FT);margin-top:6px}
 .tiny.warn{color:var(--WARN)}
 .lk2.dim{opacity:.6}
 /* ── 竖排日文：桌面端的一处细节 ── */
 @media (min-width:901px){
   .vjp{position:absolute;top:14px;right:12px;writing-mode:vertical-rl;text-orientation:upright;
-   font-family:var(--disp);font-size:10.5px;letter-spacing:.22em;color:var(--FT);opacity:.5;
+   font-family:var(--disp);font-size:12px;letter-spacing:.22em;color:var(--FT);opacity:.5;
    pointer-events:none;max-height:calc(100% - 28px);overflow:hidden}
   .day.open .vjp{opacity:.75}
   .daybtn{position:relative;padding-right:34px}
@@ -406,7 +406,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
 @media (max-width:900px){
   header{padding:8px 13px 0;padding-top:calc(8px + env(safe-area-inset-top))}
   .brand h1{font-size:17px}
-  .brand .sub{font-size:9.5px;gap:8px}
+  .brand .sub{font-size:11.5px;gap:8px}
   .hrow{gap:8px}
   .hright{width:100%;order:3}
   .seals{padding:9px 0 8px;gap:7px}
@@ -428,7 +428,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
   .tab{font-size:12px;padding:11px 5px 9px}
   .hint{display:none}
   .mapctl{top:10px;right:10px}
-  .mbtn{padding:6px 9px;font-size:9px}
+  .mbtn{padding:6px 9px;font-size:11px}
   .spine{padding-left:30px}
   .spine:before{left:10px}
   .node{left:-26px}
@@ -439,6 +439,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
 @media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
 </style>
 
+<link rel="stylesheet" href="../shared/skin.css">
 </head>
 <body>
 <div id="app">
@@ -446,7 +447,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
     <div class="hrow">
       <div class="brand">
         <h1>関西 <em>·</em> 四国 <em>·</em> 熊野古道</h1>
-        <div class="sub"><b id="hdates">2026.09.17 → 10.06</b> · <span id="hnights">18 NIGHTS</span> · <span id="hvar">PLAN A</span> · <span id="verBadge" title="页面版本">v2 · 2026-08-20</span></div>
+        <div class="sub"><b id="hdates">2027.09.17 → 10.06</b> · <span id="hnights">18 晚</span> · <span id="hvar">方案 A</span></div>
       </div>
       <div class="hright">
         <button class="chip" id="dateBtn">📅 改日期</button>
@@ -467,7 +468,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
     </section>
     <section id="map">
       <div class="mapctl">
-        <button class="mbtn" id="baseBtn">底图 · 夜</button>
+        <button class="mbtn" id="baseBtn">底图 · 街道</button>
         <button class="mbtn" id="allBtn">显示全程</button>
         <button class="mbtn" id="addBtn">＋ 加点</button>
       </div>
@@ -480,6 +481,8 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
 <div id="modal"><div class="mbox" id="mbox"></div></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="../shared/config.js"></script>
+<script src="../shared/storage.js"></script>
 <script src="content.js"></script>
 <script>
 if(typeof V==='undefined'||typeof P==='undefined'){document.getElementById('app').innerHTML='<div style="padding:40px;font-family:monospace;font-size:13px;line-height:2;color:#8A94A6">content.js 没加载成功。<br>确认它和 index.html 在同一个文件夹里，文件名一字不差。<br>刚改过的话多半是里面有语法错误 —— 按 F12 看 Console 红字。</div>';throw new Error('no content.js');}
@@ -600,8 +603,8 @@ function dateModal(){
 
 function tripWindow(v){
  const a=v.days[0].d.split('.'),b=v.days[v.days.length-1].d.split('.');
- return{y:2026,a:`2026-${a[0]}-${a[1]}`,b:`2026-${b[0]}-${b[1]}`,
-        la:`2025-${a[0]}-${a[1]}`,lb:`2025-${b[0]}-${b[1]}`}}
+ return{y:2027,a:`2027-${a[0]}-${a[1]}`,b:`2027-${b[0]}-${b[1]}`,
+        la:`2026-${a[0]}-${a[1]}`,lb:`2026-${b[0]}-${b[1]}`}}
 async function loadWX(force){
  const c=await S.get('jp:wx');
  if(!force&&c&&Date.now()-c.at<3*3600e3&&c.opt===st.variant){WX=c;return}
@@ -644,7 +647,7 @@ function wxBlock(s){
      `<div class="tt">${Math.round(d.temperature_2m_min[j])}/${Math.round(d.temperature_2m_max[j])}°</div>`;
     row.appendChild(c)});
    box.appendChild(row);s.appendChild(box)})}
- const n=el('p','lede');n.style.cssText='font-size:11.5px;color:var(--faint);margin:2px 0 20px';
+ const n=el('p','lede');n.style.cssText='font-size:12.5px;color:var(--faint);margin:2px 0 20px';
  n.innerHTML=(WX.err?`<span style="color:var(--kin)">${WX.err}（离线或被拦截，显示上次缓存）</span> · `:'')+TXT.wxNote;
  s.appendChild(n)}
 
@@ -672,7 +675,7 @@ async function bkSet(i,r){st.bk=st.bk||{};
 function bkModal(b){
  if(!st.me.name)return meModal(()=>bkModal(b));
  const r=bkGet(b.id)||{};
- openModal(`<h3>${esc(b.n)}</h3><p class="mp">订好了填确认号，没订就关掉。两个人共享。</p>
+ openModal(`<h3>${esc(b.n)}</h3><p class="mp">订好了填确认号，没订就关掉。</p>
   <div class="field"><label class="lb">确认号 / 订单号</label><input type="text" id="bref" maxlength="60" value="${esc(r.ref||'')}"></div>
   <div class="field"><label class="lb">实付 CAD（两人合计）</label><input type="number" id="bamt" step="1" value="${r.amt||''}"></div>
   <div class="row"><button class="btn" id="bclr">标为未订</button><button class="btn pri" id="bok">标为已订</button></div>
@@ -691,7 +694,7 @@ function toICS(){
  const E=t=>String(t).replace(/[\\;,]/g,m=>'\\'+m).replace(/\n/g,'\\n');
  let o='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//kansai//ZH\r\nCALSCALE:GREGORIAN\r\n';
  v.days.forEach((d,i)=>{
-  const ds='2026'+d.d.replace('.','');
+  const ds='2027'+d.d.replace('.','');
   const body=[d.note||'',...d.stops.map(x=>`${x.t} ${x.n}${x.s?' — '+x.s:''}`)].filter(Boolean).join('\n');
   o+=`BEGIN:VEVENT\r\nUID:kansai-${st.variant}-${i}@local\r\nDTSTAMP:${ds}T000000Z\r\n`+
    `DTSTART;VALUE=DATE:${ds}\r\nDTEND;VALUE=DATE:${nx(ds)}\r\nSUMMARY:${E(d.t)}\r\n`+
@@ -725,8 +728,7 @@ const K = { pins:()=>`trip:${st.room}:pins`, mem:()=>`trip:${st.room}:members`,
    5. MAP
    ══════════════════════════════════════════════════════════════ */
 const BASES = [
-  {n:'夜', u:'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', a:'&copy; OpenStreetMap &copy; CARTO', max:20},
-  {n:'昼', u:'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', a:'&copy; OpenStreetMap &copy; CARTO', max:20},
+  {n:'街道',u:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',a:'&copy; OpenStreetMap contributors',max:19},
   {n:'地形', u:'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', a:'&copy; OpenStreetMap · SRTM | &copy; OpenTopoMap (CC-BY-SA)', max:17}
 ];
 let map, baseIdx=0, baseLayer, layerPlaces, layerPins, layerRoute, mReg={}, adding=false;
@@ -823,8 +825,8 @@ function renderSeals(){
   });
   const cv=V[st.variant];
   $('#hdates').textContent=planRange(cv);
-  $('#hnights').textContent=(cv.days.length-1)+' NIGHTS';
-  $('#hvar').textContent='PLAN '+st.variant;
+  $('#hnights').textContent=(cv.days.length-1)+' 晚';
+  $('#hvar').textContent='方案 '+st.variant;
 }
 function renderMembers(){
   const w=$('#avatars'); w.innerHTML='';
@@ -868,7 +870,7 @@ function vPlan(s){
   h.textContent=v.name; s.appendChild(h);
   v.pitch.split('\n\n').forEach(x=>s.appendChild(el('p','lede',x)));
   const c=el('div'); c.style.cssText=`border-left:2px solid ${v.hex};padding:2px 0 2px 13px;margin:0 0 22px`;
-  c.appendChild(el('div',null,`<span style="font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">${esc(LABELS.cost)}</span>`));
+  c.appendChild(el('div',null,`<span style="font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">${esc(LABELS.cost)}</span>`));
   v.cons.split('\n\n').forEach((x,i)=>{const cp=el('p','lede',x);
     cp.style.margin=i?'8px 0 0':'4px 0 0';c.appendChild(cp)}); s.appendChild(c);
 
@@ -964,7 +966,7 @@ function vPlaces(s){
     const mine=el('p',null,esc(p.note));
     mine.style.cssText='margin:6px 0 0;font-size:12.5px;color:var(--dim);line-height:1.65';
     if(nb){const tagx=el('span',null,'参考');
-      tagx.style.cssText='font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--faint);border:1px solid var(--line-soft);border-radius:3px;padding:1px 5px;margin-right:6px;vertical-align:1px';
+      tagx.style.cssText='font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--faint);border:1px solid var(--line-soft);border-radius:3px;padding:1px 5px;margin-right:6px;vertical-align:1px';
       mine.prepend(tagx)}
     c.appendChild(mine);
     c.appendChild(linkRow(p,false));
@@ -983,7 +985,7 @@ function vBudget(s){
 
   const t=el('div','btot');
   t.innerHTML=`<div><div class="cap">${st.perPerson?'每人':'两人合计'} · 18 晚</div><div class="big">${fmt(total)}</div></div>
-    <div class="side"><div>≈ ${st.ccy==='CAD'?'¥'+Math.round(total*st.rate/div).toLocaleString():'$'+Math.round(total/div).toLocaleString()}</div><div style="color:var(--faint);font-size:10.5px;margin-top:3px">${fmt(total/18)} / 晚</div></div>`;
+    <div class="side"><div>≈ ${st.ccy==='CAD'?'¥'+Math.round(total*st.rate/div).toLocaleString():'$'+Math.round(total/div).toLocaleString()}</div><div style="color:var(--faint);font-size:12px;margin-top:3px">${fmt(total/18)} / 晚</div></div>`;
   s.appendChild(t);
 
   const ctl=el('div','row'); ctl.style.marginBottom='18px';
@@ -1046,9 +1048,9 @@ function vPrep(s){
       <span class="box${ok?' on':''}"></span>
       <span style="flex:1"><span style="font-size:13.5px">${esc(b.n)}</span>
       <span class="vfy ${ok?'ok':'todo'}">${ok?'已订':'未订'}</span>
-      ${ok&&r.ref?`<small style="display:block;font-family:var(--mono);font-size:10.5px;color:var(--dim);margin-top:3px">确认号 ${esc(r.ref)}</small>`:''}
-      ${ok&&r.amt?`<small style="display:block;font-family:var(--mono);font-size:10.5px;color:var(--faint)">实付 $${Number(r.amt).toLocaleString()} CAD</small>`:''}
-      ${ok&&r.by?`<small style="display:block;font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-top:2px">${esc(r.by)} · ${esc(r.at||'')}</small>`:''}
+      ${ok&&r.ref?`<small style="display:block;font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:3px">确认号 ${esc(r.ref)}</small>`:''}
+      ${ok&&r.amt?`<small style="display:block;font-family:var(--mono);font-size:12px;color:var(--faint)">实付 $${Number(r.amt).toLocaleString()} CAD</small>`:''}
+      ${ok&&r.by?`<small style="display:block;font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:2px">${esc(r.by)} · ${esc(r.at||'')}</small>`:''}
       </span><span class="pill">${esc(b.t)}</span></div>`;
     w.onclick=()=>bkModal(b); s.appendChild(w)});
   const ic=el('button','btn','↓ 导出到日历 .ics'); ic.onclick=toICS; ic.style.marginTop='12px'; s.appendChild(ic);
@@ -1321,7 +1323,7 @@ async function pull(loud){
   if(nt&&typeof nt==='object') st.notes=nt;
   $('#syncDot').className = S.ok ? 'dot' : 'dot off';
   renderMembers(); renderTabs(); if(st.tab==='places') renderBody(); drawPins();
-  if(loud) toast(S.ok?`已同步 · ${st.pins.length} 个点`:'当前环境无共享存储，改动只保留在本次会话');
+  if(loud) toast(S.ok?`已保存在本机 · ${st.pins.length} 个点`:'当前环境无共享存储，改动只保留在本次会话');
 }
 async function pushPins(){ $('#syncDot').className='dot busy'; await S.set(K.pins(),st.pins,true); $('#syncDot').className=S.ok?'dot':'dot off'; }
 async function joinRoom(){
@@ -1384,7 +1386,7 @@ function meModal(after){
 function roomModal(){
   openModal(`<h3>行程码</h3><p class="mp">同一个码 = 同一份地图，你和同行的人加的点会互相同步。<strong style="color:var(--text)">换一个没人用过的码，就得到一份全新的空白行程</strong>——别人也可以这样拿去建自己的。</p>
     <div class="field"><label class="lb">当前行程码</label><input type="text" id="rc" maxlength="24" value="${esc(st.room)}" placeholder="jp2610"></div>
-    <p class="mp" style="font-size:11.5px;color:var(--faint)">只能用字母数字和短横线。共享数据对所有知道这个码的人可见。</p>
+    <p class="mp" style="font-size:12.5px;color:var(--faint)">只能用字母数字和短横线。共享数据对所有知道这个码的人可见。</p>
     <div class="row"><button class="btn" data-close>取消</button><button class="btn pri" id="rs">切换</button></div>`,
   b=>{
     b.querySelector('#rs').onclick=async()=>{
@@ -1399,7 +1401,7 @@ function exportJSON(){
   const d={room:st.room,variant:st.variant,pins:st.pins,budget:st.budget,done:st.done,rate:st.rate};
   const t=JSON.stringify(d,null,2);
   openModal(`<h3>导出</h3><p class="mp">复制走，可以粘回任何一个行程码里。</p>
-    <textarea id="ex" style="height:230px;font-family:var(--mono);font-size:11px">${esc(t)}</textarea>
+    <textarea id="ex" style="height:230px;font-family:var(--mono);font-size:12.5px">${esc(t)}</textarea>
     <div class="row" style="margin-top:12px"><button class="btn" data-close>关闭</button><button class="btn pri" id="cp">复制</button></div>`,
   b=>{ b.querySelector('#cp').onclick=async()=>{
     const ta=b.querySelector('#ex');
@@ -1410,7 +1412,7 @@ function exportJSON(){
 }
 function importJSON(){
   openModal(`<h3>导入</h3><p class="mp">粘贴一份导出的 JSON。会覆盖当前行程码下的点位和预算。</p>
-    <textarea id="im" style="height:200px;font-family:var(--mono);font-size:11px" placeholder='{"pins":[...]}'></textarea>
+    <textarea id="im" style="height:200px;font-family:var(--mono);font-size:12.5px" placeholder='{"pins":[...]}'></textarea>
     <div class="row" style="margin-top:12px"><button class="btn" data-close>取消</button><button class="btn pri" id="io">导入</button></div>`,
   b=>{ b.querySelector('#io').onclick=async()=>{
     try{
@@ -1522,5 +1524,6 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http')){
   setTimeout(()=>map.invalidateSize(),200);
 })();
 </script>
+<script src="../shared/extras.js"></script>
 </body>
 </html>

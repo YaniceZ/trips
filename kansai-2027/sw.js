@@ -1,7 +1,7 @@
 /* 离线缓存 v2
    关键修正：HTML 和 JS 改成「网络优先」，避免页面框架被永久缓存成旧版。
    地图瓦片和天气仍然缓存，山里没信号照样能用。 */
-const C = 'banff-2026-v2';
+const C = 'kansai-2027-v1';
 const SHELL = [
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'
@@ -27,7 +27,7 @@ self.addEventListener('fetch', e => {
 
   // 页面与脚本：网络优先，拿到就更新缓存；断网才回落缓存
   const isDoc = req.mode === 'navigate'
-    || /\.(html|js|webmanifest)$/.test(url.pathname)
+    || /\.(html|js|css|webmanifest)$/.test(url.pathname)
     || url.pathname.endsWith('/');
   if (isDoc && url.origin === location.origin) {
     e.respondWith(

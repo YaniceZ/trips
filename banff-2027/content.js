@@ -54,10 +54,10 @@ const TXT={
   itinHint: '点任意一天，地图跟随。左侧数字 = 当日驾驶小时数，红色 >5 小时。',
 
   pinsEmpty:
-    '暂无收藏点。分享行程码给同行者，新增餐厅/观景点/住宿实时同步。地图长按可落点。',
+    '暂无收藏点。地图长按可落点。',
 
   bookingIntro:
-    '本栏为预订记录，非建议。勾选完成项，填确认号+实付金额，同行者可见，预算页自动对账。',
+    '本栏为预订记录，非建议。勾选完成项，填确认号+实付金额，预算页自动对账。',
 
   prepIntro:
     '按当前方案筛选。<b>Moraine Lake 班车预约</b>需最先处理，其余可临时补办。',
@@ -65,15 +65,15 @@ const TXT={
   budgetNote:
     '单位加元，数字为估算，可拖拽调整。'
     +'<br><br>油费按往返 1500 km、9 L/100km、1.7 CAD/L 估算，实际依车型浮动。'
-    +'国家公园门票：2026.06.19–09.07 由 Canada Strong Pass 覆盖，免费入园。'
+    +'国家公园门票：2026 年夏季（6.19–9.07）由 Canada Strong Pass 覆盖免费入园，2027 年是否延续尚未确认，预算里公园门票暂按 0 计，不免费时需自己补上。'
     +'Lake Louise 旺季停车 42 CAD/车，Park and Ride 免费。',
 
   noteHint: '记实地信息：人流时段/停车状况/闭店/路线修正。显示在描述上方。',
 
   aboutPage:
-    '行程码 = 数据视图。同码用户共享收藏点。新码 = 空白行程，可供他人独立使用。',
+    '收藏点、笔记和预订记录存在这台设备的浏览器里。换设备或清除浏览数据会丢，需要的话用下面的导出备份。',
   aboutFoot:
-    '共享数据对同码用户可见。坐标为示意精度，班车时刻/票价/开放状态以 Parks Canada 当日公告为准。'
+    '数据只存在本机。坐标为示意精度，班车时刻/票价/开放状态以 Parks Canada 当日公告为准。'
 };
 
 /* ── Moraine Lake 抢票分步指南（准备页） ── */
@@ -111,10 +111,10 @@ const OFFLINE=[
 /* ── 两条硬规则 ── */
 const RULES=[
  ['Moraine Lake 禁私家车','2023 年起全年封闭私家车（含无障碍证）。仅限 Parks Canada 班车/持牌商业车/Roam 公交/骑行（单程 12.5 km，爬升 250 m）。'],
- ['班车分两次放票','2026.04.15 放全季 40% 票额。剩余 60% 于出发前 2 日 08:00 MT 滚动放出。热门时段数分钟售罄。'],
+ ['班车分两次放票','2026 年是 4.15 放全季 40% 票额，其余 60% 于出发前 2 日 08:00 MT 滚动放出，2027 年的放票日期以 Parks Canada 公布为准。热门时段数分钟售罄。'],
  ['一票通两湖','含 Lake Connector 接驳 + Park and Ride 返程。预约时选定的湖为首个目的地。'],
  ['Lake Louise 可开车，停车贵','旺季 42 CAD/车，3:00–19:00 收费，清晨即满。Park and Ride 班车停车免费。'],
- ['门票与班车票分离','班车票不含国家公园门票。2026.06.19–09.07 Canada Strong Pass 免费入园，其余时段单独购买。']
+ ['门票与班车票分离','班车票不含国家公园门票。2026 年夏季有 Canada Strong Pass 免费入园，2027 年是否延续待公布，不免费就单独购买。']
 ];
 
 /* ── 五套方案对比 ── */
@@ -219,8 +219,8 @@ const TIMING={
 
 /* ══════ 五套方案 ══════ */
 const V={
-A:{k:'A',gr:'甲',name:'Calgary 连住四晚 · 6 天 5 晚',met:'6 DAYS · 5 NIGHTS',hex:'#C0392B',tag:'这次',
-  start:'2026-08-27', dates:'2026.08.27 → 09.01',
+A:{k:'A',gr:'甲',name:'Calgary 连住四晚 · 6 天 5 晚',met:'6 天 · 5 晚',hex:'#C0392B',tag:'这次',
+  start:'2027-08-27', dates:'2027.08.27 → 09.01',
   pitch:'住宿仅换两处：Calgary 连住四晚，回程 Kamloops 歇一晚。行李拆两次。\n\n'
     +'首日直达 Calgary，最累一段一次用完。后三日当日往返，每日 ≤3 景点，步行 ≤1 小时。',
   cons:'首日约 950 km，10–11 小时，全程最硬一天。早出发，避免夜间进城。\n\n'
@@ -284,7 +284,7 @@ A:{k:'A',gr:'甲',name:'Calgary 连住四晚 · 6 天 5 晚',met:'6 DAYS · 5 NI
      {t:'—',p:'burnaby',n:'到家',s:''}]}
   ]},
 
-B:{k:'B',gr:'乙',name:'住进 Banff · 5 天',met:'5 DAYS · 示例 2027.07',hex:'#2E8C9E',tag:'省折返',
+B:{k:'B',gr:'乙',name:'住进 Banff · 5 天',met:'5 天 · 示例 2027.07',hex:'#2E8C9E',tag:'省折返',
   start:'2027-07-15', dates:'2027.07.15 → 07.19',
   pitch:'住 Banff 镇，省去每日 Calgary 往返 2 小时。7 点可达湖边，'
     +'傍晚 Norquay 下山直接回镇用餐。\n\n'
@@ -314,7 +314,7 @@ B:{k:'B',gr:'乙',name:'住进 Banff · 5 天',met:'5 DAYS · 示例 2027.07',he
      {t:'—',p:'golden',n:'Golden 中途停',s:''},{t:'—',p:'burnaby',n:'到家',s:''}]}
   ]},
 
-C:{k:'C',gr:'丙',name:'飞过去 4 天 · 落地租车',met:'4 DAYS · 示例 2027.08',hex:'#7A6A8C',tag:'时间紧',
+C:{k:'C',gr:'丙',name:'飞过去 4 天 · 落地租车',met:'4 天 · 示例 2027.08',hex:'#7A6A8C',tag:'时间紧',
   start:'2027-08-12', dates:'2027.08.12 → 08.15',
   pitch:'YVR→YYC 1.5 小时，落地租车直接进山。省 2 整天驾驶，'
     +'4 天完成方案乙 5 天内容。\n\n'
@@ -340,7 +340,7 @@ C:{k:'C',gr:'丙',name:'飞过去 4 天 · 落地租车',met:'4 DAYS · 示例 2
      {t:'上午',p:'calgary',n:'市区或 outlet',s:''},{t:'—',p:'yyc',n:'还车',s:''}]}
   ]},
 
-D:{k:'D',gr:'丁',name:'深度 8 天 · 含 Jasper',met:'8 DAYS · 示例 2027.07',hex:'#D8A93C',tag:'走完整',
+D:{k:'D',gr:'丁',name:'深度 8 天 · 含 Jasper',met:'8 天 · 示例 2027.07',hex:'#D8A93C',tag:'走完整',
   start:'2027-07-10', dates:'2027.07.10 → 07.17',
   pitch:'加入 Jasper + Icefields Parkway 全程，230 km，'
     +'冰川/湖/瀑布密集分布，慢开需一整天。\n\n'
@@ -370,7 +370,7 @@ D:{k:'D',gr:'丁',name:'深度 8 天 · 含 Jasper',met:'8 DAYS · 示例 2027.0
    {d:'07.17',w:'',t:'Banff → Burnaby',r:'bc',stay:'—',drive:10,note:'过累 → Kamloops 加一晚。',stops:[{t:'—',p:'burnaby',n:'到家',s:''}]}
   ]},
 
-E:{k:'E',gr:'戊',name:'冬季滑雪 7 天 · Kicking Horse + SkiBig3',met:'7 DAYS · 示例 2028.02',hex:'#1F6FA8',tag:'雪季',
+E:{k:'E',gr:'戊',name:'冬季滑雪 7 天 · Kicking Horse + SkiBig3',met:'7 天 · 示例 2028.02',hex:'#1F6FA8',tag:'雪季',
   start:'2028-02-05', dates:'2028.02.05 → 02.11',
   pitch:'冬季专攻滑雪。Golden 滑 2 天 Kicking Horse，再进 Banff 滑 SkiBig3。\n\n'
     +'Kicking Horse 落差 1260 m，陡峭碗状地形著称。SkiBig3 = Sunshine + Lake Louise + Norquay，'
@@ -402,7 +402,7 @@ const BROWS=[
  {k:'gas', n:'油费', s:'往返约 1500 km · 9 L/100km · 1.7 CAD/L', max:1200},
  {k:'stay',n:'住宿', s:'Golden / Calgary / Banff / Canmore', max:4000},
  {k:'food',n:'餐饮', s:'Banff 镇内价格高于 Calgary 约 30%', max:2500},
- {k:'park',n:'国家公园门票', s:'2026.06.19–09.07 由 Canada Strong Pass 覆盖', max:400},
+ {k:'park',n:'国家公园门票', s:'2026 夏季由 Canada Strong Pass 覆盖，2027 待确认，不免费要自己填', max:400},
  {k:'shuttle',n:'班车 · 停车', s:'Parks Canada 班车 + Lake Louise 停车', max:400},
  {k:'tickets',n:'门票 · 雪票 · 活动', s:'冰原车 / Calgary Tower / 雪票', max:3000},
  {k:'shop',n:'购物', s:'Outlet + 手信', max:2000},
@@ -411,7 +411,7 @@ const BROWS=[
 
 const TODOS=[
  {id:'b1',n:'抢 Moraine Lake 班车（最优先）',s:'出发前 2 日 08:00 MT（温哥华 07:00）放 60% 票额。预先登录账号，确定湖点+人数，勿现场填写',due:'出发前 2 天',v:'ABCD'},
- {id:'b2',n:'确认国家公园门票',s:'2026.06.19–09.07 Canada Strong Pass 免费入园。其余时段需购日票/年票，班车票不含门票',due:'现在',v:'ABCDE'},
+ {id:'b2',n:'确认国家公园门票',s:'2026 夏季 Canada Strong Pass 免费入园，2027 是否延续待 Parks Canada 公布。不免费就需购日票/年票，班车票不含门票',due:'现在',v:'ABCDE'},
  {id:'b3',n:'订住宿',s:'Banff 镇 + Lake Louise 村旺季极紧张。同价位 Canmore 通常高一档',due:'现在',v:'ABCDE'},
  {id:'b4',n:'订餐厅',s:'Farm and Fire / Fairmont 湖景餐厅 / JOEY 均需订位。Golden 的 Wolfs Den 旺季需等位',due:'出发前 1 周',v:'ABCD'},
  {id:'b5',n:'车检 + 加油策略',s:'查胎压/机油/雨刮。Icefields Parkway 全程无加油站。Coquihalla 段油价高，Kamloops 加油最划算',due:'出发前',v:'ABDE'},

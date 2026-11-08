@@ -3,257 +3,149 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Trips</title>
-<meta name="theme-color" content="#0B0E13">
+<title>旅行计划</title>
+<meta name="theme-color" content="#F4F0E6">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700&family=Zen+Kaku+Gothic+New:wght@900&family=Cinzel:wght@700&family=Archivo:wght@900&family=Noto+Serif+SC:wght@700&family=Noto+Sans+SC:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0B0E13; --card:#11151C; --card-2:#161B23; --line:#1F2630; --line-2:#171D25;
-  --tx:#E9E7E2; --dim:#8D97A6; --faint:#5A6472;
-  --mono:'IBM Plex Mono',ui-monospace,monospace;
-  --body:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;
+  --paper:#F4F0E6; --card:#FCFAF4; --ink:#2A2620; --slate:#4D473C; --mist:#756E60; --faint:#A0988A;
+  --line:#D8D0BD; --acc:#A8432E;
+  --disp:'Noto Serif SC','Source Han Serif SC','Songti SC','Noto Serif CJK SC',serif;
+  --body:'Noto Sans SC','PingFang SC','Microsoft YaHei','Hiragino Sans GB',sans-serif;
 }
 *{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{
-  background:var(--bg);color:var(--tx);font-family:var(--body);font-weight:300;
-  line-height:1.7;-webkit-font-smoothing:antialiased;min-height:100dvh;
-  padding:clamp(22px,5vw,60px) clamp(18px,5vw,40px) 60px;
-  padding-top:calc(clamp(22px,5vw,60px) + env(safe-area-inset-top));
-}
-body:before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
-  background:
-    repeating-linear-gradient(to right,rgba(255,255,255,.018) 0 1px,transparent 1px 84px),
-    repeating-linear-gradient(to bottom,rgba(255,255,255,.018) 0 1px,transparent 1px 84px);
-}
-.wrap{width:100%;max-width:780px;margin:0 auto;position:relative;z-index:1}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;min-height:100dvh;
+  padding:clamp(28px,7vw,76px) clamp(20px,6vw,44px) 64px;padding-top:calc(clamp(28px,7vw,76px) + env(safe-area-inset-top))}
+.wrap{max-width:720px;margin:0 auto}
 
-header{margin-bottom:clamp(26px,5vw,42px)}
-.eyebrow{
-  font-family:var(--mono);font-size:10px;letter-spacing:.24em;color:var(--faint);
-  text-transform:uppercase;display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.eyebrow:after{content:'';flex:1;height:1px;background:var(--line)}
-h1{
-  font-family:var(--mono);font-weight:500;font-size:clamp(30px,7vw,44px);margin:0;
-  letter-spacing:-.02em;line-height:1;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
-h1 b{font-weight:500}
-h1 i{font-style:normal;font-size:clamp(10px,2.2vw,12px);letter-spacing:.14em;color:var(--faint)}
-.lede{font-size:14px;color:var(--dim);margin:16px 0 0;max-width:52ch;line-height:1.85}
+h1{font-family:var(--disp);font-weight:700;font-size:clamp(34px,8vw,48px);line-height:1.2;margin:0}
+.sub{color:var(--mist);margin:8px 0 0;font-size:15px}
+.next{margin:30px 0 0;padding:14px 0;border-top:2px solid var(--ink);border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+.next .l{color:var(--mist);font-size:14px}
+.next .l b{color:var(--ink);font-weight:500}
+.next .n{font-family:var(--disp);font-weight:700;font-size:26px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.next .n small{font-family:var(--body);font-weight:400;font-size:14px;color:var(--mist);margin-left:4px}
 
-.tl{margin:clamp(28px,5vw,42px) 0 clamp(24px,4vw,34px)}
-.tlhead{
-  display:flex;justify-content:space-between;align-items:baseline;
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--faint);
-  text-transform:uppercase;margin-bottom:11px}
-.tlbox{position:relative;height:66px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.yr{position:absolute;top:0;bottom:0;border-left:1px solid var(--line-2)}
-.yr:first-child{border-left:0}
-.yr span{
-  position:absolute;top:5px;left:7px;font-family:var(--mono);font-size:9px;
-  letter-spacing:.14em;color:var(--faint)}
-.seg{
-  position:absolute;height:9px;border-radius:2px;background:var(--c);
-  transition:transform .22s cubic-bezier(.2,.8,.3,1),box-shadow .22s,opacity .22s;
-  opacity:.82;cursor:pointer;border:0;padding:0}
-.seg:hover,.seg.on{opacity:1;transform:scaleY(1.7);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 22%,transparent)}
-.seg b{
-  position:absolute;left:0;top:-15px;font-family:var(--mono);font-size:8.5px;
-  letter-spacing:.1em;color:var(--c);white-space:nowrap;font-weight:500;opacity:0;transition:opacity .2s}
-.seg:hover b,.seg.on b{opacity:1}
-.tlnote{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--faint);margin-top:10px;line-height:1.9}
+.yr{font-family:var(--disp);font-weight:700;font-size:18px;margin:44px 0 0;padding-bottom:8px;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:baseline}
+.yr span{font-family:var(--body);font-weight:400;font-size:13.5px;color:var(--mist)}
 
-.grid{display:flex;flex-direction:column;gap:9px}
-a.card{
-  display:block;text-decoration:none;color:inherit;background:var(--card);
-  border:1px solid var(--line);border-radius:12px;padding:0;overflow:hidden;
-  transition:border-color .22s,background .22s,transform .22s cubic-bezier(.2,.8,.3,1);
-  position:relative}
-a.card:hover{border-color:color-mix(in srgb,var(--c) 55%,var(--line));background:var(--card-2);transform:translateY(-2px)}
-a.card:focus-visible{outline:2px solid var(--c);outline-offset:3px}
-a.card:before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--c);opacity:.75;transition:opacity .22s,width .22s}
-a.card:hover:before{opacity:1;width:3px}
-.inner{padding:18px 20px 17px 22px}
-.top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-.idx{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--c);flex:none}
-.native{
-  font-family:var(--nf);font-size:clamp(17px,3.6vw,20px);font-weight:var(--nw,700);
-  letter-spacing:var(--nl,.02em);line-height:1.25;margin:0;flex:1 1 auto;min-width:0}
-.zh{font-size:13px;color:var(--dim);margin:5px 0 0;letter-spacing:.02em}
-.meta{
-  display:flex;gap:7px;flex-wrap:wrap;margin-top:13px;font-family:var(--mono);font-size:9.5px;
-  letter-spacing:.07em}
-.chip{padding:3px 8px;border-radius:4px;background:rgba(255,255,255,.035);color:var(--dim);border:1px solid var(--line-2)}
-.chip.k{color:var(--c);border-color:color-mix(in srgb,var(--c) 32%,transparent);
-  background:color-mix(in srgb,var(--c) 9%,transparent)}
-.desc{font-size:12.5px;color:var(--dim);line-height:1.8;margin:12px 0 0;max-width:56ch}
-.foot{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;
-  padding-top:12px;border-top:1px solid var(--line-2)}
-.pal{display:flex;gap:4px}
-.pal i{width:16px;height:4px;border-radius:1px;display:block}
-.go{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--faint);transition:color .2s}
-a.card:hover .go{color:var(--c)}
+a.row{display:grid;grid-template-columns:34px 1fr;gap:0 6px;padding:20px 0 19px;border-bottom:1px solid var(--line);
+  color:inherit;text-decoration:none}
+a.row .i{color:var(--faint);font-size:14px;padding-top:5px;font-variant-numeric:tabular-nums}
+a.row .t{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap}
+a.row h2{font-family:var(--disp);font-weight:700;font-size:21px;line-height:1.4;margin:0;
+  text-decoration:underline;text-decoration-color:transparent;text-decoration-thickness:2px;text-underline-offset:6px;transition:text-decoration-color .2s}
+a.row:hover h2,a.row:focus-visible h2{text-decoration-color:var(--c)}
+a.row:focus-visible{outline:2px solid var(--c);outline-offset:4px}
+a.row .d{color:var(--mist);font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}
+a.row .z{grid-column:2;color:var(--slate);font-size:14.5px;margin:3px 0 0}
+a.row .p{grid-column:2;color:var(--mist);font-size:14px;margin:7px 0 0;line-height:1.75}
+a.row .m{grid-column:2;color:var(--mist);font-size:13.5px;margin:7px 0 0}
+a.row .m i{font-style:normal;color:var(--c);font-weight:500}
 
-footer{
-  margin-top:clamp(30px,5vw,44px);padding-top:18px;border-top:1px solid var(--line);
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;color:var(--faint);line-height:2}
-footer b{color:var(--dim);font-weight:400}
-
-@media (max-width:560px){
-  .tlbox{height:60px}
-  .inner{padding:16px 16px 15px 18px}
-  .desc{font-size:12px}
-  .seg b{display:none}
-}
-@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}
+footer{margin-top:40px;color:var(--mist);font-size:13.5px;line-height:1.9}
+@media (max-width:520px){a.row{grid-template-columns:26px 1fr} a.row h2{font-size:19px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <div class="eyebrow">Itineraries</div>
-    <h1><b>Trips</b><i id="count"></i></h1>
-    <p class="lede">每个目的地有独立的行程码、地图、住宿与预算，可以加到手机主屏幕离线打开。</p>
+    <h1>旅行计划</h1>
+    <p class="sub" id="sub"></p>
   </header>
 
-  <section class="tl">
-    <div class="tlhead"><span>Timeline</span><span id="tlrange"></span></div>
-    <div class="tlbox" id="tlbox"></div>
-    <div class="tlnote">南美分四趟，各按季节。点击色块跳转。</div>
-  </section>
+  <div class="next" id="next" hidden></div>
 
-  <div class="grid" id="grid"></div>
+  <main id="list"></main>
 
   <footer>
-    每站<b>独立编码</b>，数据隔离。<br>
-    手机可「添加到主屏幕」，离线可开。
+    每个目的地各有一页，里面有地图、逐日行程、住宿、预算，还能记航班、租车和分账。<br>
+    在手机上选「添加到主屏幕」，没网的地方也能打开。
   </footer>
 </div>
 
 <script>
 /* ══════════════════════════════════════════════════════════
-   改这里就能改首页。
-   font / pal 对应各站自己的设计语言，segs 是时间轴上的段落。
+   想改首页，只改这个数组。
+   start / end：用来排序、分年份、算倒计时
+   when：卡片上显示的日期文字
+   c：这一行的点缀色
    ══════════════════════════════════════════════════════════ */
 const TRIPS=[
- {href:'./banff-2026/', c:'#2E8C9E',
-  native:'Banff · Calgary', zh:'落基山 · 温哥华自驾往返 / 飞抵 / 冬季滑雪',
-  font:"'Bitter','Noto Serif SC',serif", weight:800, ls:'-.01em',
-  chips:['2026.08.27 → 09.01','6 天 5 晚','5 套方案'], key:'日期可自定义',
-  desc:'Calgary 连住四晚 6 天 / Banff 5 天 / 飞抵 4 天 / 含 Jasper 8 天 / 冬季滑雪 7 天。每套方案日期可选。',
-  pal:['#2E8C9E','#C0392B','#D8A93C','#2F6B4F'],
-  segs:[{a:'2026-08-27',b:'2026-09-01',t:'Banff'}]},
+ {href:'./banff-2027/', c:'#2F6F73', start:'2027-08-27', end:'2027-09-01',
+  name:'Banff · Calgary', zh:'落基山，温哥华自驾往返 / 飞抵 / 冬季滑雪',
+  when:'8.27 → 9.01', len:'6 天 5 晚', plans:'5 套方案', key:'日期可自定义',
+  desc:'Calgary 连住四晚 6 天、Banff 5 天、飞抵 4 天、含 Jasper 8 天、冬季滑雪 7 天。每套方案的日期都能改。'},
 
- {href:'./fall-2026/', c:'#C8412B',
-  native:'Automne · 加拿大赏枫', zh:'Algonquin 阿冈昆/ Charlevoix 沙勒瓦/ Cape Breton 布雷顿/ Yukon 育空',
-  font:"'Fraunces','Noto Serif SC',serif", weight:900, ls:'-.015em',
-  chips:['2026.09.24 → 10.06','6–8 天','4 条线路'], key:'变色窗口图',
-  desc:'枫色自北向南推移，四条线高峰期相差 1–2 周。页面根据所选日期计算与各线高峰的重叠天数。',
-  pal:['#C8412B','#E0A526','#B85C2E','#6FA07A'],
-  segs:[{a:'2026-09-24',b:'2026-10-06',t:'赏枫'}]},
+ {href:'./fall-2027/', c:'#A8432E', start:'2027-09-24', end:'2027-10-06',
+  name:'加拿大赏枫', zh:'Algonquin / Charlevoix / Cape Breton / Yukon',
+  when:'9.24 → 10.06', len:'6–8 天', plans:'4 条线路', key:'变色窗口图',
+  desc:'枫叶自北向南变红，四条线的高峰期差 1–2 周。页面会按你选的日期算和各线高峰重叠几天。'},
 
- {href:'./kansai-2026/', c:'#E2452F',
-  native:'関西 · 四国 · 熊野古道', zh:'大阪 · 四国自驾 · 京都旅居 · 熊野徒步',
-  font:"'Shippori Mincho','Noto Serif SC',serif", weight:700, ls:'.06em',
-  chips:['2026.09.17 → 10.06','18 晚','4 个方案'], key:'熊野中边路 3 天',
-  desc:'大阪倒时差 → 四国自驾环线 → 京都 6 晚 → 熊野中边路。行程顺序按台风季风险评估排布。',
-  pal:['#E2452F','#4C9CC4','#57946F','#C9A227'],
-  segs:[{a:'2026-09-17',b:'2026-10-06',t:'関西'}]},
+ {href:'./kansai-2027/', c:'#B3432F', start:'2027-09-17', end:'2027-10-06',
+  name:'関西・四国・熊野古道', zh:'大阪 · 四国自驾 · 京都旅居 · 熊野徒步',
+  when:'9.17 → 10.06', len:'18 晚', plans:'4 个方案', key:'熊野中边路 3 天',
+  desc:'先在大阪倒时差，再环四国自驾，京都住 6 晚，最后走熊野中边路。顺序是按台风季风险排的。'},
 
- {href:'./japow-2027/', c:'#4C9CC4',
-  native:'JAPOW · 留寿都 / 白马', zh:'Epic Pass · 5+5 天',
-  font:"'Zen Kaku Gothic New','Noto Sans SC',sans-serif", weight:900, ls:'-.01em',
-  chips:['2027.01.08 → 01.24','17 天','10 个滑雪日'], key:'实时雪情',
-  desc:'Epic 日本仅限两家雪场，各 5 天且须连续使用。含未来 7 天降雪预报及去年同期实测数据。',
-  pal:['#4C9CC4','#D63C33','#1F8F5F','#141A22'],
-  segs:[{a:'2027-01-08',b:'2027-01-24',t:'JAPOW'}]},
+ {href:'./japow-2027/', c:'#2F5D8A', start:'2027-01-08', end:'2027-01-24',
+  name:'JAPOW 留寿都 / 白马', zh:'Epic Pass · 5+5 天',
+  when:'1.08 → 1.24', len:'17 天', plans:'10 个滑雪日', key:'实时雪情',
+  desc:'Epic 在日本只含两家雪场，各 5 天且必须连续用。页面带未来 7 天降雪预报和去年同期实测。'},
 
- {href:'./camino-2027/', c:'#D9A21B',
-  native:'Camino de Santiago', zh:'朝圣之路 · 最后 100 km · 北西班牙',
-  font:"'Cinzel','Noto Serif SC',serif", weight:700, ls:'.05em',
-  chips:['2027.05.08 → 05.23','16 天','4 条路线'], key:'115 km 步行',
-  desc:'Sarria → Santiago，115 km，达标即可领取 Compostela 证书。剩下时间给圣塞瓦斯蒂安、毕尔巴鄂和马德里。',
-  pal:['#D9A21B','#2F7D5B','#B3402A','#1F6FA8'],
-  segs:[{a:'2027-05-08',b:'2027-05-23',t:'Camino'}]},
+ {href:'./camino-2027/', c:'#946414', start:'2027-05-08', end:'2027-05-23',
+  name:'Camino de Santiago', zh:'朝圣之路，最后 100 公里，西班牙北部',
+  when:'5.08 → 5.23', len:'16 天', plans:'4 条路线', key:'115 km 步行',
+  desc:'Sarria 走到 Santiago，115 公里，走满即可领 Compostela 证书。剩下的天数留给圣塞瓦斯蒂安、毕尔巴鄂和马德里。'},
 
- {href:'./andes-2027/', c:'#C4392D',
-  native:'Los Andes', zh:'南美四程 · 秘鲁 / 玻利维亚 / 巴塔哥尼亚 / 哥伦比亚',
-  font:"'Archivo','Noto Sans SC',sans-serif", weight:900, ls:'-.02em',
-  chips:['2027.06 → 2029.01','54 天 · 分四趟','最高 4278 m'], key:'海拔曲线',
-  desc:'四地最佳季节互不重叠，遂分拆为四趟分年执行。页面按每日睡眠海拔计算高反风险，超标日期标红。',
-  pal:['#C4392D','#D99A2B','#3FA3B8','#4E9E6B'],
-  segs:[{a:'2027-06-12',b:'2027-06-25',t:'秘鲁'},
-        {a:'2028-02-19',b:'2028-03-01',t:'玻利维亚'},
-        {a:'2028-11-11',b:'2028-11-26',t:'巴塔哥尼亚'},
-        {a:'2029-01-13',b:'2029-01-24',t:'哥伦比亚'}]}
+ {href:'./andes-2027/', c:'#A23B30', start:'2027-06-12', end:'2029-01-24',
+  name:'Los Andes', zh:'南美四程：秘鲁 / 玻利维亚 / 巴塔哥尼亚 / 哥伦比亚',
+  when:'2027.06 → 2029.01', len:'54 天，分四趟', plans:'最高 4278 m', key:'海拔曲线',
+  desc:'四地最佳季节互不重叠，所以拆成四趟分年去。页面按每晚睡眠海拔算高反风险，超标的日子标红。'}
 ];
 
 const $=s=>document.querySelector(s);
-const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
-const D=s=>new Date(s+'T00:00:00Z');
+const D=s=>new Date(s+'T00:00:00');
+const today=new Date(); today.setHours(0,0,0,0);
+const sorted=[...TRIPS].sort((a,b)=>D(a.start)-D(b.start));
 
-const all=TRIPS.flatMap(t=>t.segs);
-const t0=D('2026-08-20'), t1=D('2029-03-31'), span=t1-t0;
-const pct=d=>((D(d)-t0)/span*100);
-const box=$('#tlbox');
+$('#sub').textContent=`${sorted[0].start.slice(0,4)} — ${sorted[sorted.length-1].end.slice(0,4)}，${TRIPS.length} 个目的地`;
 
-[2026,2027,2028,2029].forEach(y=>{
-  const s0=Math.max(0,pct(y+'-01-01'));
-  if(s0>=100) return;
-  const s1=Math.min(100,pct((y+1)+'-01-01'));
-  const g=el('div','yr'); g.style.left=s0+'%'; g.style.width=(s1-s0)+'%';
-  g.appendChild(el('span',null,String(y)));
-  box.appendChild(g);
-});
+/* 下一次出发 */
+const up=sorted.find(t=>D(t.end)>=today);
+const nx=$('#next');
+if(up){
+  const going=D(up.start)<=today, days=Math.round((D(up.start)-today)/864e5);
+  nx.innerHTML=going
+    ?`<span class="l">正在进行　<b>${up.name}</b></span><span class="n">${Math.round((today-D(up.start))/864e5)+1}<small>天</small></span>`
+    :`<span class="l">下一次出发　<b>${up.name}</b></span><span class="n">${days}<small>天后</small></span>`;
+  nx.hidden=false;
+}
 
-TRIPS.forEach((t,ti)=>{
-  t.segs.forEach(sg=>{
-    const s=el('button','seg');
-    s.type='button';
-    s.style.setProperty('--c',t.c);
-    s.style.left=pct(sg.a)+'%';
-    s.style.width=Math.max(1.1,pct(sg.b)-pct(sg.a))+'%';
-    s.style.top=(28+ti*8)+'px';
-    s.appendChild(el('b',null,sg.t));
-    s.title=sg.t+'  '+sg.a+' → '+sg.b;
-    s.setAttribute('aria-label',sg.t+' '+sg.a+' 至 '+sg.b);
-    s.onclick=()=>{location.href=t.href};
-    s.dataset.trip=ti;
-    box.appendChild(s);
-  });
-});
-$('#tlrange').textContent='2026 — 2029';
-$('#count').textContent='／ '+TRIPS.length+' destinations · '+all.length+' trips';
-
-const grid=$('#grid');
-TRIPS.forEach((t,i)=>{
-  const a=document.createElement('a');
-  a.className='card'; a.href=t.href;
-  a.style.setProperty('--c',t.c);
-  a.style.setProperty('--nf',t.font);
-  a.style.setProperty('--nw',t.weight);
-  a.style.setProperty('--nl',t.ls);
-  const chips=t.chips.map(c=>`<span class="chip">${c}</span>`).join('')
-    +`<span class="chip k">${t.key}</span>`;
-  const pal=t.pal.map(c=>`<i style="background:${c}"></i>`).join('');
-  a.innerHTML=`<div class="inner">
-    <div class="top"><span class="idx">${String(i+1).padStart(2,'0')}</span>
-      <h2 class="native">${t.native}</h2></div>
-    <p class="zh">${t.zh}</p>
-    <div class="meta">${chips}</div>
-    <p class="desc">${t.desc}</p>
-    <div class="foot"><span class="pal">${pal}</span><span class="go">打开 →</span></div>
-  </div>`;
-  const mark=on=>document.querySelectorAll('.seg[data-trip="'+i+'"]')
-    .forEach(s=>s.classList.toggle('on',on));
-  a.addEventListener('mouseenter',()=>mark(true));
-  a.addEventListener('mouseleave',()=>mark(false));
-  a.addEventListener('focus',()=>mark(true));
-  a.addEventListener('blur',()=>mark(false));
-  grid.appendChild(a);
+/* 按年份分组 */
+const list=$('#list'); let idx=0, yr=null;
+sorted.forEach(t=>{
+  const y=t.start.slice(0,4);
+  if(y!==yr){
+    yr=y;
+    const n=sorted.filter(x=>x.start.slice(0,4)===y).length;
+    const h=document.createElement('div'); h.className='yr'; h.innerHTML=`${y}<span>${n} 个</span>`;
+    list.appendChild(h);
+  }
+  idx++;
+  const a=document.createElement('a'); a.className='row'; a.href=t.href; a.style.setProperty('--c',t.c);
+  a.innerHTML=`<span class="i">${String(idx).padStart(2,'0')}</span>
+    <div class="t"><h2>${t.name}</h2><span class="d">${t.when}</span></div>
+    <p class="z">${t.zh}</p>
+    <p class="p">${t.desc}</p>
+    <p class="m">${t.len}　·　${t.plans}　·　<i>${t.key}</i></p>`;
+  list.appendChild(a);
 });
 </script>
 </body>

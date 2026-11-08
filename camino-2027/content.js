@@ -33,11 +33,11 @@ const TXT={
   itinHint: '点任意一天，地图跟随。左侧数字 = 距 Santiago 剩余公里数，按石碑标注方式。',
 
   pinsEmpty:
-    '暂无收藏点。分享行程码给同行者，新增庇护所/餐厅/教堂实时同步。'
+    '暂无收藏点。'
     +'地图长按可直接落点。',
 
   bookingIntro:
-    '本栏为预订记录，非建议。勾选完成项，填确认号+实付金额，同行者可见，预算页自动对账。',
+    '本栏为预订记录，非建议。勾选完成项，填确认号+实付金额，预算页自动对账。',
 
   prepIntro:
     '按方案筛选。朝圣者证书（credencial）+5 月住宿，优先处理。',
@@ -51,9 +51,9 @@ const TXT={
   noteHint: '记实地信息：哪家庇护所需早到/无补水段/路线修正。显示在描述上方。',
 
   aboutPage:
-    '行程码 = 数据视图。同码用户共享收藏点。新码 = 空白行程，供他人独立使用。',
+    '收藏点、笔记和预订记录存在这台设备的浏览器里。换设备或清除浏览数据会丢，需要的话用下面的导出备份。',
   aboutFoot:
-    '共享数据对同码用户可见。坐标为示意精度，公里数为路书常见值，实际以石碑为准。'
+    '数据只存在本机。坐标为示意精度，公里数为路书常见值，实际以石碑为准。'
 };
 
 /* ── Compostela 规则 ─────────────────────────────────────── */
@@ -156,7 +156,7 @@ const TIMING={
 
 /* ══════ 四个方案 ══════ */
 const V={
-A:{k:'A',gr:'I',name:'最后 100 公里 + 西班牙北部',met:'16 DAYS · 5 WALK',hex:'#D9A21B',tag:'推荐',
+A:{k:'A',gr:'I',name:'最后 100 公里 + 西班牙北部',met:'16 天 · 5 天步行',hex:'#D9A21B',tag:'推荐',
   dates:'2027.05.08 → 05.23', walkDays:5, walkKm:115,
   pitch:'Sarria 走到 Santiago，6 天 115 km，达 Compostela 证书门槛。'
     +'余下时间：圣塞瓦斯蒂安/毕尔巴鄂/马德里。\n\n'
@@ -205,7 +205,7 @@ A:{k:'A',gr:'I',name:'最后 100 公里 + 西班牙北部',met:'16 DAYS · 5 WAL
    {d:'05.23',w:'日',t:'马德里 → 温哥华',r:'cit',stay:'—',km:null,note:'',stops:[{t:'—',p:'mad',n:'MAD',s:'退税柜台排队久，提前三小时'}]}
   ]},
 
-B:{k:'B',gr:'II',name:'葡萄牙之路 · Porto 出发',met:'18 DAYS · 11 WALK',hex:'#C0532F',tag:'最平缓',
+B:{k:'B',gr:'II',name:'葡萄牙之路 · Porto 出发',met:'18 天 · 11 天步行',hex:'#C0532F',tag:'最平缓',
   dates:'2027.05.06 → 05.23', walkDays:11, walkKm:263,
   pitch:'Porto 出发，240 km 全程，12 天。主线中地形最平缓，'
     +'气候优于内陆。海岸变体沿大西洋，长段木栈道。\n\n'
@@ -235,7 +235,7 @@ B:{k:'B',gr:'II',name:'葡萄牙之路 · Porto 出发',met:'18 DAYS · 11 WALK'
    {d:'05.23',w:'日',t:'马德里 → 温哥华',r:'cit',stay:'—',km:null,note:'',stops:[{t:'—',p:'mad',n:'MAD',s:''}]}
   ]},
 
-C:{k:'C',gr:'III',name:'原始之路 · Oviedo 出发',met:'20 DAYS · 13 WALK',hex:'#1F6FA8',tag:'最难最静',
+C:{k:'C',gr:'III',name:'原始之路 · Oviedo 出发',met:'20 天 · 13 天步行',hex:'#1F6FA8',tag:'最难最静',
   dates:'2027.05.04 → 05.23', walkDays:13, walkKm:315,
   pitch:'321 km，14 天，最古老路线，9 世纪阿方索二世原路。'
     +'翻越坎塔布连山脉，服务点少，同行者少。\n\n'
@@ -268,7 +268,7 @@ C:{k:'C',gr:'III',name:'原始之路 · Oviedo 出发',met:'20 DAYS · 13 WALK',
    {d:'05.23',w:'日',t:'马德里 → 温哥华',r:'cit',stay:'—',km:null,note:'',stops:[{t:'—',p:'mad',n:'MAD',s:''}]}
   ]},
 
-D:{k:'D',gr:'IV',name:'法国之路全程 · SJPdP 出发',met:'38 DAYS · 33 WALK · 节点示意',hex:'#8C4A6B',tag:'全程',
+D:{k:'D',gr:'IV',name:'法国之路全程 · SJPdP 出发',met:'38 天 · 33 天步行 · 节点示意',hex:'#8C4A6B',tag:'全程',
   dates:'2027.05.01 → 06.07', walkDays:33, walkKm:780,
   pitch:'780 km，33 步行日，法国边境至 Santiago。'
     +'即多数人所指「朝圣之路」标准全程。\n\n'

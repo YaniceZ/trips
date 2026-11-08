@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-trip="banff">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
 <title>Banff · Calgary — 落基山</title>
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#EDF1F1">
+<meta name="theme-color" content="#F4F0E6">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,12 +48,12 @@ header{flex:0 0 auto;background:var(--card);border-bottom:1px solid var(--line);
 .brand{flex:1 1 auto;min-width:190px}
 .brand h1{font-family:var(--disp);font-weight:800;font-size:22px;margin:0;letter-spacing:-.01em;line-height:1.1}
 .brand h1 i{font-style:normal;color:var(--rd)}
-.brand .sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--mist);
+.brand .sub{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--mist);
   margin-top:3px;display:flex;gap:9px;flex-wrap:wrap;align-items:center}
 .brand .sub b{color:var(--slate);font-weight:600}
 .hright{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .chip{display:inline-flex;align-items:center;gap:6px;background:var(--card-2);border:1px solid var(--line);
-  border-radius:7px;padding:5px 10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+  border-radius:7px;padding:5px 10px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;
   color:var(--slate);transition:.16s}
 .chip:hover{border-color:var(--faint);background:var(--sunk)}
 .chip b{color:var(--ink);font-weight:600}
@@ -62,7 +62,7 @@ header{flex:0 0 auto;background:var(--card);border-bottom:1px solid var(--line);
 @keyframes pl{50%{opacity:.2}}
 .avatars{display:flex}
 .av{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-family:var(--mono);
-  font-size:10px;font-weight:600;color:#fff;border:2px solid var(--card);margin-left:-6px;flex:none}
+  font-size:12px;font-weight:600;color:#fff;border:2px solid var(--card);margin-left:-6px;flex:none}
 .av:first-child{margin-left:0}
 
 /* ── 方案切换：雪道牌 ── */
@@ -77,7 +77,7 @@ header{flex:0 0 auto;background:var(--card);border-bottom:1px solid var(--line);
   font-family:var(--disp);font-weight:800;font-size:14px;transition:background .18s,color .18s}
 .opt[aria-pressed=true] .gr{background:var(--oc);color:#fff}
 .opt .lab{display:block;font-size:13px;font-weight:500;white-space:nowrap;line-height:1.3}
-.opt .met{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--mist);
+.opt .met{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;color:var(--mist);
   white-space:nowrap;margin-top:1px}
 
 /* ── main ── */
@@ -92,11 +92,11 @@ main{flex:1 1 auto;display:flex;min-height:0;position:relative;overflow:clip}
   border-bottom:2px solid transparent;transition:.16s;white-space:nowrap}
 .tab:hover{color:var(--slate)}
 .tab[aria-selected=true]{color:var(--ink);border-bottom-color:var(--rd);font-weight:500}
-.tab .n{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-left:3px}
+.tab .n{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-left:3px}
 .scroll{flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;padding:18px 18px 64px}
 
 /* ── typography ── */
-h2.sec{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);
+h2.sec{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);
   margin:0 0 11px;font-weight:600;display:flex;align-items:center;gap:9px}
 h2.sec:after{content:'';flex:1;height:1px;background:var(--line-2)}
 h2.sec+h2.sec{margin-top:26px}
@@ -105,7 +105,7 @@ p.tx{font-size:14px;color:var(--slate);line-height:1.85;margin:0 0 15px}
 p.tx b{color:var(--ink);font-weight:600}
 .callout{background:var(--card-2);border:1px solid var(--line-2);border-left:3px solid var(--amb);
   border-radius:0 8px 8px 0;padding:11px 13px;margin:0 0 18px}
-.callout .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--amb);
+.callout .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;color:var(--amb);
   text-transform:uppercase;font-weight:600}
 .callout p{margin:4px 0 0;font-size:13.5px;color:var(--slate);line-height:1.75}
 
@@ -116,25 +116,25 @@ p.tx b{color:var(--ink);font-weight:600}
 .qname{flex:0 0 62px;font-size:12.5px;font-weight:500}
 .qslots{display:flex;gap:4px;flex:1}
 .qs{flex:1;height:23px;border-radius:4px;background:var(--sunk);border:1px solid var(--line-2);
-  display:grid;place-items:center;font-family:var(--mono);font-size:9.5px;color:var(--faint)}
+  display:grid;place-items:center;font-family:var(--mono);font-size:11.5px;color:var(--faint)}
 .qs.on{background:var(--qc);border-color:var(--qc);color:#fff;font-weight:600}
-.qtot{flex:0 0 auto;font-family:var(--mono);font-size:11px;color:var(--slate)}
-.qnote{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--mist);
+.qtot{flex:0 0 auto;font-family:var(--mono);font-size:12.5px;color:var(--slate)}
+.qnote{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--mist);
   margin-top:11px;padding-top:10px;border-top:1px solid var(--line-2);line-height:1.7}
 .qnote.warn{color:var(--rd)}
 
 /* ── 签名 2：时机热力表 ── */
 .tm{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:8px;background:var(--card)}
 .tmg{display:grid;grid-template-columns:52px repeat(7,1fr)}
-.tmc{padding:5px 2px;text-align:center;font-family:var(--mono);font-size:8.5px;letter-spacing:.02em;
+.tmc{padding:5px 2px;text-align:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.02em;
   color:var(--mist);border-bottom:1px solid var(--line-2);background:var(--card-2)}
 .tmc.pk{color:var(--rd);font-weight:600}
-.tmh{padding:0 8px;font-size:11.5px;height:26px;white-space:nowrap;color:var(--slate);border-bottom:1px solid var(--line-2);
+.tmh{padding:0 8px;font-size:12.5px;height:26px;white-space:nowrap;color:var(--slate);border-bottom:1px solid var(--line-2);
   border-right:1px solid var(--line-2);background:var(--card-2);display:flex;align-items:center}
 .tmv{border-bottom:1px solid var(--line-2);border-right:1px solid var(--line-2);height:26px;
-  display:grid;place-items:center;font-family:var(--mono);font-size:8.5px;color:#fff;font-weight:600}
+  display:grid;place-items:center;font-family:var(--mono);font-size:10.5px;color:#fff;font-weight:600}
 .tmg>*:nth-last-child(-n+8){border-bottom:0}
-.tmleg{display:flex;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:9.5px;
+.tmleg{display:flex;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;
   color:var(--mist);margin:0 0 18px;letter-spacing:.04em}
 .tmleg i{font-style:normal;display:inline-flex;align-items:center;gap:3px}
 .tmleg b{width:8px;height:8px;border-radius:2px;display:inline-block}
@@ -148,7 +148,7 @@ p.tx b{color:var(--ink);font-weight:600}
 .day.open .daybtn{background:var(--card-2);border-color:var(--line)}
 .node{position:absolute;left:-34px;top:14px;width:36px;height:24px;border-radius:3px;
   background:var(--card);border:1px solid var(--nc);display:grid;place-items:center;z-index:2;
-  font-family:var(--mono);font-size:9px;font-weight:600;color:var(--nc);line-height:1}
+  font-family:var(--mono);font-size:11px;font-weight:600;color:var(--nc);line-height:1}
 .node small{display:block;font-size:6.5px;letter-spacing:.05em;opacity:.6;margin-top:1px}
 .node.jump{border-width:2px;border-color:var(--rd);color:var(--rd)}
 .day.open .node{background:var(--nc);color:#14110F}
@@ -158,11 +158,11 @@ p.tx b{color:var(--ink);font-weight:600}
 .spine:before{left:16px;width:6px;border-radius:0;background:
  repeating-linear-gradient(45deg,var(--line) 0 3px,transparent 3px 6px),
  repeating-linear-gradient(-45deg,var(--line) 0 3px,transparent 3px 6px)}
-.ddate{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--mist)}
+.ddate{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--mist)}
 .dtitle{font-family:var(--disp);font-size:15.5px;font-weight:700;margin-top:2px;line-height:1.4}
 .dnote{font-size:13px;color:var(--slate);margin-top:5px;line-height:1.7}
 .dmeta{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
-.pill{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;padding:3px 7px;border-radius:4px;
+.pill{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;padding:3px 7px;border-radius:4px;
   background:var(--sunk);color:var(--slate)}
 .pill.sk{background:var(--nc);color:#fff;font-weight:600}
 .pill.st{background:transparent;border:1px solid var(--line);color:var(--mist)}
@@ -170,9 +170,9 @@ p.tx b{color:var(--ink);font-weight:600}
 .day.open .dbody{display:block}
 .stop{display:flex;gap:10px;padding:8px 0;border-top:1px solid var(--line-2);width:100%;text-align:left;transition:.14s}
 .stop:hover{opacity:.65}
-.stop .t{font-family:var(--mono);font-size:10px;color:var(--faint);flex:0 0 44px;padding-top:3px}
+.stop .t{font-family:var(--mono);font-size:12px;color:var(--faint);flex:0 0 44px;padding-top:3px}
 .stop .n{font-size:13px;line-height:1.55}
-.stop .n small{display:block;color:var(--mist);font-size:11.5px;margin-top:2px;line-height:1.6}
+.stop .n small{display:block;color:var(--mist);font-size:12.5px;margin-top:2px;line-height:1.6}
 
 /* ── 卡片 ── */
 .pc{border:1px solid var(--line-2);border-radius:9px;padding:11px 12px;margin-bottom:7px;
@@ -181,20 +181,20 @@ p.tx b{color:var(--ink);font-weight:600}
 .pc .top{display:flex;align-items:flex-start;gap:9px}
 .pc .sw{width:8px;height:8px;border-radius:2px;flex:none;margin-top:7px;background:var(--pc)}
 .pc h3{margin:0;font-size:13.5px;font-weight:500;line-height:1.5;flex:1}
-.pc h3 span{font-family:var(--mono);color:var(--faint);font-size:10.5px;margin-left:6px;letter-spacing:.04em}
+.pc h3 span{font-family:var(--mono);color:var(--faint);font-size:12px;margin-left:6px;letter-spacing:.04em}
 .pc p{margin:5px 0 0;font-size:12.5px;color:var(--slate);line-height:1.7}
 .pc .foot{display:flex;align-items:center;gap:7px;margin-top:9px;flex-wrap:wrap}
-.byl{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9.5px;color:var(--mist)}
+.byl{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11.5px;color:var(--mist)}
 .mini{width:14px;height:14px;border-radius:4px;display:grid;place-items:center;font-size:7.5px;
   font-weight:600;color:#fff;font-family:var(--mono)}
-.act{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;padding:4px 8px;border-radius:5px;
+.act{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;padding:4px 8px;border-radius:5px;
   border:1px solid var(--line);color:var(--mist);transition:.15s}
 .act:hover{border-color:var(--faint);color:var(--slate)}
 .act.on{border-color:var(--rd);color:var(--rd);background:#FBEEEC}
 
 /* ── forms ── */
 .fd{margin-bottom:12px}
-label.lb{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;color:var(--mist);
+label.lb{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.11em;color:var(--mist);
   text-transform:uppercase;margin-bottom:5px;font-weight:600}
 input[type=text],input[type=number],input[type=date],textarea{width:100%;background:var(--card-2);border:1px solid var(--line);
   border-radius:7px;padding:9px 11px;font-size:13.5px;transition:.16s}
@@ -203,7 +203,7 @@ input[type=date]{color-scheme:light;color:var(--ink);font-family:var(--mono);let
 input:focus,textarea:focus{outline:none;border-color:var(--blu);background:var(--card)}
 textarea{resize:vertical;min-height:62px;line-height:1.65}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border-radius:7px;
-  border:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;
+  border:1px solid var(--line);font-family:var(--mono);font-size:12px;letter-spacing:.08em;
   color:var(--slate);transition:.16s;background:var(--card)}
 .btn:hover{border-color:var(--faint);background:var(--card-2)}
 .btn.pri{background:var(--rd);border-color:var(--rd);color:#fff;font-weight:600}
@@ -215,13 +215,13 @@ textarea{resize:vertical;min-height:62px;line-height:1.65}
 .btot{border:1px solid var(--line);border-radius:10px;padding:15px;margin-bottom:14px;background:var(--card-2);
   display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .btot .big{font-family:var(--mono);font-size:29px;font-weight:600;letter-spacing:-.02em;line-height:1;color:var(--ink)}
-.btot .cap{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--mist);
+.btot .cap{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;color:var(--mist);
   text-transform:uppercase;margin-bottom:6px;font-weight:600}
-.btot .side{text-align:right;font-family:var(--mono);font-size:11.5px;color:var(--mist)}
+.btot .side{text-align:right;font-family:var(--mono);font-size:12.5px;color:var(--mist)}
 .bl{padding:10px 0;border-bottom:1px solid var(--line-2)}
 .bl .lr{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .bl .nm{font-size:13.5px}
-.bl .nm small{display:block;color:var(--mist);font-size:11px;margin-top:1px;line-height:1.6}
+.bl .nm small{display:block;color:var(--mist);font-size:12.5px;margin-top:1px;line-height:1.6}
 .bl .vv{font-family:var(--mono);font-size:13.5px;color:var(--ink);white-space:nowrap;font-weight:500}
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:3px;background:var(--line);
   border-radius:3px;margin:11px 0 1px}
@@ -240,34 +240,34 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
   transform:rotate(43deg) translate(-1px,-1px)}
 .td.done .tx2{color:var(--faint);text-decoration:line-through}
 .tx2{font-size:13.5px;line-height:1.6;flex:1}
-.tx2 small{display:block;color:var(--mist);font-size:11.5px;margin-top:2px;line-height:1.65}
-.due{font-family:var(--mono);font-size:9.5px;color:var(--rd);flex:none;margin-top:4px;letter-spacing:.04em}
+.tx2 small{display:block;color:var(--mist);font-size:12.5px;margin-top:2px;line-height:1.65}
+.due{font-family:var(--mono);font-size:11.5px;color:var(--rd);flex:none;margin-top:4px;letter-spacing:.04em}
 .due.ok{color:var(--faint)}
 
 /* ── map overlay ── */
 .mc{position:absolute;top:12px;right:12px;z-index:900;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
 .mb{background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:7px;
-  padding:7px 11px;font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;color:var(--slate);
+  padding:7px 11px;font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;color:var(--slate);
   transition:.15s;white-space:nowrap;box-shadow:0 1px 5px rgba(15,21,28,.07)}
 .mb:hover{color:var(--ink);border-color:var(--faint)}
 .mb.on{color:var(--rd);border-color:var(--rd)}
 .leaflet-container{background:#D9E2E0;font-family:var(--body)}
-.leaflet-control-attribution{background:rgba(255,255,255,.85)!important;font-size:9px!important;font-family:var(--mono)!important;color:var(--mist)!important}
+.leaflet-control-attribution{background:rgba(255,255,255,.85)!important;font-size:11px!important;font-family:var(--mono)!important;color:var(--mist)!important}
 .leaflet-popup-content-wrapper{background:var(--card);border-radius:9px;border:1px solid var(--line);
   box-shadow:0 10px 32px rgba(15,21,28,.16)}
 .leaflet-popup-tip{background:var(--card);border:1px solid var(--line)}
 .leaflet-popup-content{margin:11px 13px;font-size:12.5px;line-height:1.7;color:var(--slate)}
 .leaflet-popup-content b{font-family:var(--disp);font-size:14px;font-weight:700;color:var(--ink);
   display:block;margin-bottom:2px}
-.leaflet-popup-content .jp{font-family:var(--mono);color:var(--faint);font-size:10.5px}
-.leaflet-popup-content .mt{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--faint);
+.leaflet-popup-content .jp{font-family:var(--mono);color:var(--faint);font-size:12px}
+.leaflet-popup-content .mt{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--faint);
   margin-top:6px;display:block}
 .pinico{display:grid;place-items:center;border-radius:3px;border:2px solid #fff;color:#fff;
-  box-shadow:0 2px 7px rgba(15,21,28,.28);font-family:var(--mono);font-weight:600;font-size:9.5px}
+  box-shadow:0 2px 7px rgba(15,21,28,.28);font-family:var(--mono);font-weight:600;font-size:11.5px}
 .pinico.usr{border-radius:6px 6px 6px 2px}
 
 #toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,90px);z-index:3000;background:var(--ink);
-  border-radius:8px;padding:10px 16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:#fff;
+  border-radius:8px;padding:10px 16px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:#fff;
   transition:transform .3s cubic-bezier(.2,.9,.3,1.2);pointer-events:none;
   box-shadow:0 10px 32px rgba(15,21,28,.28);max-width:88vw;text-align:center}
 #toast.show{transform:translate(-50%,0)}
@@ -288,22 +288,22 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 .sigi{width:10px;height:10px;flex:none;margin-top:5px;border-radius:50%;background:var(--blu);opacity:.55}
 .shbox{border:1px solid var(--line);border-radius:9px;padding:11px 12px;margin-bottom:10px;background:var(--card-2)}
 .shtop{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px}
-.shk{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--mist)}
+.shk{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;color:var(--mist)}
 .shp{font-size:12px;color:var(--slate);line-height:1.75;margin-top:3px}
 .shstep{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-2)}
 .shnum{flex:none;width:19px;height:19px;border-radius:50%;background:var(--rd);color:#fff;
- display:grid;place-items:center;font-family:var(--mono);font-size:10px;font-weight:600;margin-top:1px}
+ display:grid;place-items:center;font-family:var(--mono);font-size:12px;font-weight:600;margin-top:1px}
 .shtx{flex:1}
 .shtx b{font-size:13px;font-weight:500;display:block}
 .shtx small{display:block;color:var(--slate);font-size:12px;line-height:1.7;margin-top:3px}
-.navtip{flex-basis:100%;font-family:var(--mono);font-size:9.5px;color:var(--mist);margin-top:4px;line-height:1.7}
+.navtip{flex-basis:100%;font-family:var(--mono);font-size:11.5px;color:var(--mist);margin-top:4px;line-height:1.7}
 .lk2.navday{border-color:var(--blu);color:var(--blu);font-weight:500}
 .lk2.navday:hover{background:var(--blu);color:#fff}
 .samestay{margin:10px 0 4px;padding:8px 11px;border:1px dashed var(--line);border-radius:8px;
  background:var(--card-2);font-size:12.5px;color:var(--slate)}
-.samestay span{font-family:var(--mono);font-size:10px;color:var(--mist)}
+.samestay span{font-family:var(--mono);font-size:12px;color:var(--mist)}
 .lkrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
-.lk2{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9.5px;
+.lk2{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:11.5px;
  letter-spacing:.04em;padding:4px 8px;border-radius:5px;border:1px solid var(--line);
  color:var(--slate);background:var(--card);text-decoration:none;transition:.15s;white-space:nowrap}
 .lk2:hover{border-color:var(--blu);color:var(--blu);background:#EDF6F7}
@@ -314,7 +314,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 .note{position:relative;background:#FBF4E0;border-left:2px solid var(--amb);
  border-radius:0 7px 7px 0;padding:8px 26px 8px 10px}
 .note .nb{font-size:12.5px;line-height:1.7;color:var(--ink)}
-.note .nm{font-family:var(--mono);font-size:9px;letter-spacing:.05em;color:var(--mist);margin-top:4px}
+.note .nm{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--mist);margin-top:4px}
 .ndel{position:absolute;top:4px;right:7px;color:var(--faint);font-size:15px;line-height:1;padding:2px 4px}
 .ndel:hover{color:var(--rd)}
 /* 雪情 */
@@ -322,13 +322,13 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 .wxh{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 11px;
  border-bottom:1px solid var(--line-2);background:var(--card-2)}
 .wxn{font-size:12.5px;font-weight:500}
-.wxm{font-family:var(--mono);font-size:9px;color:var(--faint);white-space:nowrap}
+.wxm{font-family:var(--mono);font-size:11px;color:var(--faint);white-space:nowrap}
 .wxd{display:flex}
 .wxc{flex:1;text-align:center;padding:7px 1px;border-right:1px solid var(--line-2);min-width:0}
 .wxc:last-child{border-right:0}
-.wxc .dd{font-family:var(--mono);font-size:8.5px;color:var(--faint)}
+.wxc .dd{font-family:var(--mono);font-size:10.5px;color:var(--faint)}
 .wxc .sn{font-family:var(--mono);font-size:14px;font-weight:600;margin:2px 0;line-height:1.1}
-.wxc .tt{font-family:var(--mono);font-size:8.5px;color:var(--mist)}
+.wxc .tt{font-family:var(--mono);font-size:10.5px;color:var(--mist)}
 /* 预订 */
 .bkrow{border:1px solid var(--line-2);border-radius:8px;padding:10px 11px;margin-bottom:6px;
  background:var(--card);transition:.15s;cursor:pointer}
@@ -338,7 +338,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 .bkrow .box.on{background:var(--gr);border-color:var(--gr)}
 .bkrow .box.on:after{content:'';width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;
  transform:rotate(43deg) translate(-1px,-1px)}
-.vfy{display:inline-flex;align-items:center;font-family:var(--mono);font-size:9px;
+.vfy{display:inline-flex;align-items:center;font-family:var(--mono);font-size:11px;
  padding:2px 6px;border-radius:4px;letter-spacing:.05em;vertical-align:1px}
 .vfy.todo{background:#FAF0D8;color:#8A6510}
 .vfy.ok{background:#E5F1EA;color:#215139}
@@ -350,20 +350,20 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 .stayh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:8px 11px;
  border-bottom:1px solid var(--LN2);background:var(--BG3)}
 .sn2{font-size:12px;font-weight:500}
-.sa{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--FT)}
-.stayh2{padding:7px 11px 3px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+.sa{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--FT)}
+.stayh2{padding:7px 11px 3px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;
  color:var(--FT);text-transform:uppercase;border-top:1px solid var(--LN2)}
 .sopt,.sfood{padding:9px 11px;border-top:1px solid var(--LN2)}
 .sopt:first-of-type{border-top:0}
 .sopt.pick{background:var(--PICKBG)}
 .st{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
-.tier{font-family:var(--mono);font-size:10px;color:var(--FT);letter-spacing:.05em}
+.tier{font-family:var(--mono);font-size:12px;color:var(--FT);letter-spacing:.05em}
 .sname{font-size:12.5px;font-weight:500;flex:1;min-width:0}
-.fjp{font-family:var(--mono);font-size:10px;color:var(--FT)}
-.pk{font-family:var(--mono);font-size:9px;letter-spacing:.09em;padding:1px 6px;border-radius:3px;
+.fjp{font-family:var(--mono);font-size:12px;color:var(--FT)}
+.pk{font-family:var(--mono);font-size:11px;letter-spacing:.09em;padding:1px 6px;border-radius:3px;
  background:var(--PICK);color:var(--PICKTX)}
 .swhy{font-size:12px;color:var(--DM);line-height:1.65;margin-top:4px}
-.staynote{padding:8px 11px;border-top:1px solid var(--LN2);font-family:var(--mono);font-size:9.5px;
+.staynote{padding:8px 11px;border-top:1px solid var(--LN2);font-family:var(--mono);font-size:11.5px;
  line-height:1.75;color:var(--FT)}
 /* ── 加点搜索结果 ── */
 .gitem{display:flex;align-items:baseline;gap:8px;width:100%;text-align:left;padding:8px 10px;
@@ -371,8 +371,8 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 .gitem:hover{border-color:var(--LN)}
 .gitem.on{border-color:var(--PICK)}
 .gn{flex:1;font-size:12.5px;line-height:1.5}
-.gk{font-family:var(--mono);font-size:9px;color:var(--FT)}
-.tiny{font-family:var(--mono);font-size:9.5px;line-height:1.8;color:var(--FT);margin-top:6px}
+.gk{font-family:var(--mono);font-size:11px;color:var(--FT)}
+.tiny{font-family:var(--mono);font-size:11.5px;line-height:1.8;color:var(--FT);margin-top:6px}
 .tiny.warn{color:var(--WARN)}
 .lk2.dim{opacity:.6}
 /* ── 竖排日文：桌面端的一处细节 ── */
@@ -383,17 +383,17 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 .wcell{flex:1;text-align:center;padding:4px 2px;border-right:1px solid var(--line-2)}
 .wcell:last-child{border-right:0}
 .wv{font-family:var(--mono);font-size:19px;font-weight:600;color:var(--ink);line-height:1.15}
-.wl{font-family:var(--mono);font-size:9px;letter-spacing:.07em;color:var(--mist);margin-top:3px}
+.wl{font-family:var(--mono);font-size:11px;letter-spacing:.07em;color:var(--mist);margin-top:3px}
 .prof{display:flex;align-items:flex-end;gap:2px;height:52px;margin:15px 0 4px;
  padding-bottom:1px;border-bottom:1px solid var(--line)}
 .pbar{flex:1;min-width:2px;background:var(--blu);border-radius:1px 1px 0 0;cursor:pointer;
  transition:opacity .15s;opacity:.75}
 .pbar:hover{opacity:1}
 .pbar.jump{background:var(--rd);opacity:1}
-.pax{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;
+.pax{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;
  letter-spacing:.06em;color:var(--faint)}
 .quota{border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:18px;background:var(--card-2)}
-.qnote{font-family:var(--mono);font-size:10px;letter-spacing:.03em;color:var(--mist);
+.qnote{font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--mist);
  margin-top:12px;padding-top:10px;border-top:1px solid var(--line-2);line-height:1.75}
 .qnote.warn{color:var(--rd)}
 
@@ -401,7 +401,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 @media (max-width:900px){
   header{padding:8px 13px 0;padding-top:calc(8px + env(safe-area-inset-top))}
   .brand h1{font-size:18px}
-  .brand .sub{font-size:9.5px;gap:7px}
+  .brand .sub{font-size:11.5px;gap:7px}
   .hright{width:100%;order:3;padding-bottom:1px}
   .opts{padding:9px 0 8px;gap:6px}
   .opt{padding:6px 11px 6px 6px;gap:8px}
@@ -419,12 +419,13 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
   .tab{font-size:12px;padding:10px 5px 8px}
   .mc{top:10px;right:10px}
   .tmg{grid-template-columns:48px repeat(7,1fr)}
-  .tmh{font-size:10px;padding:5px 6px}
+  .tmh{font-size:12px;padding:5px 6px}
 }
 .grab{display:none;padding:9px 0 4px;flex:none;touch-action:none;cursor:grab}
 .grab:after{content:'';display:block;width:34px;height:4px;border-radius:3px;background:var(--line);margin:0 auto}
 @media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
 </style>
+<link rel="stylesheet" href="../shared/skin.css">
 </head>
 <body>
 <div id="app">
@@ -432,7 +433,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
     <div class="hrow">
       <div class="brand">
         <h1>Banff <i>/</i> Calgary</h1>
-        <div class="sub"><b id="hdates">—</b> · <span id="hski">—</span> · <span id="hopt">—</span> · <span id="verBadge" title="页面版本">v2 · 2026-08-20</span></div>
+        <div class="sub"><b id="hdates">—</b> · <span id="hski">—</span> · <span id="hopt">—</span></div>
       </div>
       <div class="hright">
         <button class="chip" id="dateBtn">📅 改日期</button>
@@ -461,6 +462,8 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:5px;bac
 <div id="modal"><div class="mbox" id="mbox"></div></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="../shared/config.js"></script>
+<script src="../shared/storage.js"></script>
 <script src="content.js"></script>
 <script>
 if(typeof V==='undefined'||typeof P==='undefined'){document.getElementById('app').innerHTML='<div style="padding:40px;font-family:monospace;font-size:13px;line-height:2">content.js 没加载成功。<br>确认它和 index.html 在同一个文件夹里，文件名一字不差。<br>如果刚改过 content.js，多半是里面有语法错误 —— 按 F12 看 Console 的红字。</div>';throw new Error('content.js missing');}
@@ -550,7 +553,7 @@ function wxBlock(s){
    const tmax=dd.temperature_2m_max||[];
    const avg=tmax.length?Math.round(tmax.reduce((a,b)=>a+b,0)/tmax.length):'—';
    const c=el('div','wxc');
-   c.innerHTML=`<div class="dd">${pt.n}</div><div class="sn">${rain}<small style="font-size:9px"> / ${arr.length} 天有雨</small></div><div class="tt">均高温 ${avg}°C</div>`;
+   c.innerHTML=`<div class="dd">${pt.n}</div><div class="sn">${rain}<small style="font-size:11px"> / ${arr.length} 天有雨</small></div><div class="tt">均高温 ${avg}°C</div>`;
    rowd.appendChild(c)});
   box.appendChild(rowd);s.appendChild(box);
  }
@@ -568,7 +571,7 @@ function wxBlock(s){
      `<div class="tt">${Math.round(d.temperature_2m_min[j])}/${Math.round(d.temperature_2m_max[j])}°</div>`;
     rowd.appendChild(c)});
    box.appendChild(rowd);s.appendChild(box)})}
- const n=el('p','tx');n.style.cssText='font-size:11.5px;color:var(--faint);margin:2px 0 18px';
+ const n=el('p','tx');n.style.cssText='font-size:12.5px;color:var(--faint);margin:2px 0 18px';
  n.innerHTML=(WX.err?`<span style="color:var(--amb)">${WX.err}（离线或被拦截，显示的是上次缓存）</span> · `:'')+TXT.wxNote;
  s.appendChild(n)}
 
@@ -642,12 +645,11 @@ const K={pins:()=>`banff:${st.room}:pins`,mem:()=>`banff:${st.room}:members`,
 /* ═══════ 6. 地图 ═══════ */
 const BASES=[
  {n:'地形',u:'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',a:'&copy; OpenStreetMap · SRTM | &copy; OpenTopoMap (CC-BY-SA)',max:17},
- {n:'素',u:'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',a:'&copy; OpenStreetMap &copy; CARTO',max:20},
- {n:'夜',u:'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',a:'&copy; OpenStreetMap &copy; CARTO',max:20}
+ {n:'街道',u:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',a:'&copy; OpenStreetMap contributors',max:19}
 ];
 let map,bi=0,bl,lPl,lPin,lRt,mReg={},adding=false,mapOK=false;
 function initMap(){
-  if(typeof L==='undefined'){$('#map').innerHTML='<div style="padding:26px;font-family:var(--mono);font-size:11px;color:var(--mist);line-height:1.9">地图组件没能加载（网络拦截了 CDN）。<br>行程、方案、预算、清单全部照常可用。</div>';return}
+  if(typeof L==='undefined'){$('#map').innerHTML='<div style="padding:26px;font-family:var(--mono);font-size:12.5px;color:var(--mist);line-height:1.9">地图组件没能加载（网络拦截了 CDN）。<br>行程、方案、预算、清单全部照常可用。</div>';return}
   map=L.map('map',{zoomControl:true}).setView([39.5,139.5],5);
   map.zoomControl.setPosition('bottomright');
   setBase(0);
@@ -702,7 +704,7 @@ function setAdd(v){adding=v;$('#addBtn').classList.toggle('on',v);
 
 /* ═══════ 6.5 日期引擎 ═══════ */
 const WD=['日','一','二','三','四','五','六'];
-function planStart(v){ return (st.starts&&st.starts[v.k]) || v.start || '2026-08-27'; }
+function planStart(v){ return (st.starts&&st.starts[v.k]) || v.start || '2027-08-27'; }
 function dayInfo(v,i){
   const d=new Date(planStart(v)+'T00:00:00Z');
   if(isNaN(d)) return {iso:null,md:v.days[i].d||'—',wd:v.days[i].w||'',date:null};
@@ -920,7 +922,7 @@ function vSpots(s){
     const nb=noteBlock(p); if(nb) c.appendChild(nb);
     const mine=el('p',null,esc(p.note));
     if(nb){const tg=el('span',null,'参考');
-      tg.style.cssText='font-family:var(--mono);font-size:9px;letter-spacing:.09em;color:var(--faint);border:1px solid var(--line);border-radius:3px;padding:1px 5px;margin-right:6px;vertical-align:1px';
+      tg.style.cssText='font-family:var(--mono);font-size:11px;letter-spacing:.09em;color:var(--faint);border:1px solid var(--line);border-radius:3px;padding:1px 5px;margin-right:6px;vertical-align:1px';
       mine.prepend(tg)}
     c.appendChild(mine);
     c.appendChild(linkRow(p,false));
@@ -1023,9 +1025,9 @@ function vPrep(s){
       <span class="box${ok?' on':''}"></span>
       <span style="flex:1"><span style="font-size:13.5px">${esc(b.n)}</span>
       <span class="vfy ${ok?'ok':'todo'}" style="margin-left:6px">${ok?'已订':'未订'}</span>
-      ${ok&&r.ref?`<small style="display:block;font-family:var(--mono);font-size:10.5px;color:var(--slate);margin-top:3px">确认号 ${esc(r.ref)}</small>`:''}
-      ${ok&&r.amt?`<small style="display:block;font-family:var(--mono);font-size:10.5px;color:var(--mist)">实付 $${Number(r.amt).toLocaleString()} CAD</small>`:''}
-      ${ok&&r.by?`<small style="display:block;font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-top:2px">${esc(r.by)} · ${esc(r.at||'')}</small>`:''}
+      ${ok&&r.ref?`<small style="display:block;font-family:var(--mono);font-size:12px;color:var(--slate);margin-top:3px">确认号 ${esc(r.ref)}</small>`:''}
+      ${ok&&r.amt?`<small style="display:block;font-family:var(--mono);font-size:12px;color:var(--mist)">实付 $${Number(r.amt).toLocaleString()} CAD</small>`:''}
+      ${ok&&r.by?`<small style="display:block;font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:2px">${esc(r.by)} · ${esc(r.at||'')}</small>`:''}
       </span><span class="pill">${esc(b.t)}</span></div>`;
     w.querySelector('.box').parentNode.style.cursor='pointer';
     w.onclick=()=>bkModal(b);
@@ -1197,7 +1199,7 @@ async function addrModal(k){
   const cur=(st.addr||{})[k]||'';
   const def=(typeof STAY!=='undefined'&&STAY[k]&&STAY[k].nav)?STAY[k].nav:'';
   openM(`<h3>${esc(k)} 的住宿地址</h3>
-   <p class="mp">用于「本日整条路线导航」的终点。填酒店名或完整地址，越具体越准。同行程码的人共用。</p>
+   <p class="mp">用于「本日整条路线导航」的终点。填酒店名或完整地址，越具体越准。</p>
    <div class="fd"><label class="lb">住宿地址</label>
      <input type="text" id="ad2" maxlength="120" value="${esc(cur)}" placeholder="${esc(def||'例：Hilton Garden Inn Calgary Downtown')}"></div>
    <div class="tiny">留空则用默认值${def?'：'+esc(def):'（当天最后一个停靠点）'}</div>
@@ -1366,7 +1368,7 @@ async function pull(loud){
   if(bk&&typeof bk==='object')st.bk=bk;if(nt&&typeof nt==='object')st.notes=nt;if(ad&&typeof ad==='object')st.addr=ad;
   $('#syncDot').className=S.ok?'dot':'dot off';
   renderMem();renderTabs();if(st.tab==='spots')renderBody();drawPin();
-  if(loud)toast(S.ok?`已同步 · ${st.pins.length} 个点`:'当前环境没有共享存储，改动只留在本次会话')}
+  if(loud)toast(S.ok?`已保存在本机 · ${st.pins.length} 个点`:'当前环境没有共享存储，改动只留在本次会话')}
 async function push(){$('#syncDot').className='dot busy';await S.set(K.pins(),st.pins,true);$('#syncDot').className=S.ok?'dot':'dot off'}
 async function join(){if(!st.me.id)return;const m=await S.get(K.mem(),true)||[];
   const i=m.findIndex(x=>x.id===st.me.id),rec={id:st.me.id,name:st.me.name,color:st.me.color,at:Date.now()};
@@ -1397,7 +1399,7 @@ function meM(after){
 function roomM(){
   openM(`<h3>行程码</h3><p class="mp">同一个码就是同一份地图。换一个没人用过的码，会得到一份全新的空白行程。</p>
    <div class="fd"><label class="lb">当前</label><input type="text" id="rc" maxlength="24" value="${esc(st.room)}"></div>
-   <p class="mp" style="font-size:11.5px;color:var(--faint)">只能用字母数字和短横线。知道这个码的人都能看到里面的内容。</p>
+   <p class="mp" style="font-size:12.5px;color:var(--faint)">只能用字母数字和短横线。知道这个码的人都能看到里面的内容。</p>
    <div class="row"><button class="btn" data-close>取消</button><button class="btn pri" id="rs">切换</button></div>`,
   b=>{b.querySelector('#rs').onclick=async()=>{
    const v=b.querySelector('#rc').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
@@ -1406,7 +1408,7 @@ function roomM(){
 function bkModal(b){
  if(!st.me.name)return meM(()=>bkModal(b));
  const r=bkGet(b.id)||{};
- openM(`<h3>${esc(b.n)}</h3><p class="mp">订好了就填确认号，没订就留空关掉。两个人共享。</p>
+ openM(`<h3>${esc(b.n)}</h3><p class="mp">订好了就填确认号，没订就留空关掉。</p>
   <div class="fd"><label class="lb">确认号 / 订单号</label><input type="text" id="bref" maxlength="60" value="${esc(r.ref||'')}" placeholder="例如 ABC123 或 Booking #99887"></div>
   <div class="fd"><label class="lb">实付金额 CAD（两人合计）</label><input type="number" id="bamt" step="1" value="${r.amt||''}" placeholder="0"></div>
   <div class="row"><button class="btn" id="bclr">标为未订</button><button class="btn pri" id="bok">标为已订</button></div>
@@ -1419,13 +1421,13 @@ function bkModal(b){
   x.querySelector('#bclr').onclick=async()=>{await bkSet(b.id,null);closeM();toast('已清除')}})}
 function exJ(){const d={room:st.room,opt:st.opt,pins:st.pins,budget:st.budget,done:st.done,rate:st.rate};
  openM(`<h3>导出</h3><p class="mp">复制走，可以粘回任何一个行程码。</p>
-  <textarea id="ex" style="height:220px;font-family:var(--mono);font-size:11px">${esc(JSON.stringify(d,null,2))}</textarea>
+  <textarea id="ex" style="height:220px;font-family:var(--mono);font-size:12.5px">${esc(JSON.stringify(d,null,2))}</textarea>
   <div class="row" style="margin-top:11px"><button class="btn" data-close>关闭</button><button class="btn pri" id="cp">复制</button></div>`,
  b=>{b.querySelector('#cp').onclick=async()=>{const ta=b.querySelector('#ex');
   try{await navigator.clipboard.writeText(ta.value)}catch(e){ta.select();try{document.execCommand('copy')}catch(_){return toast('复制失败，手动全选')}}
   toast('已复制')}})}
 function imJ(){openM(`<h3>导入</h3><p class="mp">粘贴一份导出的 JSON，会覆盖当前行程码下的点位和预算。</p>
-  <textarea id="im" style="height:190px;font-family:var(--mono);font-size:11px"></textarea>
+  <textarea id="im" style="height:190px;font-family:var(--mono);font-size:12.5px"></textarea>
   <div class="row" style="margin-top:11px"><button class="btn" data-close>取消</button><button class="btn pri" id="io">导入</button></div>`,
  b=>{b.querySelector('#io').onclick=async()=>{try{const d=JSON.parse(b.querySelector('#im').value);
   if(Array.isArray(d.pins))st.pins=d.pins;if(d.budget)st.budget=d.budget;if(d.done)st.done=d.done;
@@ -1482,5 +1484,6 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
   if(!S.ok)$('#syncDot').className='dot off';
   setTimeout(()=>mapOK&&map.invalidateSize(),200)})();
 </script>
+<script src="../shared/extras.js"></script>
 </body>
 </html>
