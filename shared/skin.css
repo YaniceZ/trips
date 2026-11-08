@@ -4,8 +4,6 @@
    不改各页自己的布局，只改颜色、字体、字号和装饰。
    想换整体色调，改下面 :root 里的几行就行。
    ══════════════════════════════════════════════════════════════ */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap');
-
 :root{
   --paper:#F4F0E6; --card:#FCFAF4; --card-2:#F0EBDF; --sunk:#E7E0D0;
   --ink:#2A2620;   --slate:#4D473C; --mist:#756E60; --faint:#A0988A;

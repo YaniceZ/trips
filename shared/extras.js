@@ -8,6 +8,7 @@
    ══════════════════════════════════════════════════════════════ */
 (function(){
 'use strict';
+if(window.__BAD) return;                                          // 内容检查没通过，不启动
 if(typeof st==='undefined'||typeof TABS==='undefined') return;   // 不是行程页就不动
 
 const TRIP=document.documentElement.dataset.trip||'';

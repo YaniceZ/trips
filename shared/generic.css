@@ -1,0 +1,43 @@
+/* shared/generic.css —— 新行程的默认配色变量和行程脊柱样式。
+   五个老行程各有自己的 trip.css，不加载这个。想给自己的行程定制，就在文件夹里加一个 trip.css，
+   放在本文件后面加载，同名规则会覆盖这里。 */
+:root{
+  --gr:#4C7F5B;   /* 绿：可行 / 已完成 */
+  --rd:#A8432E;   /* 红：重点 / 提醒 */
+  --blu:#2F6F73;  /* 蓝绿：链接 / 数据 */
+  --amb:#B88313;  /* 琥珀：警示 */
+  --sheet-h:55vh; /* 手机上底部抽屉的默认高度 */
+}
+#map{flex:1 1 auto;min-width:0;z-index:1}
+
+/* 行程脊柱：左边一条细线，每天一个圆形序号 */
+.spine{padding-left:34px}
+.spine:before{left:12px;width:1px;background:var(--line)}
+.node{position:absolute;left:-31px;top:14px;width:22px;height:22px;border-radius:50%;
+  background:var(--paper);border:1.5px solid var(--nc,var(--text));display:grid;place-items:center;z-index:2;
+  font-size:11.5px;font-weight:700;color:var(--nc,var(--text));line-height:1}
+.day.open .node{background:var(--nc,var(--text));color:#fff}
+
+/* 方案切换：甲乙丙 */
+.opt .gr{font-family:var(--disp);font-weight:700}
+
+/* 手机：地图铺满，内容面板变成可上下拖的底部抽屉 */
+@media (max-width:900px){
+  header{padding:8px 13px 0;padding-top:calc(8px + env(safe-area-inset-top))}
+  .brand h1{font-size:18px}
+  .brand .sub{font-size:11.5px;gap:7px}
+  .hright{width:100%;order:3;padding-bottom:1px}
+  .opts{padding:9px 0 8px;gap:6px}
+  .opt{padding:6px 11px 6px 6px;gap:8px}
+  .opt .lab{font-size:12px}
+  main{display:block}
+  #map{position:absolute;inset:0;height:100%}
+  #panel{position:absolute;left:0;right:0;top:0;bottom:0;flex:none;height:100%;border-right:0;
+    border-top:1px solid var(--line);border-radius:15px 15px 0 0;box-shadow:0 -10px 36px rgba(42,38,32,.16);
+    transform:translateY(max(0px,calc(100% - var(--sheet-h))));
+    transition:transform .33s cubic-bezier(.25,.9,.3,1);z-index:1000;touch-action:none}
+  #panel.dragging{transition:none}
+  .grab{display:block!important}
+  .scroll{padding:14px 15px calc(70px + env(safe-area-inset-bottom))}
+  .mc{top:10px;right:10px}
+}

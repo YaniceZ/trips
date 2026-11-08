@@ -1,0 +1,97 @@
+/* camino-2027/trip.css —— 这一趟独有的样式和配色变量。 */
+:root{
+  
+  
+  --paper:#EFEAE0; --card:#FBF8F2; --card-2:#F4EFE5; --sunk:#E6DFD1;
+  --ink:#241E16; --slate:#5B5145; --mist:#8E8375; --faint:#B3A897;
+  --line:#DAD0BE; --line-2:#E7E0D2;
+  --gr:#2F7D5B;  
+  --rd:#B3402A;  
+  --bk:#241E16;
+  --blu:#1F6FA8; 
+  --amb:#D9A21B; 
+  --disp:'Cinzel','Noto Serif SC',serif;
+  --body:'Noto Sans SC',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --disp2:'Noto Serif SC',serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sheet-h:55vh;
+}
+.brand h1{font-family:var(--disp);font-weight:900;font-size:21px;margin:0;letter-spacing:.05em;line-height:1.15}
+.opt .gr{width:32px;height:32px;flex:none;border-radius:2px;background:transparent;
+  border:1px solid var(--oc);display:grid;place-items:center;color:var(--oc);
+  font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.06em;
+  transition:background .18s,color .18s}
+.opt[aria-pressed=true] .gr{background:var(--oc);color:#FBF8F2}
+#map{flex:1 1 auto;min-width:0;background:#E2DACB;z-index:1}
+.t-big{font-family:var(--disp2);font-size:20px;font-weight:700;line-height:1.45;margin:0 0 9px}
+.wsum{display:flex;gap:0;margin-bottom:2px}
+.wcell{flex:1;text-align:center;padding:4px 2px;border-right:1px solid var(--line-2)}
+.wcell:last-child{border-right:0}
+.wv{font-family:var(--mono);font-size:19px;font-weight:600;color:var(--ink);line-height:1.15}
+.wl{font-family:var(--mono);font-size:11px;letter-spacing:.09em;color:var(--mist);margin-top:3px}
+.node{position:absolute;left:-31px;top:14px;width:32px;height:26px;border-radius:4px 4px 3px 3px;
+  background:var(--card);border:1.5px solid var(--nc);display:grid;place-items:center;z-index:2;
+  font-family:var(--mono);font-size:11px;font-weight:600;color:var(--nc);line-height:1}
+.node small{display:block;font-size:6.5px;letter-spacing:.06em;opacity:.65;margin-top:1px}
+.day.open .node,.node.ski{background:var(--nc);color:#FBF8F2}
+.spine{padding-left:38px}
+.spine:before{left:15px;background:repeating-linear-gradient(to bottom,var(--amb) 0 6px,transparent 6px 12px)}
+.dtitle{font-family:var(--disp2);font-size:15.5px;font-weight:700;margin-top:2px;line-height:1.45}
+.act.on{border-color:var(--rd);color:var(--rd);background:#FDF2F1}
+input[type=text],input[type=number],input[type=date],textarea{width:100%;background:var(--card-2);border:1px solid var(--line);
+  border-radius:7px;padding:9px 11px;font-size:13.5px;transition:.16s}
+input[type=date]{color-scheme:light;color:var(--ink);font-family:var(--mono);letter-spacing:.02em}
+.btn.pri{background:var(--rd);border-color:var(--rd);color:#fff;font-weight:600}
+.td.done .box:after{content:'';width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;
+  transform:rotate(43deg) translate(-1px,-1px)}
+.mb{background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:7px;
+  padding:7px 11px;font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;color:var(--slate);
+  transition:.15s;white-space:nowrap;box-shadow:0 1px 5px rgba(15,21,28,.07)}
+.leaflet-container{background:#E2DACB;font-family:var(--body)}
+.leaflet-control-attribution{background:rgba(255,255,255,.85)!important;font-size:11px!important;font-family:var(--mono)!important;color:var(--mist)!important}
+.leaflet-popup-content b{font-family:var(--disp2);font-size:14px;font-weight:700;color:var(--ink);
+  display:block;margin-bottom:2px}
+.pinico{display:grid;place-items:center;border-radius:6px;border:2px solid #fff;color:#fff;
+  box-shadow:0 2px 7px rgba(15,21,28,.28);font-family:var(--mono);font-weight:600;font-size:11.5px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,90px);z-index:3000;background:var(--ink);
+  border-radius:8px;padding:10px 16px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:#fff;
+  transition:transform .3s cubic-bezier(.2,.9,.3,1.2);pointer-events:none;
+  box-shadow:0 10px 32px rgba(15,21,28,.28);max-width:88vw;text-align:center}
+#modal{position:fixed;inset:0;z-index:2500;display:none;align-items:center;justify-content:center;
+  padding:20px;background:rgba(15,21,28,.42);backdrop-filter:blur(4px)}
+.mbox{background:var(--card);border-radius:13px;padding:21px;width:100%;max-width:396px;max-height:86vh;
+  overflow-y:auto;box-shadow:0 22px 64px rgba(15,21,28,.28)}
+.mbox h3{font-family:var(--disp2);font-size:17px;font-weight:700;margin:0 0 4px}
+.lk2:hover{border-color:var(--blu);color:var(--blu);background:#F3F8FC}
+.lk2.jp:hover{border-color:var(--gr);color:var(--gr);background:#F1F9F5}
+.lk2.nt:hover{border-color:var(--amb);color:var(--amb);background:#FDF8EE}
+.note{position:relative;background:#FBF6EA;border-left:2px solid var(--amb);
+ border-radius:0 7px 7px 0;padding:8px 26px 8px 10px}
+.bkrow .box.on:after{content:'';width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;
+ transform:rotate(43deg) translate(-1px,-1px)}
+.vfy.todo{background:#FBF1DC;color:#9A6B0F}
+.vfy.ok{background:#E6F4EC;color:#166B45}
+:root{--LN:var(--line);--LN2:var(--line-2);--BG2:var(--card);--BG3:var(--card-2);--DM:var(--slate);--FT:var(--mist);--PICK:var(--amb);--PICKTX:#241E16;--PICKBG:#F7F0DC;--WARN:var(--rd)}
+@media (max-width:900px){
+  header{padding:8px 13px 0;padding-top:calc(8px + env(safe-area-inset-top))}
+  .brand h1{font-size:18px}
+  .brand .sub{font-size:11.5px;gap:7px}
+  .hright{width:100%;order:3;padding-bottom:1px}
+  .opts{padding:9px 0 8px;gap:6px}
+  .opt{padding:6px 11px 6px 6px;gap:8px}
+  .opt .gr{width:26px;height:26px;font-size:13px}
+  .opt .lab{font-size:12px}
+  main{display:block}
+  #map{position:absolute;inset:0;height:100%}
+  #panel{position:absolute;left:0;right:0;top:0;bottom:0;flex:none;height:100%;border-right:0;
+    border-top:1px solid var(--line);border-radius:15px 15px 0 0;box-shadow:0 -10px 36px rgba(15,21,28,.18);
+    transform:translateY(max(0px,calc(100% - var(--sheet-h))));
+    transition:transform .33s cubic-bezier(.25,.9,.3,1);z-index:1000;touch-action:none}
+  #panel.dragging{transition:none}
+  .grab{display:block!important}
+  .scroll{padding:14px 15px calc(70px + env(safe-area-inset-bottom))}
+  .tab{font-size:12px;padding:10px 5px 8px}
+  .mc{top:10px;right:10px}
+  .tmg{grid-template-columns:48px repeat(7,1fr)}
+  .tmh{font-size:12px;padding:5px 6px}
+}

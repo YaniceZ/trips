@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-trip="template">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<!-- ① 改标题：浏览器标签页上显示的名字 -->
+<title>示例 · 京都三日</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#F4F0E6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="../shared/vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="../shared/generic.css">
+<!-- 想定制样式：在本文件夹加一个 trip.css，再取消下面这行的注释 -->
+<!-- <link rel="stylesheet" href="trip.css"> -->
+<link rel="stylesheet" href="../shared/skin.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap"></noscript>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="hrow">
+      <div class="brand">
+        <!-- ② 改页头大标题。<i>/</i> 会显示成点缀色的分隔符 -->
+        <h1>京都 <i>/</i> 三日</h1>
+        <div class="sub"><b id="hdates">—</b> · <span id="hski">—</span> · <span id="hopt">—</span></div>
+      </div>
+      <div class="hright">
+        <button class="chip" id="dateBtn">📅 改日期</button>
+        <button class="chip" id="roomBtn"><span class="dot" id="syncDot"></span>行程码 <b id="roomLabel">—</b></button>
+        <button class="chip" id="meBtn"><span class="avatars" id="avatars"></span><b id="meName">设置名字</b></button>
+      </div>
+    </div>
+    <div class="opts" id="opts"></div>
+  </header>
+  <main>
+    <section id="panel">
+      <div class="grab" id="grab"></div>
+      <div class="tabs" role="tablist" id="tabs"></div>
+      <div class="scroll" id="scroll"></div>
+    </section>
+    <section id="map">
+      <div class="mc">
+        <button class="mb" id="baseBtn">底图 · 地形</button>
+        <button class="mb" id="allBtn">显示全程</button>
+        <button class="mb" id="addBtn">＋ 加点</button>
+      </div>
+    </section>
+  </main>
+</div>
+<div id="toast"></div>
+<div id="modal"><div class="mbox" id="mbox"></div></div>
+
+<!-- 下面的脚本顺序不要动 -->
+<script src="../shared/vendor/leaflet/leaflet.js"></script>
+<script src="../shared/config.js"></script>
+<script src="../shared/storage.js"></script>
+<script src="content.js"></script>
+<script src="trip.js"></script>
+<script src="../shared/validate.js"></script>
+<script>validateTrip()</script>
+<script src="../shared/engine.js"></script>
+<script src="../shared/defaults.js"></script>
+<script>if(!window.__BAD) __boot()</script>
+<script src="../shared/extras.js"></script>
+</body>
+</html>
