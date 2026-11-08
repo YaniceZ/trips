@@ -19,7 +19,7 @@
   --body:'Noto Sans SC','PingFang SC','Microsoft YaHei','Hiragino Sans GB',sans-serif;
   --mono:var(--body);                    /* 不再用等宽小字做标签 */
 }
-html[data-trip=kansai]{--ink:#F4F0E6;--acc:#B3432F;--shu:#B3432F;--ai:#3F7A98;--iou:#B98324;--sugi:#4F7F61;--kin:#A97F1C}
+html[data-trip=kansai]{--acc:#B3432F;--shu:#B3432F;--ai:#3F7A98;--iou:#B98324;--sugi:#4F7F61;--kin:#A97F1C}
 html[data-trip=banff]  {--acc:#2F6F73}
 html[data-trip=fall]   {--acc:#A8432E}
 html[data-trip=japow]  {--acc:#2F5D8A}

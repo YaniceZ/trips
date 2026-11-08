@@ -1,0 +1,5 @@
+/* kansai-2027/trip.css —— 台风风险条 */
+.risk{margin:0 0 22px}
+.riskbar{display:flex;height:28px;border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+.riskseg{flex:1;display:grid;place-items:center;font-size:12px;color:#fff;font-weight:700}
+.risklab{display:flex;justify-content:space-between;font-size:12px;color:var(--mist);margin-top:6px}

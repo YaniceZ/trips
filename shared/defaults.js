@@ -42,10 +42,12 @@ Object.keys(P).forEach(k=>{if(!P[k].jp)P[k].jp=P[k].en||P[k].es||P[k].zh});
 let st={opt:Object.keys(V)[0],tab:'plan',room:TRIP.room||_id,openDay:null,
   me:{id:null,name:'',color:AVC[0]},pins:[],members:[],budget:{},done:{},bk:{},notes:{},addr:{},
   rate:CUR.rate,perPerson:false,ccy:CUR.home};
-const K={pins:()=>`${_id}:${st.room}:pins`,mem:()=>`${_id}:${st.room}:members`,
-  bk:()=>`${_id}:${st.room}:bookings`,addr:()=>`${_id}:${st.room}:addr`,notes:()=>`${_id}:${st.room}:notes`,cfg:()=>`${_id}:localcfg`};
+const _sid=TRIP.store||_id;            // 存储前缀。老行程搬进来时用它保住已有的本地数据，新行程不用管
+const K={pins:()=>`${_sid}:${st.room}:pins`,mem:()=>`${_sid}:${st.room}:members`,
+  bk:()=>`${_sid}:${st.room}:bookings`,addr:()=>`${_sid}:${st.room}:addr`,notes:()=>`${_sid}:${st.room}:notes`,cfg:()=>`${_sid}:localcfg`};
 const TABS=[{k:'plan',n:'方案'},{k:'prep',n:'准备'},{k:'itin',n:'行程'},{k:'spots',n:(TRIP.tabs&&TRIP.tabs.spots)||'地点'},{k:'bud',n:'预算'}];
 const WX_TZ=encodeURIComponent((TRIP.wx&&TRIP.wx.tz)||'auto');
+const WX_MODELS=(TRIP.wx&&TRIP.wx.models)?'&models='+TRIP.wx.models:'';
 
 function tripWindow(v){
   const a=dayInfo(v,0), b=dayInfo(v,v.days.length-1);
@@ -61,7 +63,7 @@ async function loadWX(force){
  try{
   const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${la}&longitude=${lo}`+
    `&daily=precipitation_sum,temperature_2m_max,temperature_2m_min,weather_code`+
-   `&timezone=${WX_TZ}&forecast_days=7`);
+   `&timezone=${WX_TZ}&forecast_days=7${WX_MODELS}`);
   if(!r.ok)throw 0;
   const j=await r.json();WX.fc=Array.isArray(j)?j:[j];WX.err=null;
  }catch(e){WX.err='预报没拉到';if(cache)WX.fc=cache.fc}
@@ -115,6 +117,7 @@ function wxBlock(s){
 function bookings(){
  const v=V[st.opt],out=[];
  const ids=new Set(); v.days.forEach(d=>d.stops.forEach(x=>x.p&&ids.add(x.p)));
+ if(typeof TRIP.bookingsAll==='function') return TRIP.bookingsAll(v,ids);      // 完全自己决定整张清单
  if(typeof TRIP.bookings==='function') TRIP.bookings(v,ids).forEach(b=>out.push(b));
  else out.push({id:'air',n:'机票 / 车票',t:'交通'});
  [...new Set(v.days.map(d=>stayKey(d.stay)).filter(x=>x&&x!=='—'&&x!=='机上'))]
@@ -233,11 +236,12 @@ function vPlan(s){
     COMPARE.forEach(([n2,d2])=>{const w=el('div','bl');
       w.innerHTML=`<div class="nm">${esc(n2)}<small style="margin-top:3px;display:block">${esc(d2)}</small></div>`;
       s.appendChild(w)})}
+  if(typeof TRIP.planAfter==='function') TRIP.planAfter(s);
   if(Object.keys(V).length>1){
     s.appendChild(el('h2','sec',LABELS.switchPlan));
     Object.values(V).filter(x=>x.k!==st.opt).forEach(x=>{
       const b=el('button','pc');b.style.setProperty('--pc',x.hex);b.style.width='100%';b.style.textAlign='left';
-      b.innerHTML=`<div class="top"><span class="sw"></span><h3>${esc(x.name)}<span>${esc(x.tag)}</span></h3></div><p>${esc(x.met)}${x.dates?' · '+esc(x.dates):''}</p>`;
+      b.innerHTML=`<div class="top"><span class="sw"></span><h3>${esc(x.name)}<span>${esc(x.tag)}</span></h3></div><p>${TRIP.switchExcerpt?esc(x.pitch.replace(/<[^>]+>/g,'').slice(0,84))+'…':esc(x.met)+(x.dates?' · '+esc(x.dates):'')}</p>`;
       b.onclick=()=>{st.opt=x.k;st.openDay=null;renderOpts();renderTabs();renderBody();drawPl();showAll();save();$('#scroll').scrollTop=0};
       s.appendChild(b)})}
 }
@@ -392,6 +396,7 @@ function vPrep(s){
     const dn=!!st.done[t.id];const b=el('button','td'+(dn?' done':''));
     b.innerHTML=`<span class="box"></span><span class="tx2">${esc(t.n)}<small>${esc(t.s||'')}</small></span><span class="due ${dn?'ok':''}">${esc(t.due||'')}</span>`;
     b.onclick=()=>{st.done[t.id]=!dn;renderTabs();renderBody();save()};s.appendChild(b)});
+  if(typeof TRIP.prepAfter==='function') TRIP.prepAfter(s);
   s.appendChild(el('h2','sec',LABELS.aboutPage));
   s.appendChild(el('p','tx',TXT.aboutPage));
   const rw=el('div','row');
@@ -428,12 +433,12 @@ function linkRow(p,compact){
     b.onclick=e=>{e.stopPropagation();fn()};return b};
   w.appendChild(A('地图',LK2.map(p)));
   w.appendChild(A('导航',LK2.dir(p)));
-  const j=B('英文名 ⧉',()=>copyJP(p),'jp'); j.title=p.jp||p.zh; w.appendChild(j);
+  const j=B((TRIP.nameLabel||'英文名')+' ⧉',()=>copyJP(p),'jp'); j.title=p.jp||p.zh; w.appendChild(j);
   if(!compact){
     const kind=p.kind||'poi';
     if(kind!=='way'){
       w.appendChild(A('官网 / 营业时间',LK2.site(p)));
-      w.appendChild(B('攻略搜索',()=>openXHS((p.en||p.zh)+' '+(TRIP.searchSuffix||''))));
+      w.appendChild(B('攻略搜索',()=>openXHS(((TRIP.searchName==='zh'?p.zh:(p.en||p.zh))+' '+(TRIP.searchSuffix||'')).trim())));
     }
     w.appendChild(A('坐标',LK2.pin(p),'dim'));
     w.appendChild(B('＋ 笔记',()=>noteModal(p),'nt'));

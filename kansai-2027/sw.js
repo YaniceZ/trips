@@ -1,7 +1,7 @@
 /* 离线缓存 v2
    关键修正：HTML 和 JS 改成「网络优先」，避免页面框架被永久缓存成旧版。
    地图瓦片和天气仍然缓存，山里没信号照样能用。 */
-const C = 'kansai-2027-v2';
+const C = 'kansai-2027-v3';
 const SHELL = [
   '../shared/vendor/leaflet/leaflet.js',
   '../shared/vendor/leaflet/leaflet.css'
