@@ -1,3 +1,20 @@
+# Trip planner
+
+A phone-friendly page for each trip: a day-by-day itinerary, maps, where to stay, budget and a pre-trip checklist. It also tracks flights and car rentals with countdowns and splits shared costs between travellers. Each trip can be added to a phone's home screen and opens without a connection.
+
+It is a static site with no backend, hosted for free on GitHub Pages.
+
+**How it is built**
+
+- `shared/engine.js` is the common engine: maps (Leaflet, bundled locally), itinerary, bookings, notes and calendar export.
+- `shared/validate.js` checks a trip's content before the page starts and reports exactly what is wrong.
+- Each trip is a folder with `trip.js` (settings such as start date, currency and weather location) and `content.js` (the itinerary itself). New trips start from `template/`.
+- Optional multi-user sync runs on Supabase (`supabase/setup.sql`, `SUPABASE.md`).
+
+**Try it:** open `/template/` for a working three-day Kyoto example. To make your own, fork the repo, enable GitHub Pages on `main`, copy `template/` and follow `docs/ADD_A_TRIP.md`.
+
+---
+
 # 旅行计划网页
 
 给每一趟旅行做一个手机上好用的页面：逐日行程、地图、住宿方向、预算、行前待办，
